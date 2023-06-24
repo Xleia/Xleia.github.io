@@ -1,0 +1,37 @@
+* {
+    --background-blur: 15px;
+}
+
+#board {
+    -webkit-backdrop-filter: blur(calc(var(--background-blur) * 2));
+    backdrop-filter: blur(calc(var(--background-blur) * 2));
+}
+
+footer {
+    color: #ff2600 !important;
+    font-weight: 600;
+}
+
+footer span {
+    color: #74e673 !important;
+    font-weight: 600;
+}
+
+#toc {
+    /* font-family: fangsong; */
+    padding: 10px;
+    top: 4rem;
+    background-color: var(--board-bg-color);
+    border-radius: 10px;
+    -webkit-backdrop-filter: blur(var(--background-blur));
+    backdrop-filter: blur(var(--background-blur));
+  }
+  .category-list {
+    /* font-family: fangsong; */
+    padding: 10px;
+    top: 4rem;
+    background-color: var(--board-bg-color);
+    border-radius: 10px;
+    -webkit-backdrop-filter: blur(var(--background-blur));
+    backdrop-filter: blur(var(--background-blur));
+  }

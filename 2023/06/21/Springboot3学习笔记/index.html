@@ -1,0 +1,1244 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.ico">
+  <link rel="icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Xleia">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SpringBoot3快速入门1、简介1.1 环境要求   工具 版本    Springboot 3.x+   IDEA 2021.2.1+   JDK 17+   Maven 3.5+   Tomcat 10.0+   Servlet 5.0+   GraalVM Community 22.3+   Native Build Tools 0.0.19+   1.2 Springboot是什么S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Springboot3学习笔记--Spring3-核心特性">
+<meta property="og:url" content="https://xleia.gitee.io/2023/06/21/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="xleiaの个人博客">
+<meta property="og:description" content="SpringBoot3快速入门1、简介1.1 环境要求   工具 版本    Springboot 3.x+   IDEA 2021.2.1+   JDK 17+   Maven 3.5+   Tomcat 10.0+   Servlet 5.0+   GraalVM Community 22.3+   Native Build Tools 0.0.19+   1.2 Springboot是什么S">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%9C%BA%E5%88%B6%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2%E5%92%8C%E6%97%A5%E5%BF%97%E5%AE%9E%E7%8E%B0.png">
+<meta property="article:published_time" content="2023-06-21T01:39:14.628Z">
+<meta property="article:modified_time" content="2023-06-23T14:51:52.869Z">
+<meta property="article:author" content="Xleia">
+<meta property="article:tag" content="springboot">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Springboot3学习笔记--Spring3-核心特性 - xleiaの个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/cloudedGlass.css">
+<link rel="stylesheet" href="/css/scrollAnimation.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xleia.gitee.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>H的学习小破站</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>作者</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Springboot3学习笔记--Spring3-核心特性"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Xleia
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-21 09:39" pubdate>
+          2023年6月21日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          78 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="学习"
+        id="heading-4ef520d6cd20ba4a727af08e17e4939e" role="tab" data-toggle="collapse" href="#collapse-4ef520d6cd20ba4a727af08e17e4939e"
+        aria-expanded="true"
+      >
+        学习
+        <span class="list-group-count">(7)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-4ef520d6cd20ba4a727af08e17e4939e"
+           role="tabpanel" aria-labelledby="heading-4ef520d6cd20ba4a727af08e17e4939e">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">JDBC注册驱动推荐</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/11/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Redis学习笔记（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Redis学习笔记（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/15/hello-world/" title="Hello World"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Hello World</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/19/indexOf-%E4%B8%8ElastIndexOf-%E5%8C%BA%E5%88%AB/" title="indexOf()与lastIndexOf()区别"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">indexOf()与lastIndexOf()区别</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/20/SpringBoot%E6%95%B4%E5%90%88Redis/" title="SpringBoot整合Redis"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">SpringBoot整合Redis</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/21/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Springboot3学习笔记--Spring3-核心特性"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">Springboot3学习笔记--Spring3-核心特性</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">数据结构与算法---线性结构</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Springboot3学习笔记--Spring3-核心特性</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年6月23日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="SpringBoot3快速入门"><a href="#SpringBoot3快速入门" class="headerlink" title="SpringBoot3快速入门"></a>SpringBoot3快速入门</h2><h3 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h3><h4 id="1-1-环境要求"><a href="#1-1-环境要求" class="headerlink" title="1.1 环境要求"></a>1.1 环境要求</h4><table>
+<thead>
+<tr>
+<th align="center">工具</th>
+<th align="center">版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Springboot</td>
+<td align="center">3.x+</td>
+</tr>
+<tr>
+<td align="center">IDEA</td>
+<td align="center">2021.2.1+</td>
+</tr>
+<tr>
+<td align="center">JDK</td>
+<td align="center">17+</td>
+</tr>
+<tr>
+<td align="center">Maven</td>
+<td align="center">3.5+</td>
+</tr>
+<tr>
+<td align="center">Tomcat</td>
+<td align="center">10.0+</td>
+</tr>
+<tr>
+<td align="center">Servlet</td>
+<td align="center">5.0+</td>
+</tr>
+<tr>
+<td align="center">GraalVM Community</td>
+<td align="center">22.3+</td>
+</tr>
+<tr>
+<td align="center">Native Build Tools</td>
+<td align="center">0.0.19+</td>
+</tr>
+</tbody></table>
+<h4 id="1-2-Springboot是什么"><a href="#1-2-Springboot是什么" class="headerlink" title="1.2 Springboot是什么"></a>1.2 Springboot是什么</h4><p>Springboot帮我们简单、快速地创建一个独立的生产级别的Spring应用。大多数Springboot应用只需要编写少量配置即可快速整合Spring平台以及第三方技术。</p>
+<p><strong>特性：</strong></p>
+<ul>
+<li>能够<strong>快速创建</strong>独立Spring应用</li>
+<li>直接<strong>嵌入</strong>Tomcat，Jetty和Undertow（无需部署war包）</li>
+<li>提供可选的<strong>starter</strong>，简化应用整合</li>
+<li>按需<strong>自动配置</strong>Spring以及第三方库</li>
+<li>提供<strong>生产级特性</strong>：如 监控指标、健康检查、外部化部署等</li>
+<li>无代码生成，<strong>无xml</strong></li>
+</ul>
+<p>总结：简化开发、简化配置、简化整合、简化部署、简化监控、简化运维</p>
+<h3 id="2、快速体验"><a href="#2、快速体验" class="headerlink" title="2、快速体验"></a>2、快速体验</h3><h4 id="2-1-开发流程"><a href="#2-1-开发流程" class="headerlink" title="2.1 开发流程"></a>2.1 开发流程</h4><ol>
+<li>创建maven项目，并继承springboot父maven</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--所有springboot项目木都必须继承spring-boot-starter-parent--&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">parent</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">parent</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>导入场景（场景启动器）</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-comment">&lt;!--web开发场景启动器--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>主程序</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span>  <span class="hljs-comment">// </span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MainApplication</span> &#123;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        SpringApplication.run(MainApplication.class, args);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>编写业务类</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloController</span> &#123;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/hello&quot;)</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">hello</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello,Spring Boot&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>测试</li>
+</ol>
+<p>默认访问：localhost:8080</p>
+<ol start="6">
+<li>打包（引入打包插件）</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>使用<code>mvn clean</code>先清除target文件，在使用<code>mvn package</code>把项目打成jar包</p>
+<p><code>java -jar xxxxx.jar</code>启动项目</p>
+<p>还可以使用Spring Initializer来快速创建</p>
+<h3 id="3、应用分析"><a href="#3、应用分析" class="headerlink" title="3、应用分析"></a>3、应用分析</h3><h4 id="3-1-依赖管理机制"><a href="#3-1-依赖管理机制" class="headerlink" title="3.1 依赖管理机制"></a>3.1 依赖管理机制</h4><p><img src="/../img/mdimg/springboot/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6.png" srcset="/img/loading.gif" lazyload alt="依赖管理机制"></p>
+<h4 id="3-2自动配置机制"><a href="#3-2自动配置机制" class="headerlink" title="3.2自动配置机制"></a>3.2自动配置机制</h4><h5 id="1、初步理解"><a href="#1、初步理解" class="headerlink" title="1、初步理解"></a>1、初步理解</h5><ul>
+<li><p>自动配置的Tomcat、SpringMVC等</p>
+<ul>
+<li><p>导入场景，容器中就会自动配置这个场景的核心组件。</p>
+</li>
+<li><p>以前：DispatcherServlet、ViewResolver、CharacterEncodingFilter …</p>
+</li>
+<li><p>现在：自动配置好这些组件</p>
+</li>
+<li><p>验证：容器中有什么组件，就具有什么功能</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-comment">// java10：局部变量类型的自动推断</span><br>    <span class="hljs-type">var</span> <span class="hljs-variable">ioc</span> <span class="hljs-operator">=</span> SpringApplication.run(MainApplication.class, args);<br><br>    <span class="hljs-comment">// 1、获取容器中所有组件的名字</span><br>    String[] names = ioc.getBeanDefinitionNames();<br>    <span class="hljs-comment">// spring boot把以前配置的核心组件现在都配置好了</span><br>    <span class="hljs-keyword">for</span> (String name : names) &#123;<br>        System.out.println(name);<br>    &#125;<br>&#125;	<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>默认的包扫描规则</p>
+<ul>
+<li><p><code>@SpringBootApplication</code>标注的类就是主程序类</p>
+</li>
+<li><p>SpringBoot只会扫描主程序所在的包及其下面的子包，自动的component-scan功能</p>
+</li>
+<li><p>自定义扫描路经</p>
+<ul>
+<li><code>@SpringBootApplication(scanBasePackages = &quot;xxx.xxx&quot;)</code></li>
+<li><code>@ComponentScan(xxx.xxx)</code>：直接指定扫描的路径</li>
+</ul>
+</li>
+<li><p>配置默认值</p>
+<ul>
+<li>配置文件的所有配置项是和某个类的对象值进行一一绑定的</li>
+<li>绑定了配置文件中每一项的值的类：<strong>配置属性类</strong></li>
+<li>比如：<ul>
+<li><code>ServerProperties</code>绑定了所有Tomcat服务器有关的配置</li>
+<li><code>MultipartProperties</code>绑定了所有文件上传的相关的配置</li>
+<li>其他参照[官网文档](<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties">Common Application Properties (spring.io)</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>按需加载自动配置</p>
+<ul>
+<li>导入场景<code>spring-boot-starter-web</code></li>
+<li>场景启动器除了会导入相关功能依赖，还导入了一个<code>spring-boot-starter</code>，是所有的<code>starter</code>的<code>starter</code>，基础核心<strong>starter</strong></li>
+<li><code>spring-boot-starter</code>还导入了一个包，<code>spring-boot-autoconfigure</code>。包里面都是各种场景的<code>AutoConfiguration</code><strong>自动配置类</strong></li>
+<li>虽然全场景的自动配置都在<code>spring-boot-autoconfigure</code>这个包，但是不全是开启的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2、完整流程"><a href="#2、完整流程" class="headerlink" title="2、完整流程"></a>2、完整流程</h5><p><img src="/../img/mdimg/springboot/%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E6%9C%BA%E5%88%B6%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B.png" srcset="/img/loading.gif" lazyload alt="自动配置机制流程"></p>
+<ul>
+<li>一：导入<code>starter</code>：比如<code>starter-web</code>就是导入了web开发场景<ul>
+<li>1、每个<code>starter</code>都引入了<code>spring-boot-autoconfigure</code>包</li>
+<li>2、<code>spring-boot-autoconfigure</code>里面囊括了所有场景的所有配置</li>
+<li>3、只要这个包下的所有类都能生效，相当于springBoot官方写好的所有整合功能生效了</li>
+<li>4、SpringBoot默认扫描不到<code>spring-boot-autoconfigure</code>下写好的所有配置类</li>
+</ul>
+</li>
+<li>二：主程序：<code>@SpringBootApplication</code><ul>
+<li>1、<code>@SpringBootApplication</code>由三个注解组成<code>@SpringBootConfiguration</code>、<code>@EnableAutoConfiguration</code>、<code>@ComponentScan</code></li>
+<li>2、SpringBoot默认只扫描自己主程序所在的包及其下面的子包，扫描不到<code>spring-boot-autoconfigure</code>包中官方写好的配置类</li>
+<li>3、<code>@EnableAutoConfiguration</code>：SpringBoot开启自动配置的核心<ul>
+<li>1、是由<code>@Import(&#123;AutoConfigurationImportSelector.class&#125;)</code>提供功能：批量给容器中导入组件</li>
+<li>2、SpringBoot启动会默认加载146个配置类（版本3.1.0）</li>
+<li>3、这146个来自于<code>METAINF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code></li>
+<li>4、按需生效：并不是这<code>146</code>个自动装配类都能生效，每一个自动装配类都有条件注解<code>@ConditionalOnXxx</code>,只有条件成立，才能生效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三：写业务，全程无需关心各种整合（底层都整合好了，且生效了）</li>
+</ul>
+<h5 id="3、如何学好SpringBoot"><a href="#3、如何学好SpringBoot" class="headerlink" title="3、如何学好SpringBoot"></a>3、如何学好SpringBoot</h5><blockquote>
+<p>框架的框架，底层基于Spring。</p>
+</blockquote>
+<ol>
+<li><p>理解<strong>自动装配原理</strong></p>
+<p>a、<strong>导入starter</strong> –&gt; 生效xxxAutoConfiguration –&gt; <strong>组件</strong> –&gt; xxxPreperties –&gt; <strong>配置文件</strong></p>
+</li>
+<li><p>理解<strong>其他框架底层</strong></p>
+</li>
+<li><p>可以随时<strong>定制化任何组件</strong></p>
+<p>a、改配置文件</p>
+<p>b、自定义组件</p>
+</li>
+</ol>
+<p>核心：</p>
+<ul>
+<li>这个场景自动配置导入了哪些组件，我们能不能Autowired进来使用</li>
+<li>能不能通过修改配置改变组件的一些默认参数</li>
+<li>需不需要完全定义这个组件</li>
+<li><strong>场景定制化</strong></li>
+</ul>
+<h3 id="4、核心技能"><a href="#4、核心技能" class="headerlink" title="4、核心技能"></a>4、核心技能</h3><h4 id="4-1-常用注解"><a href="#4-1-常用注解" class="headerlink" title="4.1. 常用注解"></a>4.1. 常用注解</h4><blockquote>
+<p>SpringBoot摒弃xml配置方式，改为全注解驱动</p>
+</blockquote>
+<h5 id="1、组件注解"><a href="#1、组件注解" class="headerlink" title="1、组件注解"></a>1、组件注解</h5><p><code>@Configuration</code>：替代以前的xml配置文件，配置类本身也是容器中的组件<br><code>@SpringBootConfiguration</code>：与@Configuration无区别，就是名字不一样<br><code>@Bean</code>：替代以前的Bean标签，组件在容器中的名字默认是方法名，如果修改了注解的值，则名字是注解的值<br><code>@Scope</code>：替代以前Bean标签里的scpoe属性，设置组件是否为单实例或多实例（默认都是单实例的）<br><code>@Import</code>：导入第三方的的组件到 ioc 容器中，组件名默认是全类名<br>@Controller、@Service、@Repository、@Component、@ComponentScan</p>
+<p>使用步骤：</p>
+<ol>
+<li>编写一个配置类使用@Configuration修饰</li>
+<li>在配置类中，自定义方法给容器中注册组件，配合@Bean</li>
+<li>或使用@Import导入第三方的组件</li>
+</ol>
+<h5 id="2、条件注解"><a href="#2、条件注解" class="headerlink" title="2、条件注解"></a>2、条件注解</h5><blockquote>
+<p>如果注解指定的条件成立，则触发指定行为</p>
+</blockquote>
+<p><span style="color:red">@ConditionalOnXxx</span></p>
+<p><span style="color:blue">@ConditionalOnClass：如果类路径中存在这个类，则触发指定行为</span></p>
+<p><span style="color:blue">@ConditionalOnMissClass：如果类路径中不存在这个类，则触发指定行为</span></p>
+<p><span style="color:blue">@ConditionalOnBean：如果容器中存在这个Bean，则触发指定行为</span></p>
+<p><span style="color:blue">@ConditionalOnMissBean：如果容器中不存在这个Bean，则触发指定行为</span></p>
+<blockquote>
+<p>场景：</p>
+<ul>
+<li>如果存在<code>FastsqlException</code>这个类，给容器中放一个<code>cat</code>组件，名为cat01，否则就在容器中放一个<code>Dog</code>组件，名为dog01</li>
+<li>如果系统中有<code>dog01</code>这个组件，就在容器中放一个User组件，名为zhangsan，否则，就名叫lisi<br>实现：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootConfiguration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppConfig2</span> &#123;<br><br>    <span class="hljs-meta">@ConditionalOnClass(name = &quot;com.alibaba.druid.FastsqlException&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> Cat <span class="hljs-title function_">cat01</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cat</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@ConditionalOnMissingClass(value = &quot;com.alibaba.druid.FastsqlException&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> Dog <span class="hljs-title function_">dog01</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Dog</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@ConditionalOnBean(name = &quot;dog01&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> User <span class="hljs-title function_">zhangsan</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@ConditionalOnMissingBean(name = &quot;dog01&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> User <span class="hljs-title function_">lisi</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</blockquote>
+<h5 id="3、属性绑定"><a href="#3、属性绑定" class="headerlink" title="3、属性绑定"></a>3、属性绑定</h5><p>@ConfigurationProperties<br>@EnableConfigurationProperties ：开启某个类与配置文件的绑定</p>
+<blockquote>
+<p>在容器中任意组件（Bean）的<strong>属性值</strong>和<strong>配置文件</strong>的配置项的值进行绑定</p>
+<p>1、给容器中注册组件（@Component、@Bean）</p>
+<p>2、使用@ConfigurationProperties 声明组件和配置文件的哪些配置项进行绑定</p>
+</blockquote>
+<h4 id="4-2-YAML配置文件"><a href="#4-2-YAML配置文件" class="headerlink" title="4.2. YAML配置文件"></a>4.2. YAML配置文件</h4><p>加载顺序：yml &gt; yaml &gt; properties</p>
+<blockquote>
+<p>痛点：SpringBoot集中化管理配置，<code>application.properties</code></p>
+<p>问题：配置多以后很难阅读和修改，层次结构辨识度不高</p>
+</blockquote>
+<blockquote>
+<p><strong>YAML</strong> 目前的官方全称为 “<strong>YAML Ain’t Markup Language</strong>（YAML 不是标记语言）”，但有意思的是，其实 YAML 最初的含义是 “<strong>Yet Another Markup Language</strong>（还是一种标记语言）”</p>
+</blockquote>
+<blockquote>
+<p>设计目标：为了<strong>方便阅读</strong></p>
+<p>层次分明，更适合做配置文件</p>
+<p>使用.yaml和.yml作为文件后缀</p>
+</blockquote>
+<h5 id="1、基本语法"><a href="#1、基本语法" class="headerlink" title="1、基本语法"></a>1、基本语法</h5><ul>
+<li>大小写敏感</li>
+<li>使用缩进表示层级关系，k:v，使用空格分割k，v</li>
+<li>缩进时不允许使用Tab，只允许<strong>使用空格</strong></li>
+<li>缩进的空格数目不重要，只要相同层级的元素左侧对齐即可</li>
+<li><strong># 表示注释</strong>，从这个字符一直到行尾，都会被解析器忽略</li>
+</ul>
+<p>支持的写法</p>
+<ul>
+<li>对象：<strong>键值对</strong>的集合，如：映射（map）&#x2F;哈希（hash）&#x2F;字典（dictionary）</li>
+<li>数组：一组按次序排列的值，如：序列（sequence）&#x2F;列表（list）</li>
+<li>纯量：单个的、不可分割的值，如：字符串、数字、bool、日期</li>
+</ul>
+<h5 id="2、示例"><a href="#2、示例" class="headerlink" title="2、示例"></a>2、示例</h5><p>实体类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@ConfigurationProperties(prefix = &quot;person&quot;)</span>  <span class="hljs-comment">// 和配置文件中所有以person前缀进行绑定</span><br><span class="hljs-meta">@Data</span>  <span class="hljs-comment">// 自动生成JavaBean属性的getter/setter</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> Integer age;<br>    <span class="hljs-keyword">private</span> Date birthday;<br>    <span class="hljs-keyword">private</span> Boolean like;<br>    <span class="hljs-keyword">private</span> Child child;<br>    <span class="hljs-keyword">private</span> List&lt;Dog&gt; dogs;<br>    <span class="hljs-keyword">private</span> Map&lt;String, Cat&gt; cats;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> Integer age;<br>    <span class="hljs-keyword">private</span> Date birthday;<br>    <span class="hljs-keyword">private</span> List&lt;String&gt; text;  <span class="hljs-comment">// 集合类型的</span><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Cat</span> &#123;<br>    <span class="hljs-keyword">private</span> String name;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>properties文件和yaml文件都是配置文件</p>
+</blockquote>
+<p>properties文件</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">person.name</span>=<span class="hljs-string">zhangsan</span><br><span class="hljs-attr">person.age</span>=<span class="hljs-string">18</span><br><span class="hljs-attr">person.birthday</span>=<span class="hljs-string">2001/10/10 10:10:10</span><br><span class="hljs-attr">person.like</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">person.child.name</span>=<span class="hljs-string">lisi</span><br><span class="hljs-attr">person.child.age</span>=<span class="hljs-string">12</span><br><span class="hljs-attr">person.child.birthday</span>=<span class="hljs-string">2008/10/10 10:10:10</span><br><span class="hljs-attr">person.child.text[0]</span>=<span class="hljs-string">abc</span><br><span class="hljs-attr">person.child.text[1]</span>=<span class="hljs-string">def</span><br><span class="hljs-attr">person.dogs[0].name</span>=<span class="hljs-string">xiaob</span><br><span class="hljs-attr">person.dogs[1].name</span>=<span class="hljs-string">xiaoh</span><br><span class="hljs-attr">person.cats.c1.name</span>=<span class="hljs-string">xiaol</span><br><span class="hljs-attr">person.cats.c2.name</span>=<span class="hljs-string">xiaog</span><br></code></pre></td></tr></table></figure>
+
+<p>yaml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">person:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">zhangs</span><br>  <span class="hljs-attr">age:</span> <span class="hljs-number">18</span><br>  <span class="hljs-attr">birthday:</span> <span class="hljs-number">2001</span><span class="hljs-string">/10/10</span> <span class="hljs-number">10</span><span class="hljs-string">:10:10</span><br>  <span class="hljs-attr">like:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">child:</span><br>    <span class="hljs-attr">name:</span> <span class="hljs-string">lisi</span><br>    <span class="hljs-attr">age:</span> <span class="hljs-number">20</span><br>    <span class="hljs-attr">birthday:</span> <span class="hljs-number">2008</span><span class="hljs-string">/10/10</span> <span class="hljs-number">10</span><span class="hljs-string">:10:10</span><br>    <span class="hljs-attr">text:</span> [ <span class="hljs-string">&quot;abc&quot;</span>,<span class="hljs-string">&quot;def&quot;</span> ]<br>  <span class="hljs-attr">dogs:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">xh</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">xb</span><br>  <span class="hljs-attr">cats:</span><br>    <span class="hljs-attr">c1:</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">xx</span><br>    <span class="hljs-attr">c2:</span> &#123;<span class="hljs-attr">name:</span> <span class="hljs-string">xy</span>&#125;  <span class="hljs-comment"># 对象也可这么表示</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="3、使用细节"><a href="#3、使用细节" class="headerlink" title="3、使用细节"></a>3、使用细节</h5><ul>
+<li>驼峰命名的推荐使用 - 连接。比如：birthDay &#x3D;&#x3D; birth-day</li>
+<li>文本：<ul>
+<li><strong>单引号</strong>不会转义【认为 \n 为普通字符】</li>
+<li><strong>双引号</strong>会转义【 \n 为<strong>换行符</strong>】</li>
+</ul>
+</li>
+<li>大文本：<ul>
+<li><code>|</code>开头，大文本写在下层，保留文本格式，换行符正确显示</li>
+<li><code>&gt;</code>开头，大文本写在下层，折叠换行符，以空格代替</li>
+</ul>
+</li>
+<li>多文档合并<ul>
+<li>使用<code>---</code>可以把多个yaml文档合并在一个文档中，每个文档依然内容独立</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-3-日志配置"><a href="#4-3-日志配置" class="headerlink" title="4.3. 日志配置"></a>4.3. 日志配置</h4><blockquote>
+<p>规范：项目开发不要编写<code>System.out.println() </code>，应该用<strong>日志</strong>记录信息</p>
+</blockquote>
+<p><img src="/../img/mdimg/springboot/%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2%E5%92%8C%E6%97%A5%E5%BF%97%E5%AE%9E%E7%8E%B0.png" srcset="/img/loading.gif" lazyload alt="日志门面和日志实现"></p>
+<h5 id="1、简介-1"><a href="#1、简介-1" class="headerlink" title="1、简介"></a>1、简介</h5><ol>
+<li>Spring使用<code>commons-logging</code>作为内部日志，但底层日志实现是开放的。可对接其他日志框架。</li>
+<li>支持<code>java.util.logging</code>、<code>log4j</code>、<code>logback</code>。SpringBoot提供了默认的控制台输出配置，也可以配置输出文件。</li>
+<li><code>logback</code>是默认使用的</li>
+<li>SpringBoot使用的是<code>slf4j</code>+<code>logback</code>组合</li>
+</ol>
+<p>SpringBoot怎么把日志默认配置好的</p>
+<ol>
+<li>每个<code>starter</code>场景，都会导入一个核心场景<code>spring-boot-starter</code></li>
+<li>核心场景引入了日志的所有功能<code>spring-boot-starter-longging</code></li>
+<li>默认使用了<code>slf4j</code>+<code>logback</code>组合作为默认底层日志</li>
+<li>日志系统一启动就要用，<code>xxxAutoConfiguration</code>是系统启动好后，再用到的自动配置组件</li>
+<li>日志是利用监听器机制配置好的，<code>ApplicationListener</code></li>
+<li>日志所有的配置都可以通过配置文件修改实现</li>
+</ol>
+<h5 id="2、日志格式"><a href="#2、日志格式" class="headerlink" title="2、日志格式"></a>2、日志格式</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">2023-06-22T23:28:38.274+08:00  INFO 17680 --- [           main] com.huang.Boot303LoggingApplication      : No active profile set, falling back to 1 default profile: &quot;default&quot;<br>2023-06-22T23:28:39.275+08:00  INFO 17680 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)<br></code></pre></td></tr></table></figure>
+
+<p>默认输出格式：</p>
+<ul>
+<li>时间日期：毫秒级精度</li>
+<li>日志级别：<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code>、<code>TRACE</code></li>
+<li>进程ID</li>
+<li><code>---</code>：消息分隔符</li>
+<li>线程名：使用[]包括</li>
+<li>Logger名：通常为产生日志的类名</li>
+<li>消息：日志记录的内容</li>
+</ul>
+<p>注意：logback没有<code>FATAL</code>级别，对应的是<code>ERROR</code></p>
+<h5 id="3、记录日志"><a href="#3、记录日志" class="headerlink" title="3、记录日志"></a>3、记录日志</h5><ul>
+<li><p>方案一：可以在类中定义变量来记录</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Logger</span> <span class="hljs-variable">log</span> <span class="hljs-operator">=</span> LoggerFactory.getLogger(getClass());<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>方案二：使用lombak注解<code>@Slf4j</code></p>
+</li>
+</ul>
+<h5 id="4、日志级别"><a href="#4、日志级别" class="headerlink" title="4、日志级别"></a>4、日志级别</h5><ul>
+<li>由低到高：<code>ALL</code>、<code>TRACE</code>、<code>DEBUG</code>、<code>INFO</code>、<code>WARN</code>、<code>ERROR</code>、<code>FATAL</code>、<code>OFF</code>；<ul>
+<li><strong>只会打印指定级别及以上级别的日志</strong></li>
+<li>ALL：打印所有日志</li>
+<li>TRACE：追踪框架详细流程日志，一般不使用</li>
+<li>DEBUG：开发调试细节日志</li>
+<li>INFO：关键信息日志</li>
+<li>WARN：警告但不是错误的信息日志</li>
+<li>ERROR：业务错误日志</li>
+<li>FATAL：致命错误日志，比如JVM系统奔溃</li>
+<li>OFF：关闭所有日志记录</li>
+</ul>
+</li>
+<li>不指定级别的所有类，都是用root指定的级别作为默认级别</li>
+<li><span style="color:red">SpringBoot日志默认级别是INFO</span></li>
+</ul>
+<p>在<code>application.yaml</code>中配置<code>logging.level.&lt;logger-name&gt;=&lt;level&gt;</code>指定日志级别</p>
+<h5 id="5、日志分组"><a href="#5、日志分组" class="headerlink" title="5、日志分组"></a>5、日志分组</h5><p>比较有用的技巧。</p>
+<p>将相关的<strong>logger</strong>分组在一起，统一配置，SpringBoot也支持。比如：Tomcat相关的日志统一设置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">logging.grougl.tomcat</span>=<span class="hljs-string">org.apache.catalina,org.apache.coyote,org.apache.tomcat</span><br><span class="hljs-attr">logging.level.tomcat</span>=<span class="hljs-string">trace</span><br></code></pre></td></tr></table></figure>
+
+<p>SpringBoot 预定义两个组</p>
+<table>
+<thead>
+<tr>
+<th align="center">Name</th>
+<th align="left">Loggers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">web</td>
+<td align="left"><code>org.springframework.core.codec,org.springframework.http,</code><br /><code>org.springframework.web,</code><br /><code>org.springframework.boot.actuate.endpoint.web</code>,<br /><code>org.springframework.boot.web.servlet.ServletContextinitializerBeans</code></td>
+</tr>
+<tr>
+<td align="center">sql</td>
+<td align="left"><code>org.springframework.jdbc.core</code>, <br /><code>org.hibernate.SQL</code>,<br /><code> org.jooq.tools.LoggerListener</code></td>
+</tr>
+</tbody></table>
+<h5 id="6、文件输出"><a href="#6、文件输出" class="headerlink" title="6、文件输出"></a>6、文件输出</h5><p>SpringBoot默认把日志打印到控制台，如果想将日志文件保存到磁盘，可以在<code>application.yaml</code>中添加<code>logging.file.name</code>或则<code>logging.file.path</code>配置项</p>
+<table>
+<thead>
+<tr>
+<th align="center">logging.file.name</th>
+<th align="center">logging.file.path</th>
+<th align="center">示例</th>
+<th align="center">效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">未指定</td>
+<td align="center">未指定</td>
+<td align="center"></td>
+<td align="center">仅控制台输出</td>
+</tr>
+<tr>
+<td align="center"><strong>指定</strong></td>
+<td align="center">未指定</td>
+<td align="center">my.log</td>
+<td align="center">在此项目下出现<code>my.log</code>文件，也可<code>加路径</code>将其指定到其他磁盘上</td>
+</tr>
+<tr>
+<td align="center">未指定</td>
+<td align="center"><strong>指定</strong></td>
+<td align="center">D:&#x2F;</td>
+<td align="center">写入指定目录，文件名为<code>spring.log</code></td>
+</tr>
+<tr>
+<td align="center"><strong>指定</strong></td>
+<td align="center"><strong>指定</strong></td>
+<td align="center"></td>
+<td align="center">以<code>logging.file.name</code>为准</td>
+</tr>
+</tbody></table>
+<h5 id="7、文件归档与滚动切割"><a href="#7、文件归档与滚动切割" class="headerlink" title="7、文件归档与滚动切割"></a>7、文件归档与滚动切割</h5><blockquote>
+<p>归档：每一天的日志单独存到一个文档中。</p>
+<p>切割：每个文件10MB，如果超过则切割成另一个文件。</p>
+</blockquote>
+<ul>
+<li>每天的日志应该独立分割出来存档，如果使用<code>logback</code>（SpringBoot）默认整合，可以通过<code>applicaiton.preperties/yaml</code>文件指定日志滚动规则</li>
+<li>如果是其他日志系统，需自行配置配置文件（添加<code>log4j.xml</code>或<code>log4j2-spring.xml</code>）</li>
+<li>支持的滚动规则设置如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">配置项</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>logging.logback.rollingpolicy.file-name-pattern</code></td>
+<td align="center">日志存档的文件名称格式（默认值：<code>$&#123;LOG_FILE&#125;.%d[yyyy-MM-dd].%i.gz</code>）</td>
+</tr>
+<tr>
+<td align="center"><code>logging.logback.rollingpolicy.max-file-size</code></td>
+<td align="center">存档前，每个日志文件的最大大小（默认值：10MB）</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/springboot/">#springboot</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Springboot3学习笔记--Spring3-核心特性</div>
+      <div>https://xleia.gitee.io/2023/06/21/Springboot3学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Xleia</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据结构与算法---线性结构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/20/%E6%9C%AC%E5%9C%B0Java%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BARedis%E6%8A%A5%E9%94%99/" title="本地Java连接虚拟机Redis报错">
+                        <span class="hidden-mobile">本地Java连接虚拟机Redis报错</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="#" target="_blank" rel="nofollow noopener"><span>H</span></a> <i class="iconfont icon-love"></i> <a href="#" target="_blank" rel="nofollow noopener"><span>W</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+<script src="/js/snowflake.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>
