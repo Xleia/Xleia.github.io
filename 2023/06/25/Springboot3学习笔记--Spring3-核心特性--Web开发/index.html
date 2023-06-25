@@ -18,24 +18,26 @@
   <meta name="author" content="Xleia">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="SpringBoot3-Web开发 SpringBoot的web开发能力，由SpringMVC提供  1、Web场景1、自动配置 整合整合web场景 1234&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;spring-boot-starter-we">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://xleia.gitee.io/2023/06/15/hello-world/index.html">
+<meta property="og:title" content="Springboot3学习笔记--Spring3-核心特性--Web开发">
+<meta property="og:url" content="https://xleia.gitee.io/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="xleiaの个人博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="SpringBoot3-Web开发 SpringBoot的web开发能力，由SpringMVC提供  1、Web场景1、自动配置 整合整合web场景 1234&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;spring-boot-starter-we">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-06-15T14:19:51.718Z">
-<meta property="article:modified_time" content="2023-06-17T06:55:10.962Z">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
+<meta property="article:published_time" content="2023-06-25T08:04:18.820Z">
+<meta property="article:modified_time" content="2023-06-25T09:52:25.079Z">
 <meta property="article:author" content="Xleia">
-<meta property="article:tag" content="helloworld">
+<meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Hello World - xleiaの个人博客</title>
+  <title>Springboot3学习笔记--Spring3-核心特性--Web开发 - xleiaの个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -221,7 +223,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello World"></span>
+            <span id="subtitle" data-typed-text="Springboot3学习笔记--Spring3-核心特性--Web开发"></span>
           
         </div>
 
@@ -237,8 +239,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-15 22:19" pubdate>
-          2023年6月15日 晚上
+        <time datetime="2023-06-25 16:04" pubdate>
+          2023年6月25日 下午
         </time>
       </span>
     
@@ -249,7 +251,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          367 字
+          4.1k 字
         
       </span>
     
@@ -260,7 +262,7 @@
         
         
         
-          4 分钟
+          34 分钟
         
       </span>
     
@@ -352,7 +354,7 @@
       
         <a href="/2023/06/15/hello-world/" title="Hello World"
            class="list-group-item list-group-item-action
-           active">
+           ">
           <span class="category-post">Hello World</span>
         </a>
       
@@ -388,7 +390,7 @@
       
         <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记--Spring3-核心特性--Web开发"
            class="list-group-item list-group-item-action
-           ">
+           active">
           <span class="category-post">Springboot3学习笔记--Spring3-核心特性--Web开发</span>
         </a>
       
@@ -421,12 +423,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello World</h1>
+            <h1 style="display: none">Springboot3学习笔记--Spring3-核心特性--Web开发</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月17日 下午
+                    本文最后更新于：2023年6月25日 下午
                   
                 
               </p>
@@ -434,19 +436,64 @@
             
               <div class="markdown-body">
                 
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+                <h2 id="SpringBoot3-Web开发"><a href="#SpringBoot3-Web开发" class="headerlink" title="SpringBoot3-Web开发"></a>SpringBoot3-Web开发</h2><blockquote>
+<p>SpringBoot的web开发能力，由SpringMVC提供</p>
+</blockquote>
+<h3 id="1、Web场景"><a href="#1、Web场景" class="headerlink" title="1、Web场景"></a>1、Web场景</h3><h4 id="1、自动配置"><a href="#1、自动配置" class="headerlink" title="1、自动配置"></a>1、自动配置</h4><ol>
+<li><p>整合整合web场景</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>引入<code>autoconfigure</code>功能</p>
+</li>
+<li><p><code>@EnableAutoConfiguration</code>注解使用<code>@Import(&#123;AutoConfigurationImportSelector.class&#125;)</code>批量带入组件</p>
+</li>
+<li><p>加载<code>META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports</code>文件中配置的所有组件</p>
+</li>
+<li><p>所有自动配置类如下</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs imports">org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration<br>org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration<br>============= 以下是响应式web场景 ==============================<br>org.springframework.boot.autoconfigure.web.reactive.HttpHandlerAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.ReactiveMultipartAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.ReactiveWebServerFactoryAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.WebSessionIdResolverAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.function.client.ClientHttpConnectorAutoConfiguration<br>org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration<br>============= 以上是响应式web场景 ==============================<br>org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration<br>org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration<br>org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration<br>org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration<br>org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration<br>org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration<br>org.springframework.boot.autoconfigure.websocket.reactive.WebSocketReactiveAutoConfiguration<br>org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration<br>org.springframework.boot.autoconfigure.websocket.servlet.WebSocketMessagingAutoConfiguration<br>org.springframework.boot.autoconfigure.webservices.WebServicesAutoConfiguration<br>org.springframework.boot.autoconfigure.webservices.client.WebServiceTemplateAutoConfiguration<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+<ol start="6">
+<li>绑定了配置文件的一堆配置项<ul>
+<li>1、SpringMVC的所有配置 <code>spring.mvc</code></li>
+<li>2、Web场景的通用配置 <code>spring.web</code></li>
+<li>3、文件上传配置 <code>spring.servlet.multipart</code></li>
+<li>4、服务器的配置 <code>server</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="2、默认效果"><a href="#2、默认效果" class="headerlink" title="2、默认效果"></a>2、默认效果</h4><p>默认配置：</p>
+<ol>
+<li>包含了<code>ContentNegotiatingViewResolver</code>和<code>BeanNameViewResolver</code>组件，方便视图解析</li>
+<li><strong>默认的静态资源处理机制：</strong>静态资源放在<code> static</code> 文件夹下即可直接访问</li>
+<li>自动注册了<code>Converter</code>,<code>GenericConverter</code>,<code>Formatter</code>组件，适配常见的数据类型转换和格式化需求。</li>
+<li>支持<code>HttpMessageConverters</code>，可以方便返回<code>json</code>等数据类型</li>
+<li>注册<code>MessageCodesResolver</code>，方便国际化及错误消息处理</li>
+<li>支持 静态<code>index.html</code></li>
+<li>自动使用<code>ConfigurableWebBindingInitializer</code>，实现<strong>消息处理、数据绑定、类型转化、数据校验</strong>等功能</li>
+</ol>
+<blockquote>
+<p>重要：</p>
+<ul>
+<li>如果想保持 boot mvc 的默认配置，并且自定义更多的 mvc配置，如: **interceptors, **<br><strong>formatters,view controllers</strong>等。可以使用<code>@Configuration</code>注解添加一个 <code>WebMvcConfigurer</code>类型的配置类,并不要标注<code>@EnableWebMvc</code></li>
+<li>如果想保持 boot mvc的默认配置，但要自定义核心组件实例，比如:<code>RequestMappingHandlerMapping</code>,<code>RequestMappingHandlerAdapte</code>r,或<br><code>ExceptionHandlerExceptionResolver</code>，给容器中放一个 <code>WebMvcRegistrations</code> 组件即可</li>
+<li>如果想全面接管Spring MVC，<code>@Configuration</code>标注一个配置类，并加上<code>@EnableWebMvc</code>注解，实现 <code>WebMvcConfigurer</code>接口</li>
+</ul>
+</blockquote>
+<h3 id="2、静态资源"><a href="#2、静态资源" class="headerlink" title="2、静态资源"></a>2、静态资源</h3><h4 id="1、WebMvcAutoConfiguration原理"><a href="#1、WebMvcAutoConfiguration原理" class="headerlink" title="1、WebMvcAutoConfiguration原理"></a>1、WebMvcAutoConfiguration原理</h4><h5 id="1、生效条件"><a href="#1、生效条件" class="headerlink" title="1、生效条件"></a>1、生效条件</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-meta">@AutoConfiguration(</span><br><span class="hljs-meta">    after = &#123;DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfiguration.class, ValidationAutoConfiguration.class&#125;</span><br><span class="hljs-meta">)</span>  <span class="hljs-comment">// 在这些配置生效后 </span><br><span class="hljs-meta">@ConditionalOnWebApplication(</span><br><span class="hljs-meta">    type = Type.SERVLET</span><br><span class="hljs-meta">)</span>  <span class="hljs-comment">// 如果是web应用就生效，类型是servlet；另外还有reaction类型</span><br><span class="hljs-meta">@ConditionalOnClass(&#123;Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class&#125;)</span><br><span class="hljs-meta">@ConditionalOnMissingBean(&#123;WebMvcConfigurationSupport.class&#125;)</span>  <span class="hljs-comment">// 没有这个Bean，才生效。默认就是没有</span><br><span class="hljs-meta">@AutoConfigureOrder(-2147483638)</span>  <span class="hljs-comment">// 优先级</span><br><span class="hljs-meta">@ImportRuntimeHints(&#123;WebResourcesRuntimeHints.class&#125;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebMvcAutoConfiguration</span> &#123;<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h5 id="2、效果"><a href="#2、效果" class="headerlink" title="2、效果"></a>2、效果</h5><ol>
+<li><p>放了两个Filter：</p>
+<p>a. <code>HiddenHttpMethodFilter</code>：页面表单提交Rest请求</p>
+<p>b. <code>FormContentFilter</code>：表单内容Filter，GET（数据放URL后面）、POST（数据放请求体）请求可以携带数据，PUT、DELETE的请求体数据会被忽略</p>
+</li>
+<li><p>给容器中放了<code>WebMvcConfigurer</code>组件，给SpringMvc添加各种定制功能</p>
+<p>a.</p>
+</li>
+</ol>
+<h5 id="3、WebMvcConfigurer接口"><a href="#3、WebMvcConfigurer接口" class="headerlink" title="3、WebMvcConfigurer接口"></a>3、WebMvcConfigurer接口</h5><p>提供了配置SpringMVC底层的所有组件入口</p>
+<p><img src="/../img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png" srcset="/img/loading.gif" lazyload alt="WebMvcConfigurer接口"></p>
 
                 
               </div>
@@ -480,7 +527,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/helloworld/">#helloworld</a>
+        <a href="/tags/springboot/">#springboot</a>
       
     </div>
   
@@ -492,8 +539,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello World</div>
-      <div>https://xleia.gitee.io/2023/06/15/hello-world/</div>
+      <div>Springboot3学习笔记--Spring3-核心特性--Web开发</div>
+      <div>https://xleia.gitee.io/2023/06/25/Springboot3学习笔记--Spring3-核心特性--Web开发/</div>
     </div>
     <div class="license-meta">
       
@@ -505,7 +552,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年6月15日</div>
+          <div>2023年6月25日</div>
         </div>
       
       
@@ -537,9 +584,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/06/16/SSM%E6%95%B4%E5%90%88%E9%85%8D%E7%BD%AEPageHelper%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" title="SSM框架Mybatis分页PageHelper遇到的问题">
+                      <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记--Spring3-核心特性--快速入门">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SSM框架Mybatis分页PageHelper遇到的问题</span>
+                        <span class="hidden-mobile">Springboot3学习笔记--Spring3-核心特性--快速入门</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -547,8 +594,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/11/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Redis学习笔记（一）">
-                        <span class="hidden-mobile">Redis学习笔记（一）</span>
+                      <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95--%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构">
+                        <span class="hidden-mobile">数据结构与算法---线性结构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
