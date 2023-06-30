@@ -20,25 +20,28 @@
   
     <meta name="description" content="SpringBoot3-Web开发 SpringBoot的web开发能力，由SpringMVC提供  0、WebMvcAutoConfiguration原理1、生效条件1234567891011@AutoConfiguration(    after &#x3D; &amp;#123;DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfigu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Springboot3学习笔记--Spring3-核心特性--Web开发">
-<meta property="og:url" content="https://xleia.gitee.io/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:title" content="Springboot3学习笔记（二）--Spring3-核心特性--Web开发">
+<meta property="og:url" content="https://xleia.gitee.io/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="SpringBoot3-Web开发 SpringBoot的web开发能力，由SpringMVC提供  0、WebMvcAutoConfiguration原理1、生效条件1234567891011@AutoConfiguration(    after &#x3D; &amp;#123;DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfigu">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86.png">
-<meta property="article:published_time" content="2023-06-25T08:04:18.820Z">
-<meta property="article:modified_time" content="2023-06-26T09:04:43.625Z">
+<meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
+<meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png">
+<meta property="article:published_time" content="2023-06-26T09:11:21.968Z">
+<meta property="article:modified_time" content="2023-06-28T03:42:48.035Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
+<meta name="twitter:image" content="d:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Springboot3学习笔记--Spring3-核心特性--Web开发 - xleiaの个人博客</title>
+  <title>Springboot3学习笔记（二）--Spring3-核心特性--Web开发 - xleiaの个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -224,7 +227,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Springboot3学习笔记--Spring3-核心特性--Web开发"></span>
+            <span id="subtitle" data-typed-text="Springboot3学习笔记（二）--Spring3-核心特性--Web开发"></span>
           
         </div>
 
@@ -240,8 +243,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-25 16:04" pubdate>
-          2023年6月25日 下午
+        <time datetime="2023-06-26 17:11" pubdate>
+          2023年6月26日 下午
         </time>
       </span>
     
@@ -252,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          11k 字
+          17k 字
         
       </span>
     
@@ -263,7 +266,7 @@
         
         
         
-          96 分钟
+          146 分钟
         
       </span>
     
@@ -389,19 +392,19 @@
     
       
       
-        <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记--Spring3-核心特性--Web开发"
+        <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记（一）--Spring3-核心特性--快速入门"
            class="list-group-item list-group-item-action
-           active">
-          <span class="category-post">Springboot3学习笔记--Spring3-核心特性--Web开发</span>
+           ">
+          <span class="category-post">Springboot3学习笔记（一）--Spring3-核心特性--快速入门</span>
         </a>
       
     
       
       
-        <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记--Spring3-核心特性--快速入门"
+        <a href="/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记（二）--Spring3-核心特性--Web开发"
            class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">Springboot3学习笔记--Spring3-核心特性--快速入门</span>
+           active">
+          <span class="category-post">Springboot3学习笔记（二）--Spring3-核心特性--Web开发</span>
         </a>
       
     
@@ -424,12 +427,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Springboot3学习笔记--Spring3-核心特性--Web开发</h1>
+            <h1 style="display: none">Springboot3学习笔记（二）--Spring3-核心特性--Web开发</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月26日 下午
+                    本文最后更新于：2023年6月28日 中午
                   
                 
               </p>
@@ -454,7 +457,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration(</span><br><span class="hljs-meta">    proxyBeanMethods = false</span><br><span class="hljs-meta">)</span><br><span class="hljs-meta">@Import(&#123;EnableWebMvcConfiguration.class&#125;)</span>  <span class="hljs-comment">// 额外导入了其他配置</span><br><span class="hljs-meta">@EnableConfigurationProperties(&#123;WebMvcProperties.class, WebProperties.class&#125;)</span><br><span class="hljs-meta">@Order(0)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebMvcAutoConfigurationAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">WebMvcConfigurer</span>, ServletContextAware &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="3、WebMvcConfigurer接口"><a href="#3、WebMvcConfigurer接口" class="headerlink" title="3、WebMvcConfigurer接口"></a>3、WebMvcConfigurer接口</h4><p>提供了配置SpringMVC底层的所有组件入口</p>
-<p><img src="/../img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png" srcset="/img/loading.gif" lazyload alt="WebMvcConfigurer接口"></p>
+<p><img src="D:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurer接口.png" srcset="/img/loading.gif" lazyload alt="WebMvcConfigurer接口"></p>
 <h4 id="4、静态资源规则源码"><a href="#4、静态资源规则源码" class="headerlink" title="4、静态资源规则源码"></a>4、静态资源规则源码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addResourceHandlers</span><span class="hljs-params">(ResourceHandlerRegistry registry)</span> &#123;<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.resourceProperties.isAddMappings()) &#123;<br>        logger.debug(<span class="hljs-string">&quot;Default resource handling disabled&quot;</span>);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-comment">// 1、</span><br>    addResourceHandler(registry, <span class="hljs-built_in">this</span>.mvcProperties.getWebjarsPathPattern(),<br>                       <span class="hljs-string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>);<br>    <span class="hljs-comment">// 2、</span><br>    addResourceHandler(registry, <span class="hljs-built_in">this</span>.mvcProperties.getStaticPathPattern(), (registration) -&gt; &#123;<br>        registration.addResourceLocations(<span class="hljs-built_in">this</span>.resourceProperties.getStaticLocations());<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.servletContext != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-type">ServletContextResource</span> <span class="hljs-variable">resource</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletContextResource</span>(<span class="hljs-built_in">this</span>.servletContext, SERVLET_LOCATION);<br>            registration.addResourceLocations(resource);<br>        &#125;<br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <ol>
@@ -621,7 +624,7 @@
 <h3 id="4、内容协商"><a href="#4、内容协商" class="headerlink" title="4、内容协商"></a>4、内容协商</h3><blockquote>
 <p>一套系统适配多段数据返回</p>
 </blockquote>
-<p><img src="/../img/mdimg/springboot/%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86.png" srcset="/img/loading.gif" lazyload alt="内容协商"></p>
+<p><img src="D:/leaning/myblog/source/img/mdimg/springboot/内容协商.png" srcset="/img/loading.gif" lazyload alt="内容协商"></p>
 <h4 id="1、多端内容适配"><a href="#1、多端内容适配" class="headerlink" title="1、多端内容适配"></a>1、多端内容适配</h4><h5 id="1、默认规则-1"><a href="#1、默认规则-1" class="headerlink" title="1、默认规则"></a>1、默认规则</h5><ol>
 <li><p>SpringBoot 多端内容适配</p>
 <p>1.1 基于<strong>请求头</strong>内容协商（默认开启）</p>
@@ -649,12 +652,155 @@
 </ol>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># 表示开启基于请求参数的内容协商功能，默认参数为format</span><br><span class="hljs-attr">spring.mvc.contentnegotiation.favor-parameter</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"># 设置请求参数的参数为type</span><br><span class="hljs-attr">spring.mvc.contentnegotiation.parameter-name</span>=<span class="hljs-string">type</span><br></code></pre></td></tr></table></figure>
 
-<h4 id="2、自定义内容返回"><a href="#2、自定义内容返回" class="headerlink" title="2、自定义内容返回"></a>2、自定义内容返回</h4><h5 id="1、增加yaml返回支持"><a href="#1、增加yaml返回支持" class="headerlink" title="1、增加yaml返回支持"></a>1、增加yaml返回支持</h5><h5 id="2、如何增加其他"><a href="#2、如何增加其他" class="headerlink" title="2、如何增加其他"></a>2、如何增加其他</h5><ul>
+<h4 id="2、自定义内容返回"><a href="#2、自定义内容返回" class="headerlink" title="2、自定义内容返回"></a>2、自定义内容返回</h4><h5 id="1、增加yaml返回支持"><a href="#1、增加yaml返回支持" class="headerlink" title="1、增加yaml返回支持"></a>1、增加yaml返回支持</h5><p>第一步：导入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.fasterxml.jackson.dataformat<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jackson-dataformat-yaml<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>第二步：把对象写出成YAML</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> JsonProcessingException &#123;<br>    <span class="hljs-type">Person</span> <span class="hljs-variable">person</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>();<br>    person.setId(<span class="hljs-number">1L</span>);<br>    person.setUserName(<span class="hljs-string">&quot;张三&quot;</span>);<br>    person.setEmail(<span class="hljs-string">&quot;aaa.@qq.com&quot;</span>);<br>    person.setAge(<span class="hljs-number">18</span>);<br><br>    <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">mapper</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectMapper</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">YAMLFactory</span>());<br><br>    <span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> mapper.writeValueAsString(person);<br>    System.out.println(s);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>第三步：编写配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.mvc.contentnegotiation.media-types.yaml</span>=<span class="hljs-string">text/yaml</span><br></code></pre></td></tr></table></figure>
+
+<p>第四步：编写自己的类型装换规则（MessageConverter）</p>
+<p>MyYamlHttpMessageConverter类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyYamlHttpMessageConverter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractHttpMessageConverter</span>&lt;Object&gt; &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">objectMapper</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">MyYamlHttpMessageConverter</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">//        // 媒体类型</span><br>        <span class="hljs-comment">//        MediaType mediaType = new MediaType(&quot;text&quot;, &quot;yaml&quot;);</span><br>        <span class="hljs-comment">// 告诉springboot这个messageConverter支持哪种媒体类型</span><br>        <span class="hljs-built_in">super</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MediaType</span>(<span class="hljs-string">&quot;text&quot;</span>, <span class="hljs-string">&quot;yaml&quot;</span>));<br>        <span class="hljs-type">YAMLFactory</span> <span class="hljs-variable">factory</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">YAMLFactory</span>()<br>            .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);<br>        <span class="hljs-built_in">this</span>.objectMapper = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectMapper</span>(factory);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">supports</span><span class="hljs-params">(Class&lt;?&gt; clazz)</span> &#123;<br>        <span class="hljs-comment">// 可以在这添加判断，只要是对象类型都支持。这里就没写了</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span> <span class="hljs-comment">// @RequestBody</span><br>    <span class="hljs-keyword">protected</span> Object <span class="hljs-title function_">readInternal</span><span class="hljs-params">(Class&lt;?&gt; clazz, HttpInputMessage inputMessage)</span> <span class="hljs-keyword">throws</span> IOException, HttpMessageNotReadableException &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span> <span class="hljs-comment">// @ResponseBody</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">writeInternal</span><span class="hljs-params">(Object methodReturnValue, HttpOutputMessage outputMessage)</span> <span class="hljs-keyword">throws</span> IOException, HttpMessageNotWritableException &#123;<br>        <span class="hljs-comment">// try。。。with写法，自动关流</span><br>        <span class="hljs-keyword">try</span> (<span class="hljs-type">OutputStream</span> <span class="hljs-variable">os</span> <span class="hljs-operator">=</span> outputMessage.getBody()) &#123;<br>            <span class="hljs-built_in">this</span>.objectMapper.writeValue(os, methodReturnValue);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>第五步：增加<code>HttpMessageConverter</code>组件，把自定义的配置写入底层。专门负责把对象写出为yaml格式</p>
+<p>config类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Bean</span><br><span class="hljs-keyword">public</span> WebMvcConfigurer <span class="hljs-title function_">webMvcConfigurer</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebMvcConfigurer</span>() &#123;<br>        <span class="hljs-meta">@Override</span>  <span class="hljs-comment">// 配置一个把对象转为yaml的messageConverter</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">configureMessageConverters</span><span class="hljs-params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> &#123;<br>            converters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MyYamlHttpMessageConverter</span>( ));<br>        &#125;<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="2、思考：如何增加其他"><a href="#2、思考：如何增加其他" class="headerlink" title="2、思考：如何增加其他"></a>2、思考：如何增加其他</h5><ul>
 <li>配置媒体类型支持</li>
 <li>编写对应的<code>HttpMessageConverter</code></li>
 </ul>
-<p>3、内容协商原理-<code>HttpMessageConverter</code></p>
+<h5 id="3、内容协商原理-HttpMessageConverter"><a href="#3、内容协商原理-HttpMessageConverter" class="headerlink" title="3、内容协商原理-HttpMessageConverter"></a>3、内容协商原理-<code>HttpMessageConverter</code></h5><blockquote>
+<ul>
+<li><code>HttpMessageConverter</code>怎么工作？</li>
+<li>定制<code>HttpMessageConverter</code>来实现多端内容协商</li>
+<li>编写<code>WebMvcConfigurer</code>提供的<code>configureMessageConverters</code>底层，修改底层的<code>MessageConverter</code></li>
+</ul>
+</blockquote>
+<h6 id="1、-ResponseBody由HttpMessageConverter处理"><a href="#1、-ResponseBody由HttpMessageConverter处理" class="headerlink" title="1、@ResponseBody由HttpMessageConverter处理"></a>1、<code>@ResponseBody</code>由<code>HttpMessageConverter</code>处理</h6><blockquote>
+<p>标注了<code>@ResponseBody</code>的返回值 将会由支持它的 <code>HttpMessageConverter</code>写给浏览器</p>
+</blockquote>
+<ol>
+<li><p>如果controller方法的返回值标注了<code>@ResponseBody</code>注解</p>
+<ol>
+<li>请求进来先来到<code>DispatcherServlet</code>的<code>doDispatch()</code>进行处理</li>
+<li>找到一个<code>HandlerAdapter</code>适配器，利用适配器执行目标方法</li>
+<li>因为标了<code>RequestMapping</code>注解，所有是由<code>RequestMappingHandlerAdapter</code>来执行，最终会调用<code>invokeHandlerMethod</code>这个方法</li>
+<li>目标方法执行之前，准备了两个东西：<ol>
+<li><code>HandlerMethodArgumentResolver</code>：参数解析器，确定目标方法每个参数</li>
+<li><code>HandlerMethodReturnValueHandler</code>：返回值处理器，返回的数据怎么处理</li>
+</ol>
+</li>
+<li><code>RequestMappingHandlerAdapter</code>里面的<code>invokeAndHandler()</code>真正的执行目标方法</li>
+<li>目标方法执行完成，会返回<strong>返回值对象</strong></li>
+<li>当得到返回值对象后，先找到一个合适的返回值处理器<code>HandlerMethodReturnValueHandler</code></li>
+<li>最终找到<code>RequestResponseBodyMethodProcessor</code>能处理 标注了<code>@ResponseBody</code>注解的方法</li>
+<li><code>RequestResponseBodyMethodProcessor</code>调用<code>writeWithMessageConverters</code>，利用<code>MessageConverter</code>把返回值写出去</li>
+</ol>
+<blockquote>
+<p>上面解释：<code>@ResponseBody</code>由<code>HttpMessageConverter</code>处理</p>
+</blockquote>
+</li>
+<li><p><code>HttpMessageConverter</code>会进行内容协商</p>
+<ol>
+<li>遍历所有的<code>MessageConverter</code>看谁支持这种内容类型的数据</li>
+<li><code>MessageConverter</code>有以下</li>
+<li><img src="/../img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="/img/loading.gif" lazyload></li>
+<li>最终因为要JSON所以<code>MappingJackson2HttpMessageConverter</code>支持写出JSON</li>
+<li>jackson用<code>ObjectMapper</code>把对象写出去</li>
+</ol>
+</li>
+</ol>
+<h6 id="2、WebMvcAutoConfiguration提供了几种默认HttpMessageConverters"><a href="#2、WebMvcAutoConfiguration提供了几种默认HttpMessageConverters" class="headerlink" title="2、WebMvcAutoConfiguration提供了几种默认HttpMessageConverters"></a>2、<code>WebMvcAutoConfiguration</code>提供了几种默认<code>HttpMessageConverters</code></h6><ul>
+<li><p><code>EnableWebMvcConfigurration</code>通过<code>addDefaultHttpMessageConverters</code>添加了默认的<code>MessageConverter</code>；如下：</p>
+<ul>
+<li><code>ByteArrayHttpMessageConverter()</code>：支持字节数据读写</li>
+<li><code>StringHttpMessageConverter()</code>：支持字符串读写</li>
+<li><code>ResourceHttpMessageConverter()</code>：支持资源读写</li>
+<li><code>ResourceRegionHttpMessageConverter()</code>：支持分区资源写出</li>
+<li><code>AllEncompassingFormHttpMessageConverter()</code>：支持表单xml&#x2F;json读写</li>
+<li><code>MappingJackson2XmlHttpMessageConverter</code>：支持请求响应体Json读写</li>
+</ul>
+<p>如果不导包，默认只要8个：</p>
+<p><img src="/../img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>系统提供默认的<code>MessageConverter</code>功能有限，仅用于json或者普通返回数据，额外增加新的内容协商功能，必须增加新的<code>HttpMessageConverter </code></p>
+</blockquote>
+</li>
+</ul>
+<h5 id="4、WebMvcConfigurationSupport"><a href="#4、WebMvcConfigurationSupport" class="headerlink" title="4、WebMvcConfigurationSupport"></a>4、WebMvcConfigurationSupport</h5><p>提供很多默认设置。</p>
+<p>判断系统中是否有相应的类；如果有，就加入<code>HttpMessageConverter</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">jackson2Present = ClassUtils.isPresent(<span class="hljs-string">&quot;com.fasterxml.jackson.databind.ObjectMapper&quot;</span>, classLoader) &amp;&amp;<br>    ClassUtils.isPresent(<span class="hljs-string">&quot;com.fasterxml.jackson.core.JsonGenerator&quot;</span>, classLoader);<br>jackson2XmlPresent = ClassUtils.isPresent(<span class="hljs-string">&quot;com.fasterxml.jackson.dataformat.xml.XmlMapper&quot;</span>, classLoader);<br>jackson2SmilePresent = ClassUtils.isPresent(<span class="hljs-string">&quot;com.fasterxml.jackson.dataformat.smile.SmileFactory&quot;</span>, classLoader);<br></code></pre></td></tr></table></figure>
 
+
+
+<h3 id="5、模板引擎"><a href="#5、模板引擎" class="headerlink" title="5、模板引擎"></a>5、模板引擎</h3><blockquote>
+<p>由于SpringBoot使用了<strong>嵌入式Servlet容器</strong>，所以<strong>JSP</strong>默认不能使用</p>
+<p>如果需要服务端页面渲染，优先考虑使用模板引擎</p>
+</blockquote>
+<p><img src="/../img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png" srcset="/img/loading.gif" lazyload alt="模板引擎"></p>
+<p><strong>模板引擎</strong>页面默认放在<code>src/main/resource/templates</code></p>
+<p>SpringBoot包括以下模板引擎的自动配置</p>
+<ul>
+<li>FressMarker</li>
+<li>Groovy</li>
+<li>Thymeleaf</li>
+<li>Mustache</li>
+</ul>
+<p><strong><a target="_blank" rel="noopener" href="https://www.thymeleaf.org/">Thymeleaf官网</a></strong></p>
+<h4 id="1、Thymeleaf整合"><a href="#1、Thymeleaf整合" class="headerlink" title="1、Thymeleaf整合"></a>1、Thymeleaf整合</h4><p>导坐标：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>Thymeleaf自动配置原理：</p>
+<ol>
+<li>开启了<code>org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration</code>自动配置</li>
+<li>属性绑定在<code>ThymeleafProperties</code>中，对应配置文件以<code>spring.thymeleaf</code>开头</li>
+<li>所有模板页面默认在<code>classpath:/templates</code>文件下</li>
+</ol>
+<h4 id="2、基础语法"><a href="#2、基础语法" class="headerlink" title="2、基础语法"></a>2、基础语法</h4><h5 id="1、核心用法"><a href="#1、核心用法" class="headerlink" title="1、核心用法"></a>1、核心用法</h5><p><strong><code>th:xxx</code>：</strong>动态渲染指定的 html 标签属性值、或则 th 指令（遍历、判断等）</p>
+<ul>
+<li><code>th:text</code>：用于获取标签体内的数据并渲染到页面。数据是什么样子就原原本本的展示到页面，<strong>会进行转义</strong></li>
+<li><code>th:utext</code>：用于获取标签体内的数据并渲染到页面。如果是<strong>html</strong>样式在标签体内，会按html语法渲染到界面，<strong>不会进行转义</strong></li>
+<li><code>th:任意html属性</code>：标签指定属性渲染</li>
+<li><code>th:attr</code>：标签任意属性渲染</li>
+<li><code>th:if  th:each ...</code>：其他指令</li>
+</ul>
+<p><strong>表达式</strong>：用来动态取值</p>
+<ul>
+<li><code>$&#123;&#125;</code>：变量取值；使用model共享给界面的值都直接用${}</li>
+<li><code>@&#123;&#125;</code>：url地址取值</li>
+<li><code>#&#123;&#125;</code>：国际化信息</li>
+<li><code>~&#123;&#125;</code>：片段引用</li>
+<li><code>*&#123;&#125;</code>：变量选择：需要配合 th:object 绑定对象</li>
+</ul>
+<p><strong>系统工具&amp;内置对象</strong>：见 <a target="_blank" rel="noopener" href="https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#appendix-b-expression-utility-objects">官方文档</a></p>
+<h4 id="3、遍历"><a href="#3、遍历" class="headerlink" title="3、遍历"></a>3、遍历</h4><blockquote>
+<p>语法：<code>th:each=&quot;元素名，迭代状态：$&#123;集合&#125;&quot;</code></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">th:each</span>=<span class="hljs-string">&quot;prod : $&#123;prods&#125;&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.name&#125;&quot;</span>&gt;</span>Onions<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.price&#125;&quot;</span>&gt;</span>2.41<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.inStock&#125; ? #&#123;true&#125; : #&#123;false&#125;&quot;</span>&gt;</span>yes<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">tr</span> <span class="hljs-attr">th:each</span>=<span class="hljs-string">&quot;prod,iterStat : $&#123;prods&#125;&quot;</span> <span class="hljs-attr">th:class</span>=<span class="hljs-string">&quot;$&#123;iterStat.odd&#125; ? &#x27;odd&#x27;&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.name&#125;&quot;</span>&gt;</span>Onions<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.price&#125;&quot;</span>&gt;</span>2.41<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">th:text</span>=<span class="hljs-string">&quot;$&#123;prod.inStock&#125; ? #&#123;true&#125; : #&#123;false&#125;&quot;</span>&gt;</span>yes<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>iterSat</strong>有以下属性：</p>
+<ul>
+<li>index ：当前遍历元素的索引，从0开始</li>
+<li>count ：当前遍历元素的索引，从1开始</li>
+<li>size ：需要遍历元素的总数量</li>
+<li>current ：当前正在遍历的元素对象</li>
+<li>even &#x2F; odd ：是否偶数 &#x2F; 奇数，返回值为 <code>true</code> OR <code>false</code></li>
+<li>first ：是否第一个元素</li>
+<li>last ：是否最后一个元素</li>
+</ul>
+<h4 id="4、判断"><a href="#4、判断" class="headerlink" title="4、判断"></a>4、判断</h4><ul>
+<li><code>th:if</code></li>
+<li><code>th:switch</code> … <code>th:case</code></li>
+</ul>
+<h4 id="5、属性优先级"><a href="#5、属性优先级" class="headerlink" title="5、属性优先级"></a>5、属性优先级</h4>
                 
               </div>
             
@@ -699,8 +845,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Springboot3学习笔记--Spring3-核心特性--Web开发</div>
-      <div>https://xleia.gitee.io/2023/06/25/Springboot3学习笔记(二)--Spring3-核心特性--Web开发/</div>
+      <div>Springboot3学习笔记（二）--Spring3-核心特性--Web开发</div>
+      <div>https://xleia.gitee.io/2023/06/26/Springboot3学习笔记（二）--Spring3-核心特性--Web开发/</div>
     </div>
     <div class="license-meta">
       
@@ -712,7 +858,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年6月25日</div>
+          <div>2023年6月26日</div>
         </div>
       
       
@@ -744,18 +890,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记--Spring3-核心特性--快速入门">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Springboot3学习笔记--Spring3-核心特性--快速入门</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95--%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构">
-                        <span class="hidden-mobile">数据结构与算法---线性结构</span>
+                      <a href="/2023/06/25/git%20clone%E4%B8%8B%E6%9D%A5%E7%9A%84vue%E9%A1%B9%E7%9B%AE%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3/" title="git clone下来的vue项目报错解决">
+                        <span class="hidden-mobile">git clone下来的vue项目报错解决</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
