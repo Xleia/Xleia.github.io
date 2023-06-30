@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/**/%5Cimg%5Cfavicon.ico">
-  <link rel="icon" href="/**/%5Cimg%5Cfavicon.ico">
+  <link rel="apple-touch-icon" sizes="76x76" href="/%5Cimg%5Cfavicon.ico">
+  <link rel="icon" href="/%5Cimg%5Cfavicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -23,18 +23,18 @@
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="Redis安装安装前准备请确保当前Linux环境下有gcc编译器（原因：因为redis底层是由c语言编写）可以通过下面这条命令查看 1gcc -v	  安装步骤1、先到官网下载安装包到本地 [下载地址](Download | Redis) 2、将安装包通过远程连接（FinalShell，或xshell）传到Linux，一般传到 &#x2F;opt目录下 3、解压： 123tar -zxvf redis re">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdImg/redis/redisTransalationDifference.png">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdimg/redis/redisCluster.png">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdimg/redis/redisSlot.png">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdimg/redis/redis%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E5%88%86%E5%8C%BA.png">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdimg/redis/slot.png">
-<meta property="og:image" content="https://xleia.gitee.io/2023/06/11/img/mdimg/redis/cluster.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/redis/redisTransalationDifference.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/redis/redisCluster.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/redis/redisSlot.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/redis/redis%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E5%88%86%E5%8C%BA.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/redis/slot.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/redis/cluster.png">
 <meta property="article:published_time" content="2023-06-11T08:48:11.816Z">
 <meta property="article:modified_time" content="2023-06-25T02:07:40.062Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xleia.gitee.io/2023/06/11/img/mdImg/redis/redisTransalationDifference.png">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdImg/redis/redisTransalationDifference.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -64,34 +64,34 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/**/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/**/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/**/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
 
   
-<link rel="stylesheet" href="/**/css/cloudedGlass.css">
-<link rel="stylesheet" href="/**/css/scrollAnimation.css">
+<link rel="stylesheet" href="/css/cloudedGlass.css">
+<link rel="stylesheet" href="/css/scrollAnimation.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"xleia.gitee.io","root":"/**/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/**/local-search.xml"};
+    var CONFIG = {"hostname":"xleia.gitee.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/**/js/utils.js" ></script>
-  <script  src="/**/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
   
@@ -123,7 +123,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/**/">
+    <a class="navbar-brand" href="/">
       <strong>H的学习小破站</strong>
     </a>
 
@@ -142,7 +142,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/**/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 <span>首页</span>
               </a>
@@ -154,7 +154,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/**/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 <span>归档</span>
               </a>
@@ -166,7 +166,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/**/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 <span>分类</span>
               </a>
@@ -178,7 +178,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/**/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 <span>标签</span>
               </a>
@@ -190,7 +190,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/**/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 <span>作者</span>
               </a>
@@ -220,7 +220,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/**/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -337,7 +337,7 @@
     
       
       
-        <a href="/**/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐"
+        <a href="/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">JDBC注册驱动推荐</span>
@@ -346,7 +346,7 @@
     
       
       
-        <a href="/**/2023/06/11/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Redis学习笔记（一）"
+        <a href="/2023/06/11/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Redis学习笔记（一）"
            class="list-group-item list-group-item-action
            active">
           <span class="category-post">Redis学习笔记（一）</span>
@@ -355,7 +355,7 @@
     
       
       
-        <a href="/**/2023/06/15/hello-world/" title="Hello World"
+        <a href="/2023/06/15/hello-world/" title="Hello World"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">Hello World</span>
@@ -364,7 +364,7 @@
     
       
       
-        <a href="/**/2023/06/19/indexOf-%E4%B8%8ElastIndexOf-%E5%8C%BA%E5%88%AB/" title="indexOf()与lastIndexOf()区别"
+        <a href="/2023/06/19/indexOf-%E4%B8%8ElastIndexOf-%E5%8C%BA%E5%88%AB/" title="indexOf()与lastIndexOf()区别"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">indexOf()与lastIndexOf()区别</span>
@@ -373,7 +373,7 @@
     
       
       
-        <a href="/**/2023/06/20/SpringBoot%E6%95%B4%E5%90%88Redis/" title="SpringBoot整合Redis"
+        <a href="/2023/06/20/SpringBoot%E6%95%B4%E5%90%88Redis/" title="SpringBoot整合Redis"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">SpringBoot整合Redis</span>
@@ -382,7 +382,7 @@
     
       
       
-        <a href="/**/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95--%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构"
+        <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95--%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">数据结构与算法---线性结构</span>
@@ -391,7 +391,7 @@
     
       
       
-        <a href="/**/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记（一）--Spring3-核心特性--快速入门"
+        <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记（一）--Spring3-核心特性--快速入门"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">Springboot3学习笔记（一）--Spring3-核心特性--快速入门</span>
@@ -400,7 +400,7 @@
     
       
       
-        <a href="/**/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记（二）--Spring3-核心特性--Web开发"
+        <a href="/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记（二）--Spring3-核心特性--Web开发"
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">Springboot3学习笔记（二）--Spring3-核心特性--Web开发</span>
@@ -511,7 +511,7 @@
 <li>关系型数据库采用悲观锁机制来保证了事务的隔离性和原子性；而非关系型数据库通常采用乐观锁来控制并发和保持数据一致</li>
 <li>关系型数据库通常支持复杂的事务处理和多表关联查询，而非关系型数据库通常不支持多表关联的查询操作。Redis的事务操作采用<code>multi</code>和<code>exec</code>命令配合使用，通过一系列的命令操作来实现事务。</li>
 </ul>
-<p><img src="./../img/mdImg/redis/redisTransalationDifference.png" srcset="/**/img/loading.gif" lazyload alt="redis事务区别"></p>
+<p><img src="/../img/mdImg/redis/redisTransalationDifference.png" srcset="/img/loading.gif" lazyload alt="redis事务区别"></p>
 <h3 id="操作命令"><a href="#操作命令" class="headerlink" title="操作命令"></a>操作命令</h3><ul>
 <li><code>DISCARD</code>：取消事务，放弃执行事务块内全部命令</li>
 <li><code>EXEC</code>：执行所有事务块内的命令</li>
@@ -597,7 +597,7 @@
 <li>哨兵集群+主从 复制没并不能保证数据的零丢失（因此引入了集群）</li>
 </ul>
 <h2 id="Redis集群（cluster）"><a href="#Redis集群（cluster）" class="headerlink" title="Redis集群（cluster）"></a>Redis集群（cluster）</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Redis集群是一个可以在多个Redis节点之间进行数据共享的程序集。并且Redis集群可以支持多个master节点。</p>
-<p><img src="./../img/mdimg/redis/redisCluster.png" srcset="/**/img/loading.gif" lazyload alt="redis集群"></p>
+<p><img src="/../img/mdimg/redis/redisCluster.png" srcset="/img/loading.gif" lazyload alt="redis集群"></p>
 <h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ul>
 <li>Redis集群支持多个master，每个master又可以挂载多个slave。<ul>
 <li>支持数据的读写分离，</li>
@@ -611,7 +611,7 @@
 </ul>
 <h3 id="集群算法-分片-槽位slot"><a href="#集群算法-分片-槽位slot" class="headerlink" title="集群算法 -分片 -槽位slot"></a>集群算法 -分片 -槽位slot</h3><p>集群的密钥空间被分成16384个槽，有效地设置了16384个主节点的集群大小上限（但是，建议的最大节点大小约为1000个节点)。<br>集群中的每个主节点处理16384个哈希槽的一个子集。当没有集群重新配置正在进行时(即哈希槽从一个节点移动到另一个节点)，集群是稳定的。当集群稳定时，单个哈希槽将由单个节点提供服务(但是，服务节点可以有一个或多个副本，在网络分裂或故障的情况下替换它，并且可以用于扩展读取陈旧数据是可接受的操作)。</p>
 <h4 id="槽位slot"><a href="#槽位slot" class="headerlink" title="槽位slot"></a>槽位slot</h4><p>redis集群中没有使用一致性hash，而是导入了hash槽的概念。redis集群有16384个hash槽，每个key通过CRC16校验后对16384取模来决定数据放在哪个槽。集群的每个节点负责一部分hash槽。例如以下：</p>
-<p><img src="./../img/mdimg/redis/redisSlot.png" srcset="/**/img/loading.gif" lazyload alt="redis槽位"></p>
+<p><img src="/../img/mdimg/redis/redisSlot.png" srcset="/img/loading.gif" lazyload alt="redis槽位"></p>
 <h4 id="分片"><a href="#分片" class="headerlink" title="分片"></a>分片</h4><p>使用redis集群是我们会将存储的数据分散到多台redis机器上，这就称为<code>分片</code>。集群中的每个redis实例都被认为是整个数据的分片。</p>
 <p>为了找到给定key的分片，我们对key进行CRC16(key)算法处理并通过对总分片数量取模。然后，使用确定性hash函数，这意味着给定的key将多次始终映射到同一个分片。</p>
 <h4 id="槽位与分片的优势"><a href="#槽位与分片的优势" class="headerlink" title="槽位与分片的优势"></a>槽位与分片的优势</h4><ol>
@@ -619,7 +619,7 @@
 <li>方便数据分派查找</li>
 </ol>
 <h4 id="slot槽位映射"><a href="#slot槽位映射" class="headerlink" title="slot槽位映射"></a>slot槽位映射</h4><ul>
-<li><p>哈希取余分区<br><img src="./../img/mdimg/redis/redis%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E5%88%86%E5%8C%BA.png" srcset="/**/img/loading.gif" lazyload alt="reids哈希取余分区"></p>
+<li><p>哈希取余分区<br><img src="/../img/mdimg/redis/redis%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E5%88%86%E5%8C%BA.png" srcset="/img/loading.gif" lazyload alt="reids哈希取余分区"></p>
 <p><strong>优点：</strong>简单粗暴，只需要预估好数据，规划好节点</p>
 <p><strong>缺点：</strong>原来规划好的节点，进行扩容或缩容比较麻烦，映射关系需全部重新计算，导致数据混乱</p>
 </li>
@@ -642,7 +642,7 @@
 <p>哈希槽分区为了解决一致性哈希算法的数据倾斜问题而出现。哈希槽本质上就是一个数组，大小为 <code>2^14</code></p>
 <p><strong>作用</strong></p>
 <p>解决均匀分配的问题，在数据和节点之间又加入了一层，把这层称为哈希槽（slot），用于管理数据和节点之间的关系，现在就相当于节点上放的是槽，槽里放的是数据。</p>
-<p><img src="./../img/mdimg/redis/slot.png" srcset="/**/img/loading.gif" lazyload alt="slot"></p>
+<p><img src="/../img/mdimg/redis/slot.png" srcset="/img/loading.gif" lazyload alt="slot"></p>
 <p>槽解决了粒度问题，便于数据移动</p>
 </li>
 </ul>
@@ -654,7 +654,7 @@
 </ol>
 <p>Redis集群并不保证强一致性，这意味着特定的条件下，Redis集群可能会丢掉一些被系统收到的写入请求命令</p>
 <h3 id="集群环境配置案例"><a href="#集群环境配置案例" class="headerlink" title="集群环境配置案例"></a>集群环境配置案例</h3><p>这里准备6台redis服务器。端口：6381~6386</p>
-<p><img src="./../img/mdimg/redis/cluster.png" srcset="/**/img/loading.gif" lazyload alt="cluster"></p>
+<p><img src="/../img/mdimg/redis/cluster.png" srcset="/img/loading.gif" lazyload alt="cluster"></p>
 <h4 id="一、首先要新建配置文件（有几个redis服务器就有新建几个），名字自取，然后将下面配置在配置文件中保存"><a href="#一、首先要新建配置文件（有几个redis服务器就有新建几个），名字自取，然后将下面配置在配置文件中保存" class="headerlink" title="一、首先要新建配置文件（有几个redis服务器就有新建几个），名字自取，然后将下面配置在配置文件中保存"></a><strong>一、</strong>首先要新建配置文件（有几个redis服务器就有新建几个），名字自取，然后将下面配置在配置文件中保存</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs conf">bind 0.0.0.0<br>daemonize yes<br>protected-mode no<br>port 6381 									<br>logfile &quot;/myredis/cluster/cluster6381.log&quot;	   <br>pidfile /myredis/cluster6381.pid<br>dir /myredis/cluster<br>dbfilename dump6381.rdb<br>appendonly yes<br>appendfilename &quot;appendonly6381.aof&quot;<br>requirepass 123456<br>masterauth 123456<br>cluster-enabled yes							 <br>cluster-config-file nodes-6381.conf<br>cluster-node-timeout 5000<br></code></pre></td></tr></table></figure>
 
 <h4 id="二、启动redis服务"><a href="#二、启动redis服务" class="headerlink" title="二、启动redis服务"></a>二、启动redis服务</h4><p>分别启动6个服务</p>
@@ -699,7 +699,7 @@
     
       <span class="category-chain">
         
-  <a href="/**/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
   
   
 
@@ -714,7 +714,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/**/tags/redis/">#redis</a>
+        <a href="/tags/redis/">#redis</a>
       
     </div>
   
@@ -771,7 +771,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/**/2023/06/15/hello-world/" title="Hello World">
+                      <a href="/2023/06/15/hello-world/" title="Hello World">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Hello World</span>
                         <span class="visible-mobile">上一篇</span>
@@ -781,7 +781,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/**/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐">
+                      <a href="/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐">
                         <span class="hidden-mobile">JDBC注册驱动推荐</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -944,8 +944,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/**/js/events.js" ></script>
-<script  src="/**/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -967,7 +967,7 @@
 
 
   
-    <script  src="/**/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -1066,7 +1066,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/**/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
@@ -1074,14 +1074,14 @@
 
 
   
-<script src="/**/js/scrollAnimation.js"></script>
-<script src="/**/js/snowflake.min.js"></script>
+<script src="/js/scrollAnimation.js"></script>
+<script src="/js/snowflake.min.js"></script>
 
 
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/**/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   
@@ -1089,5 +1089,5 @@
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
   </noscript>
-<!-- hexo injector body_end start --><script src="/**/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
 </html>
