@@ -25,9 +25,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurer%E6%8E%A5%E5%8F%A3.png">
 <meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86.png">
-<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
-<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
-<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png">
+<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/blob/img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/blob/img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="https://xleia.gitee.io/Xleia/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/blob/img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png">
 <meta property="article:published_time" content="2023-06-26T09:11:21.968Z">
 <meta property="article:modified_time" content="2023-06-28T03:42:48.035Z">
 <meta property="article:author" content="Xleia">
@@ -710,7 +710,7 @@
 <ol>
 <li>遍历所有的<code>MessageConverter</code>看谁支持这种内容类型的数据</li>
 <li><code>MessageConverter</code>有以下</li>
-<li><img src="Myblog/../img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="blob/master/img/loading.gif" lazyload></li>
+<li><img src="blob/master/../img/mdimg/springboot/%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="blob/master/img/loading.gif" lazyload></li>
 <li>最终因为要JSON所以<code>MappingJackson2HttpMessageConverter</code>支持写出JSON</li>
 <li>jackson用<code>ObjectMapper</code>把对象写出去</li>
 </ol>
@@ -727,7 +727,7 @@
 <li><code>MappingJackson2XmlHttpMessageConverter</code>：支持请求响应体Json读写</li>
 </ul>
 <p>如果不导包，默认只要8个：</p>
-<p><img src="Myblog/../img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="blob/master/img/loading.gif" lazyload></p>
+<p><img src="blob/master/../img/mdimg/springboot/%E9%BB%98%E8%AE%A4%E5%86%85%E5%AE%B9%E7%B1%BB%E5%9E%8B.png" srcset="blob/master/img/loading.gif" lazyload></p>
 <blockquote>
 <p>系统提供默认的<code>MessageConverter</code>功能有限，仅用于json或者普通返回数据，额外增加新的内容协商功能，必须增加新的<code>HttpMessageConverter </code></p>
 </blockquote>
@@ -743,7 +743,7 @@
 <p>由于SpringBoot使用了<strong>嵌入式Servlet容器</strong>，所以<strong>JSP</strong>默认不能使用</p>
 <p>如果需要服务端页面渲染，优先考虑使用模板引擎</p>
 </blockquote>
-<p><img src="Myblog/../img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png" srcset="blob/master/img/loading.gif" lazyload alt="模板引擎"></p>
+<p><img src="blob/master/../img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png" srcset="blob/master/img/loading.gif" lazyload alt="模板引擎"></p>
 <p><strong>模板引擎</strong>页面默认放在<code>src/main/resource/templates</code></p>
 <p>SpringBoot包括以下模板引擎的自动配置</p>
 <ul>
