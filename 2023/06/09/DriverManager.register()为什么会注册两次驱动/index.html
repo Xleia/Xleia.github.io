@@ -19,7 +19,7 @@
     <meta name="description" content="关于使用JDBC注册驱动时为什么推荐使用Class.forName(“…”)（反射）来注册，而不推荐使用DriverManager.register()来注册！！先说结论!!  原因一：使用DriverManager.register()会注册两次驱动，在内存中会有两个Driver对象。 原因二：程序依赖mysql的jar包，一旦脱离mysql的jar包，程序将无法编译。 ok，我们知道了原因，但">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JDBC注册驱动推荐">
-<meta property="og:url" content="https://gitee.io/Xleia/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/index.html">
+<meta property="og:url" content="https://gitee.com/Xleia/xleia_blog.gitee.io/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/index.html">
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="关于使用JDBC注册驱动时为什么推荐使用Class.forName(“…”)（反射）来注册，而不推荐使用DriverManager.register()来注册！！先说结论!!  原因一：使用DriverManager.register()会注册两次驱动，在内存中会有两个Driver对象。 原因二：程序依赖mysql的jar包，一旦脱离mysql的jar包，程序将无法编译。 ok，我们知道了原因，但">
 <meta property="og:locale" content="zh_CN">
@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"gitee.io","root":"/blob/master/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blob/master/local-search.xml"};
+    var CONFIG = {"hostname":"gitee.com","root":"/blob/master/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blob/master/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -489,7 +489,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JDBC注册驱动推荐</div>
-      <div>https://gitee.io/Xleia/2023/06/09/DriverManager.register()为什么会注册两次驱动/</div>
+      <div>https://gitee.com/Xleia/xleia_blog.gitee.io/2023/06/09/DriverManager.register()为什么会注册两次驱动/</div>
     </div>
     <div class="license-meta">
       
