@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>git常用命令及具体上传流程</title>
+    <link href="/2023/06/30/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B7%E4%BD%93%E4%B8%8A%E4%BC%A0%E6%B5%81%E7%A8%8B/"/>
+    <url>/2023/06/30/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B7%E4%BD%93%E4%B8%8A%E4%BC%A0%E6%B5%81%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[<h2 id="git将本地仓库数据上传到远程仓库基本步骤"><a href="#git将本地仓库数据上传到远程仓库基本步骤" class="headerlink" title="git将本地仓库数据上传到远程仓库基本步骤"></a>git将本地仓库数据上传到远程仓库基本步骤</h2><h3 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h3><p>先在gitee或者github上创建一个远程仓库并保存那个仓库地址</p><p><img src="/../img/mdimg/git/1.png"></p><h3 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h3>]]></content>
+    
+    
+    <categories>
+      
+      <category>操作命令</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>git</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Springboot3学习笔记（二）--Spring3-核心特性--Web开发</title>
     <link href="/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/"/>
     <url>/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/</url>
