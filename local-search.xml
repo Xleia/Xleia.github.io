@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>数据结构与算法---树形结构</title>
+    <link href="/2023/07/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/"/>
+    <url>/2023/07/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/</url>
+    
+    <content type="html"><![CDATA[<h1 id="树形结构篇"><a href="#树形结构篇" class="headerlink" title="树形结构篇"></a>树形结构篇</h1><p>树形结构就像下面这个图一样：</p><p><img src="/../img/mdimg/dataStructure/Tree.png" alt="树"></p><p>可以看到，每一个结点下都有子结点，并不断延申。像树一样，所以就成为<strong>树（Tree）</strong>，有一个特点就是，<strong>每个结点都不与其他结点相交</strong></p><ul><li>我们称最上方的结点为<strong>根结点（root）</strong></li><li>每一个结点的子结点的数目（分支的数目），我们称为结点的<strong>度（Degree）</strong>，而各个结点度的最大值称为树的度</li><li>每个结点延伸下去的下一个结点都可以称为一颗<strong>子树（SubTree）</strong></li><li>每个<strong>结点的层次（Level）</strong>按照从上往下的顺序，书的根结点为1，每向下一层+1。整棵树中所有结点最大层次就是这个树的<strong>深度（Depth）</strong>。比如上面那个树的深度就是4。</li></ul><p>各结点之间的称呼：</p><ul><li>当前结点直接向下连接的结点，称为<strong>子结点</strong>；相反，就是<strong>父结点</strong></li><li>如果某个节点没有任何子结点（结点度为0时）那么就称这个结点为<strong>叶子结点</strong></li><li>如果两个结点的父结点是同一个，那么称这两个结点为<strong>兄弟结点</strong></li><li>从根结点开始一直到某个结点大的整个路径上的结点，都是这个结点的<strong>祖先结点</strong>（比如：L的祖先结点就是E、B、A）</li></ul><hr><h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><p><strong>二叉树（Birnary Tree）</strong>是一种特殊的树，它的度最大只能为2，所以称为二叉树。</p><p>当然某些二叉树也有特殊的称呼。比如，在一棵二叉树中，所有分支结点都存在左子树和右子树，且叶子结点都在同一层：</p><p><img src="/../img/mdimg/dataStructure/FullBinaryTree.png" alt="满二叉树"></p><p>这样的二叉树，就称为<strong>满二叉树</strong>，没有出现任何度为1的结点。还有一种特殊情况：</p><p><img src="/../img/mdimg/dataStructure/CompleteBinaryTree.png" alt="完全二叉树"></p><p>可以看到最后一层有空缺，但是所有叶子结点是按照从左往右的顺序排列的，这样的树我们称为<strong>完全二叉树</strong>。故，一颗满二叉树一定是一颗完全二叉树，但是一颗完全二叉树不一定是满二叉树。</p><h2 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h2><p>由于二叉树的结构特殊，总结了了五个性质：</p><ul><li><p><strong>性质一：</strong>对于一颗二叉树，第$i$层的最大结点数量为$2^{i-1}$个，比如二叉树的第一层只有一个根结点，也就是$2^0&#x3D;1$</p></li><li><p><strong>性质二：</strong>对于一颗深度为 k 的二叉树，可以具有最大的结点数量为：<br>$$<br>n&#x3D;2^0+2^1+2^2+…+2^{k-1}<br>$$<br>发现，实际上每一层的结点数量，组成等比数列求和公式，可以简化为：<br>$$<br>S<del>n</del>&#x3D;2^k-1<br>$$<br>所以一颗深度为 k 的二叉树结点数量为 $n &#x3D; 2^k-1$</p></li><li><p><strong>性质三：</strong>假设一颗二叉树中度为 0、1、2 的结点数量分别为 n<del>0</del>、n<del>1</del>、n<del>2</del>，由于一颗二叉树中只有这三种类型的结点，那么可以直接得到结点总数：<br>$$<br>n&#x3D;n_0+n_1+n_2<br>$$</p><p>$$<br>n&#x3D;n_1+2n_2+1<br>$$</p><p>对于任何一颗二叉树，如果其叶子结点个数为n<del>0</del>，度为2的结点个数为n<del>2</del>，那么<br>$$<br>n_0&#x3D;n_2+1<br>$$</p></li><li><p><strong>性质四：</strong>一颗具有 n 个结点的完全二叉树深度为 $k&#x3D;\lfloor log_2n \rfloor+1$</p></li><li><p><strong>性质五：</strong>一颗有n个结点的完全二叉树，由性质四得到深度为 $k&#x3D; \lfloor log_2n\rfloor+1$现在对于任意一个结点i，结点的顺序为从上往下，从左往右:</p><ul><li>对于一个拥有左右孩子的结点来说，其左孩子为 2i，右孩子为 2i + 1。</li><li>如果 &#96;i &#x3D; 1，那么此结点为二叉树的根结点，如果i&gt;1，那么其父结点就是[i&#x2F;2]，比如第3个结点的父结点为第1个节点，也就是根结点。</li><li>如果2i &gt; n，则结点i没有左孩子，比如下面图中的二叉树，n为5，假设此时i &#x3D; 3，那么2i &#x3D; 6 &gt; n &#x3D;5 说明第三个结点没有左子树。</li><li>如果2i +1 &gt; n，则结点i没有右孩子。</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>算法</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>git推送代码到远程仓库报错</title>
     <link href="/2023/06/30/git%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%8A%A5%E9%94%99/"/>
     <url>/2023/06/30/git%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%8A%A5%E9%94%99/</url>

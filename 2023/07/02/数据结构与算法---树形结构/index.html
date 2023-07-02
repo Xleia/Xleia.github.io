@@ -18,24 +18,28 @@
   <meta name="author" content="Xleia">
   <meta name="keywords" content="">
   
-    <meta name="description" content="报错：Cannot convert value of type ‘com.github.pagehelper.PageHelper’ to required type ‘org.apache.ibatis.plugin.Interceptor’ for property ‘plugins[0]’: no matching editors or conversion strategy found 问">
+    <meta name="description" content="树形结构篇树形结构就像下面这个图一样：  可以看到，每一个结点下都有子结点，并不断延申。像树一样，所以就成为树（Tree），有一个特点就是，每个结点都不与其他结点相交  我们称最上方的结点为根结点（root） 每一个结点的子结点的数目（分支的数目），我们称为结点的度（Degree），而各个结点度的最大值称为树的度 每个结点延伸下去的下一个结点都可以称为一颗子树（SubTree） 每个结点的层次（L">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SSM框架Mybatis分页PageHelper遇到的问题">
-<meta property="og:url" content="https://xleia.gitee.io/2023/06/16/SSM%E6%95%B4%E5%90%88%E9%85%8D%E7%BD%AEPageHelper%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:title" content="数据结构与算法---树形结构">
+<meta property="og:url" content="https://xleia.gitee.io/2023/07/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="xleiaの个人博客">
-<meta property="og:description" content="报错：Cannot convert value of type ‘com.github.pagehelper.PageHelper’ to required type ‘org.apache.ibatis.plugin.Interceptor’ for property ‘plugins[0]’: no matching editors or conversion strategy found 问">
+<meta property="og:description" content="树形结构篇树形结构就像下面这个图一样：  可以看到，每一个结点下都有子结点，并不断延申。像树一样，所以就成为树（Tree），有一个特点就是，每个结点都不与其他结点相交  我们称最上方的结点为根结点（root） 每一个结点的子结点的数目（分支的数目），我们称为结点的度（Degree），而各个结点度的最大值称为树的度 每个结点延伸下去的下一个结点都可以称为一颗子树（SubTree） 每个结点的层次（L">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-06-16T03:32:31.814Z">
-<meta property="article:modified_time" content="2023-06-20T14:53:06.440Z">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/dataStructure/Tree.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/dataStructure/FullBinaryTree.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/dataStructure/CompleteBinaryTree.png">
+<meta property="article:published_time" content="2023-07-02T06:56:10.952Z">
+<meta property="article:modified_time" content="2023-07-02T08:27:09.677Z">
 <meta property="article:author" content="Xleia">
-<meta property="article:tag" content="debug">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/dataStructure/Tree.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>SSM框架Mybatis分页PageHelper遇到的问题 - xleiaの个人博客</title>
+  <title>数据结构与算法---树形结构 - xleiaの个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -221,7 +225,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="SSM框架Mybatis分页PageHelper遇到的问题"></span>
+            <span id="subtitle" data-typed-text="数据结构与算法---树形结构"></span>
           
         </div>
 
@@ -237,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-16 11:32" pubdate>
-          2023年6月16日 中午
+        <time datetime="2023-07-02 14:56" pubdate>
+          2023年7月2日 下午
         </time>
       </span>
     
@@ -249,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          1.4k 字
         
       </span>
     
@@ -260,7 +264,7 @@
         
         
         
-          16 分钟
+          12 分钟
         
       </span>
     
@@ -313,17 +317,17 @@
     
     <div class="category row nomargin-x">
       <a class="category-item 
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="DEBUG"
-        id="heading-dc30ec20708ef7b0f641ef78b7880a15" role="tab" data-toggle="collapse" href="#collapse-dc30ec20708ef7b0f641ef78b7880a15"
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="学习"
+        id="heading-4ef520d6cd20ba4a727af08e17e4939e" role="tab" data-toggle="collapse" href="#collapse-4ef520d6cd20ba4a727af08e17e4939e"
         aria-expanded="true"
       >
-        DEBUG
-        <span class="list-group-count">(4)</span>
+        学习
+        <span class="list-group-count">(9)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
-      <div class="category-collapse collapse show" id="collapse-dc30ec20708ef7b0f641ef78b7880a15"
-           role="tabpanel" aria-labelledby="heading-dc30ec20708ef7b0f641ef78b7880a15">
+      <div class="category-collapse collapse show" id="collapse-4ef520d6cd20ba4a727af08e17e4939e"
+           role="tabpanel" aria-labelledby="heading-4ef520d6cd20ba4a727af08e17e4939e">
         
         
           
@@ -332,37 +336,82 @@
     
       
       
-        <a href="/2023/06/16/SSM%E6%95%B4%E5%90%88%E9%85%8D%E7%BD%AEPageHelper%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" title="SSM框架Mybatis分页PageHelper遇到的问题"
+        <a href="/2023/06/09/DriverManager.register()%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%B3%A8%E5%86%8C%E4%B8%A4%E6%AC%A1%E9%A9%B1%E5%8A%A8/" title="JDBC注册驱动推荐"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">JDBC注册驱动推荐</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/11/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Redis学习笔记（一）"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Redis学习笔记（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/15/hello-world/" title="Hello World"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Hello World</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/19/indexOf-%E4%B8%8ElastIndexOf-%E5%8C%BA%E5%88%AB/" title="indexOf()与lastIndexOf()区别"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">indexOf()与lastIndexOf()区别</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/20/SpringBoot%E6%95%B4%E5%90%88Redis/" title="SpringBoot整合Redis"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">SpringBoot整合Redis</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95--%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84/" title="数据结构与算法---线性结构"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">数据结构与算法---线性结构</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/25/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="Springboot3学习笔记（一）--Spring3-核心特性--快速入门"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Springboot3学习笔记（一）--Spring3-核心特性--快速入门</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/06/26/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--Web%E5%BC%80%E5%8F%91/" title="Springboot3学习笔记（二）--Spring3-核心特性--Web开发"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Springboot3学习笔记（二）--Spring3-核心特性--Web开发</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2023/07/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95---%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/" title="数据结构与算法---树形结构"
            class="list-group-item list-group-item-action
            active">
-          <span class="category-post">SSM框架Mybatis分页PageHelper遇到的问题</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2023/06/20/%E6%9C%AC%E5%9C%B0Java%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BARedis%E6%8A%A5%E9%94%99/" title="本地Java连接虚拟机Redis报错"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">本地Java连接虚拟机Redis报错</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2023/06/25/git%20clone%E4%B8%8B%E6%9D%A5%E7%9A%84vue%E9%A1%B9%E7%9B%AE%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3/" title="git clone下来的vue项目报错解决"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">git clone下来的vue项目报错解决</span>
-        </a>
-      
-    
-      
-      
-        <a href="/2023/06/30/git%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%8A%A5%E9%94%99/" title="git推送代码到远程仓库报错"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">git推送代码到远程仓库报错</span>
+          <span class="category-post">数据结构与算法---树形结构</span>
         </a>
       
     
@@ -385,12 +434,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">SSM框架Mybatis分页PageHelper遇到的问题</h1>
+            <h1 style="display: none">数据结构与算法---树形结构</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月20日 晚上
+                    本文最后更新于：2023年7月2日 下午
                   
                 
               </p>
@@ -398,16 +447,50 @@
             
               <div class="markdown-body">
                 
-                <p><strong>报错：</strong>Cannot convert value of type ‘com.github.pagehelper.PageHelper’ to required type ‘org.apache.ibatis.plugin.Interceptor’ for property ‘plugins[0]’: no matching editors or conversion strategy found</p>
-<h2 id="问题描述：sqlSessionFactory初始化失败"><a href="#问题描述：sqlSessionFactory初始化失败" class="headerlink" title="问题描述：sqlSessionFactory初始化失败"></a>问题描述：sqlSessionFactory初始化失败</h2><p>修改前的applicationContext-dao.xml配置：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;sqlSessionFactory&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dataSource&quot;</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;dataSource&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;typeAliasesPackage&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;com.huang.pojo&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;plugins&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.github.pagehelper.PageHelper&quot;</span>&gt;</span> <span class="hljs-comment">&lt;!--此时这里报错--&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;properties&quot;</span>&gt;</span><br>                        <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>helperDialect=mysql<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>                    <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;configLocation&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;classpath:sqlMapConfig.xml&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="原因分析："><a href="#原因分析：" class="headerlink" title="原因分析："></a>原因分析：</h2><p>通过查阅<a target="_blank" rel="noopener" href="https://pagehelper.github.io/docs/">官网</a>得知，因为上面的相关PageHelper配置是4.x版本的，老版的拦截器<code>Interceptor</code>和分页插件实现类<code>dialect</code>都是在<code>com.github.pagehelper.PageHelper</code>这个类下，但是5.x版本的<code>PageHelper</code>只是<code>dialect</code>的实现类，而新版的拦截器则是在<code>com.github.pagehelper.PageInterceptor</code>下，所以需要配置<code>PageInterceptor</code>。</p>
-<p>pageHelper是如何在<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=mybatis&spm=1001.2101.3001.7020">mybatis</a>中工作呢，是通过mybatis的pulgin实现了Interceptor接口，从而获得要执行的sql语句实现分页技术。</p>
-<h2 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h2><p>修改后的applicationContext-dao.xml配置：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;sqlSessionFactory&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dataSource&quot;</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;dataSource&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;typeAliasesPackage&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;com.huang.pojo&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;plugins&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.github.pagehelper.PageInterceptor&quot;</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;properties&quot;</span>&gt;</span><br>                        <span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>helperDialect=mysql<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span><br>                    <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;configLocation&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;classpath:sqlMapConfig.xml&quot;</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<p>修改后成功运行。</p>
+                <h1 id="树形结构篇"><a href="#树形结构篇" class="headerlink" title="树形结构篇"></a>树形结构篇</h1><p>树形结构就像下面这个图一样：</p>
+<p><img src="/../img/mdimg/dataStructure/Tree.png" srcset="/img/loading.gif" lazyload alt="树"></p>
+<p>可以看到，每一个结点下都有子结点，并不断延申。像树一样，所以就成为<strong>树（Tree）</strong>，有一个特点就是，<strong>每个结点都不与其他结点相交</strong></p>
+<ul>
+<li>我们称最上方的结点为<strong>根结点（root）</strong></li>
+<li>每一个结点的子结点的数目（分支的数目），我们称为结点的<strong>度（Degree）</strong>，而各个结点度的最大值称为树的度</li>
+<li>每个结点延伸下去的下一个结点都可以称为一颗<strong>子树（SubTree）</strong></li>
+<li>每个<strong>结点的层次（Level）</strong>按照从上往下的顺序，书的根结点为1，每向下一层+1。整棵树中所有结点最大层次就是这个树的<strong>深度（Depth）</strong>。比如上面那个树的深度就是4。</li>
+</ul>
+<p>各结点之间的称呼：</p>
+<ul>
+<li>当前结点直接向下连接的结点，称为<strong>子结点</strong>；相反，就是<strong>父结点</strong></li>
+<li>如果某个节点没有任何子结点（结点度为0时）那么就称这个结点为<strong>叶子结点</strong></li>
+<li>如果两个结点的父结点是同一个，那么称这两个结点为<strong>兄弟结点</strong></li>
+<li>从根结点开始一直到某个结点大的整个路径上的结点，都是这个结点的<strong>祖先结点</strong>（比如：L的祖先结点就是E、B、A）</li>
+</ul>
+<hr>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><p><strong>二叉树（Birnary Tree）</strong>是一种特殊的树，它的度最大只能为2，所以称为二叉树。</p>
+<p>当然某些二叉树也有特殊的称呼。比如，在一棵二叉树中，所有分支结点都存在左子树和右子树，且叶子结点都在同一层：</p>
+<p><img src="/../img/mdimg/dataStructure/FullBinaryTree.png" srcset="/img/loading.gif" lazyload alt="满二叉树"></p>
+<p>这样的二叉树，就称为<strong>满二叉树</strong>，没有出现任何度为1的结点。还有一种特殊情况：</p>
+<p><img src="/../img/mdimg/dataStructure/CompleteBinaryTree.png" srcset="/img/loading.gif" lazyload alt="完全二叉树"></p>
+<p>可以看到最后一层有空缺，但是所有叶子结点是按照从左往右的顺序排列的，这样的树我们称为<strong>完全二叉树</strong>。故，一颗满二叉树一定是一颗完全二叉树，但是一颗完全二叉树不一定是满二叉树。</p>
+<h2 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h2><p>由于二叉树的结构特殊，总结了了五个性质：</p>
+<ul>
+<li><p><strong>性质一：</strong>对于一颗二叉树，第$i$层的最大结点数量为$2^{i-1}$个，比如二叉树的第一层只有一个根结点，也就是$2^0&#x3D;1$</p>
+</li>
+<li><p><strong>性质二：</strong>对于一颗深度为 k 的二叉树，可以具有最大的结点数量为：<br>$$<br>n&#x3D;2^0+2^1+2^2+…+2^{k-1}<br>$$<br>发现，实际上每一层的结点数量，组成等比数列求和公式，可以简化为：<br>$$<br>S<del>n</del>&#x3D;2^k-1<br>$$<br>所以一颗深度为 k 的二叉树结点数量为 $n &#x3D; 2^k-1$</p>
+</li>
+<li><p><strong>性质三：</strong>假设一颗二叉树中度为 0、1、2 的结点数量分别为 n<del>0</del>、n<del>1</del>、n<del>2</del>，由于一颗二叉树中只有这三种类型的结点，那么可以直接得到结点总数：<br>$$<br>n&#x3D;n_0+n_1+n_2<br>$$</p>
+<p>$$<br>n&#x3D;n_1+2n_2+1<br>$$</p>
+<p>对于任何一颗二叉树，如果其叶子结点个数为n<del>0</del>，度为2的结点个数为n<del>2</del>，那么<br>$$<br>n_0&#x3D;n_2+1<br>$$</p>
+</li>
+<li><p><strong>性质四：</strong>一颗具有 n 个结点的完全二叉树深度为 $k&#x3D;\lfloor log_2n \rfloor+1$</p>
+</li>
+<li><p><strong>性质五：</strong>一颗有n个结点的完全二叉树，由性质四得到深度为 $k&#x3D; \lfloor log_2n\rfloor+1$现在对于任意一个结点i，结点的顺序为从上往下，从左往右:</p>
+<ul>
+<li>对于一个拥有左右孩子的结点来说，其左孩子为 2i，右孩子为 2i + 1。</li>
+<li>如果 &#96;i &#x3D; 1，那么此结点为二叉树的根结点，如果i&gt;1，那么其父结点就是[i&#x2F;2]，比如第3个结点的父结点为第1个节点，也就是根结点。</li>
+<li>如果2i &gt; n，则结点i没有左孩子，比如下面图中的二叉树，n为5，假设此时i &#x3D; 3，那么2i &#x3D; 6 &gt; n &#x3D;5 说明第三个结点没有左子树。</li>
+<li>如果2i +1 &gt; n，则结点i没有右孩子。</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -426,7 +509,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/DEBUG/" class="category-chain-item">DEBUG</a>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="category-chain-item">学习</a>
   
   
 
@@ -441,7 +524,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/debug/">#debug</a>
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
       
     </div>
   
@@ -453,8 +536,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>SSM框架Mybatis分页PageHelper遇到的问题</div>
-      <div>https://xleia.gitee.io/2023/06/16/SSM整合配置PageHelper遇到的坑/</div>
+      <div>数据结构与算法---树形结构</div>
+      <div>https://xleia.gitee.io/2023/07/02/数据结构与算法---树形结构/</div>
     </div>
     <div class="license-meta">
       
@@ -466,7 +549,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年6月16日</div>
+          <div>2023年7月2日</div>
         </div>
       
       
@@ -498,18 +581,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/06/19/indexOf-%E4%B8%8ElastIndexOf-%E5%8C%BA%E5%88%AB/" title="indexOf()与lastIndexOf()区别">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">indexOf()与lastIndexOf()区别</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/15/hello-world/" title="Hello World">
-                        <span class="hidden-mobile">Hello World</span>
+                      <a href="/2023/06/30/git%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E6%8A%A5%E9%94%99/" title="git推送代码到远程仓库报错">
+                        <span class="hidden-mobile">git推送代码到远程仓库报错</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
