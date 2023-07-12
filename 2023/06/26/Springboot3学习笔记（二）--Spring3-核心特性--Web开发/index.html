@@ -29,9 +29,10 @@
 <meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/contentNegotiation.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/contentType.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/defaultContentType.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/templateEngine.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/ExceptionHandler.png">
 <meta property="article:published_time" content="2023-06-26T09:11:21.968Z">
-<meta property="article:modified_time" content="2023-07-01T03:39:05.322Z">
+<meta property="article:modified_time" content="2023-07-12T09:46:30.947Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
@@ -255,7 +256,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          17k 字
+          20k 字
         
       </span>
     
@@ -266,7 +267,7 @@
         
         
         
-          146 分钟
+          165 分钟
         
       </span>
     
@@ -324,7 +325,7 @@
         aria-expanded="true"
       >
         学习
-        <span class="list-group-count">(9)</span>
+        <span class="list-group-count">(12)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
@@ -417,6 +418,21 @@
         </a>
       
     
+      
+      
+        <a href="/2023/07/09/Springboot3%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89--Spring3-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7--%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/" title="Springboot3学习笔记（三）--Spring3-核心特性--数据访问"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">Springboot3学习笔记（三）--Spring3-核心特性--数据访问</span>
+        </a>
+      
+    
+      
+      
+        <a href="/categories/%E5%AD%A6%E4%B9%A0/" class="list-group-item list-group-item-action">
+          <span class="category-post">More...</span>
+        </a>
+        
   </div>
 
         
@@ -441,7 +457,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年7月1日 中午
+                    本文最后更新于：2023年7月12日 下午
                   
                 
               </p>
@@ -511,7 +527,7 @@
 </ol>
 <h4 id="6、为什么容器中放一个WebMvcConfigurer就能生效"><a href="#6、为什么容器中放一个WebMvcConfigurer就能生效" class="headerlink" title="6、为什么容器中放一个WebMvcConfigurer就能生效"></a>6、为什么容器中放一个WebMvcConfigurer就能生效</h4><ol>
 <li><code>WebMvcAutoConfiguration</code>是一个自动配置类，它里面有一个<code>EnableWebMvcConfiguration</code></li>
-<li><code>EnableWebMvcConfiguration</code>继承与<code>DelegatingWebMvcConfiguration</code>，这两个都生效</li>
+<li><code>EnableWebMvcConfiguration</code>继承于<code>DelegatingWebMvcConfiguration</code>，这两个都生效</li>
 <li><code>DelegatingWebMvcConfiguration</code>利用 DI 把容器中所有<code>WebMvcConfigurer</code>注入进来</li>
 <li>别人调用<code> DelegatingWebMvcConfiguration</code>的方法配置底层规则，而它调用所有<code>WebMvcConfigure</code>的配置底层方法。</li>
 </ol>
@@ -754,7 +770,7 @@
 <p>由于SpringBoot使用了<strong>嵌入式Servlet容器</strong>，所以<strong>JSP</strong>默认不能使用</p>
 <p>如果需要服务端页面渲染，优先考虑使用模板引擎</p>
 </blockquote>
-<p><img src="/../img/mdimg/springboot/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E.png" srcset="/img/loading.gif" lazyload alt="模板引擎"></p>
+<p><img src="/../img/mdimg/springboot/templateEngine.png" srcset="/img/loading.gif" lazyload alt="模板引擎"></p>
 <p><strong>模板引擎</strong>页面默认放在<code>src/main/resource/templates</code></p>
 <p>SpringBoot包括以下模板引擎的自动配置</p>
 <ul>
@@ -809,7 +825,74 @@
 <li><code>th:if</code></li>
 <li><code>th:switch</code> … <code>th:case</code></li>
 </ul>
-<h4 id="5、属性优先级"><a href="#5、属性优先级" class="headerlink" title="5、属性优先级"></a>5、属性优先级</h4>
+<h4 id="5、模板布局"><a href="#5、模板布局" class="headerlink" title="5、模板布局"></a>5、模板布局</h4><ul>
+<li>定义模板：<code>th:fragment</code></li>
+<li>引用模板：<code>~&#123;模板名 :: 片段名&#125;</code></li>
+<li>插入模板：<code>th:insert</code>、<code>th:replace</code></li>
+</ul>
+<h4 id="6、热启动"><a href="#6、热启动" class="headerlink" title="6、热启动"></a>6、热启动</h4><p><strong>devtools</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-devtools<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>修改界面后：<code>ctrl+F9</code>刷新效果</p>
+<p>Java代码的修改，如果<code>devtools</code>热启动，可能有bug</p>
+<h3 id="6、国际化"><a href="#6、国际化" class="headerlink" title="6、国际化"></a>6、国际化</h3><p>国际化的自动配置类是<code>MessageSourceAutoConfiguration</code></p>
+<p>实现步骤：</p>
+<ol>
+<li>在资源文件夹下新建 <code>message.properties</code>配置文件<ul>
+<li><code>message.properties</code>：默认语言</li>
+<li><code>message-en-US.properties</code>：英文</li>
+<li><code>message-zh-CN.properties</code>：中文</li>
+</ul>
+</li>
+<li>在页面中使用表达式 <code>#&#123;&#125;</code>获取国际化配置信息</li>
+<li>在程序中可以自动注入 <code>MessageSource</code>组件，过去国际化的配置项值</li>
+</ol>
+<h3 id="7、错误处理"><a href="#7、错误处理" class="headerlink" title="7、错误处理"></a>7、错误处理</h3><p><img src="/../img/mdImg/springboot/ExceptionHandler.png" srcset="/img/loading.gif" lazyload alt="错误处理流程"></p>
+<h3 id="8、嵌入式容器"><a href="#8、嵌入式容器" class="headerlink" title="8、嵌入式容器"></a>8、嵌入式容器</h3><blockquote>
+<p><strong>Servlet容器：</strong> 管理、运行Servlet组件（Servlet、Filter、Listenere ）的环境，一般指服务器</p>
+</blockquote>
+<h4 id="1、自动配置原理"><a href="#1、自动配置原理" class="headerlink" title="1、自动配置原理"></a>1、自动配置原理</h4><blockquote>
+<p>SpringBoot默认嵌入Tomcat作为Servlet容器</p>
+</blockquote>
+<ol>
+<li><p><code>ServletWebServerFactoryAutoConfiguration</code>自动配置了嵌入式容器</p>
+</li>
+<li><p>所有的属性都绑定在了<code>ServerProperties</code>属性类中</p>
+</li>
+<li><p><code>ServletWebServerFactoryAutoConfiguration</code>导入了嵌入式三大服务器 tomcat、jetty、undertow</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@AutoConfiguration</span><br><span class="hljs-meta">@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)</span><br><span class="hljs-meta">@ConditionalOnClass(ServletRequest.class)</span><br><span class="hljs-meta">@ConditionalOnWebApplication(type = Type.SERVLET)</span><br><span class="hljs-meta">@EnableConfigurationProperties(ServerProperties.class)</span><br><span class="hljs-meta">@Import(&#123; ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,</span><br><span class="hljs-meta">		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,</span><br><span class="hljs-meta">		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,</span><br><span class="hljs-meta">		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class &#125;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ServletWebServerFactoryAutoConfiguration</span> &#123;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>导入这三个服务器都有条件注解<code>@ConditionalOnClass(&#123; Servlet.class, Tomcat.class, UpgradeProtocol.class &#125;)</code>、<code>@ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)</code></li>
+<li>默认是tomcat，给容器中放入了<code>TomcatServletWebServerFactory</code></li>
+<li>都在容器中<code>XXXServletWebServerFactory</code>放了一个<strong>Web服务器工厂</strong></li>
+<li>web服务器工厂都有一个功能，<code>getWebServer</code>获取web服务器</li>
+</ul>
+</li>
+</ol>
+<h3 id="9、全面接管SpringMVC"><a href="#9、全面接管SpringMVC" class="headerlink" title="9、全面接管SpringMVC"></a>9、全面接管SpringMVC</h3><blockquote>
+<p>spring boot默认配置好了springmvc的所有常用特性</p>
+<p>如果我们需要全面接管springmvc的所有配置并禁用默认配置，只需要我们编写一个<code>WebMvcConfigurer</code>配置类，并标注<code>@EnableWebMvc</code></p>
+<ul>
+<li><code>@EnableWebMvc</code>：禁用默认配置</li>
+<li><code>WebMvcConfigurer</code>组件：定义mvc底层行为</li>
+</ul>
+</blockquote>
+<h4 id="1、WebMvcAutoConfiguration配置了哪些行为"><a href="#1、WebMvcAutoConfiguration配置了哪些行为" class="headerlink" title="1、WebMvcAutoConfiguration配置了哪些行为"></a>1、WebMvcAutoConfiguration配置了哪些行为</h4><ol>
+<li><code>WebMvcAutoConfiguration</code> web场景的自动配置类<ol>
+<li>支持RESTful的filter：<code>HiddenHttpMethodFilter</code></li>
+<li>支持非POST，请求体携带数据：<code>FormContentFilter</code></li>
+<li>导入<code>EnableWebMvcConfiguration</code></li>
+<li><code>WebMvcAutoConfigurationAdapter</code>配置生效，它实现了<code>WebMvcConfigurer</code></li>
+<li>mvc所有的底层行为接口都在<code>WebMvcConfigurer</code>这个接口里</li>
+</ol>
+</li>
+</ol>
+<h4 id="2、-EnableWebMvc禁用默认行为怎么实现"><a href="#2、-EnableWebMvc禁用默认行为怎么实现" class="headerlink" title="2、@EnableWebMvc禁用默认行为怎么实现"></a>2、@EnableWebMvc禁用默认行为怎么实现</h4><ol>
+<li><code>@EnableWebMvc</code>往容器中导入了<code>DelegatingWebMvcConfiguration</code>组件，此组件又继承了<code>WebMvcConfigurationSupport</code>，相当于它就是<code>WebMvcConfigurationSupport</code></li>
+<li><code>WebMvcAutoConfiguration</code>要生效有条核心注解<code>@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)</code>，只有ioc容器中没有此组件时才会生效mvc底层的所有默认行为</li>
+</ol>
+
                 
               </div>
             
