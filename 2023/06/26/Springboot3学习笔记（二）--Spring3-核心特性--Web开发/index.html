@@ -25,18 +25,18 @@
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="SpringBoot3-Web开发 SpringBoot的web开发能力，由SpringMVC提供  0、WebMvcAutoConfiguration原理1、生效条件1234567891011@AutoConfiguration(    after &#x3D; &amp;#123;DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfigu">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurerInterface.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurerInterface.png">
 <meta property="og:image" content="d:/leaning/myblog/source/img/mdimg/springboot/contentNegotiation.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/contentType.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/defaultContentType.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/templateEngine.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/ExceptionHandler.png">
 <meta property="article:published_time" content="2023-06-26T09:11:21.968Z">
-<meta property="article:modified_time" content="2023-07-12T09:46:30.947Z">
+<meta property="article:modified_time" content="2023-07-12T14:25:03.183Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="d:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurerInterface.png">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/WebMvcConfigurerInterface.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -457,7 +457,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年7月12日 下午
+                    本文最后更新于：2023年7月12日 晚上
                   
                 
               </p>
@@ -482,7 +482,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration(</span><br><span class="hljs-meta">    proxyBeanMethods = false</span><br><span class="hljs-meta">)</span><br><span class="hljs-meta">@Import(&#123;EnableWebMvcConfiguration.class&#125;)</span>  <span class="hljs-comment">// 额外导入了其他配置</span><br><span class="hljs-meta">@EnableConfigurationProperties(&#123;WebMvcProperties.class, WebProperties.class&#125;)</span><br><span class="hljs-meta">@Order(0)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebMvcAutoConfigurationAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">WebMvcConfigurer</span>, ServletContextAware &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="3、WebMvcConfigurer接口"><a href="#3、WebMvcConfigurer接口" class="headerlink" title="3、WebMvcConfigurer接口"></a>3、WebMvcConfigurer接口</h4><p>提供了配置SpringMVC底层的所有组件入口</p>
-<p><img src="D:/leaning/myblog/source/img/mdimg/springboot/WebMvcConfigurerInterface.png" srcset="/img/loading.gif" lazyload alt="WebMvcConfigurer接口"></p>
+<p><img src="/../img/mdimg/springboot/WebMvcConfigurerInterface.png" srcset="/img/loading.gif" lazyload alt="WebMvcConfigurer接口"></p>
 <h4 id="4、静态资源规则源码"><a href="#4、静态资源规则源码" class="headerlink" title="4、静态资源规则源码"></a>4、静态资源规则源码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addResourceHandlers</span><span class="hljs-params">(ResourceHandlerRegistry registry)</span> &#123;<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.resourceProperties.isAddMappings()) &#123;<br>        logger.debug(<span class="hljs-string">&quot;Default resource handling disabled&quot;</span>);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-comment">// 1、</span><br>    addResourceHandler(registry, <span class="hljs-built_in">this</span>.mvcProperties.getWebjarsPathPattern(),<br>                       <span class="hljs-string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>);<br>    <span class="hljs-comment">// 2、</span><br>    addResourceHandler(registry, <span class="hljs-built_in">this</span>.mvcProperties.getStaticPathPattern(), (registration) -&gt; &#123;<br>        registration.addResourceLocations(<span class="hljs-built_in">this</span>.resourceProperties.getStaticLocations());<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.servletContext != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-type">ServletContextResource</span> <span class="hljs-variable">resource</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServletContextResource</span>(<span class="hljs-built_in">this</span>.servletContext, SERVLET_LOCATION);<br>            registration.addResourceLocations(resource);<br>        &#125;<br>    &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <ol>
