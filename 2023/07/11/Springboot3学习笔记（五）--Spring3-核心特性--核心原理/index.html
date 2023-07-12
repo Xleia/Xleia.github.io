@@ -26,11 +26,11 @@
 <meta property="og:description" content="SpringBoot3-核心原理1、事件和监听器1.1  生命周期监听场景：监听应用的生命周期 1.1.1 监听器通过自定义SpringApplicationRunListener来监听事件 步骤：  编写SpringApplicationRunListener实现类  在资源文件夹下创建META-INF&#x2F;spring.factories并配置org.springframework.boot.Sp">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/springbootLifeCycle.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/publishEvent-Listener.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/publishEventListener.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/AutoConfigurationCompleteProcess.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/springbootLifeCyclePlus.png">
 <meta property="article:published_time" content="2023-07-11T08:24:08.000Z">
-<meta property="article:modified_time" content="2023-07-12T14:05:01.798Z">
+<meta property="article:modified_time" content="2023-07-12T14:15:44.198Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
@@ -515,7 +515,7 @@
 <li>事件发布:：<code>ApplicationEventPublisherluware</code>或<code>注入：ApplicationEventMulticaster</code></li>
 <li>事件监听：<code>组件 ＋ @EventListener</code></li>
 </ul>
-<p><img src="/../img/mdimg/springboot/publishEvent-Listener.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdimg/springboot/publishEventListener.png" srcset="/img/loading.gif" lazyload></p>
 <p>步骤：</p>
 <ol>
 <li><p>创建需要发布事件的信息：自定义一个<code>事件类</code>继承<code>ApplicationEvent</code>并重写构造器方法（因为<code>ApplicationEvent</code>是一个抽象类所以必须重写）</p>
