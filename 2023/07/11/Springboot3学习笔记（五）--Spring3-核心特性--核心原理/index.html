@@ -25,16 +25,16 @@
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="SpringBoot3-核心原理1、事件和监听器1.1  生命周期监听场景：监听应用的生命周期 1.1.1 监听器通过自定义SpringApplicationRunListener来监听事件 步骤：  编写SpringApplicationRunListener实现类  在资源文件夹下创建META-INF&#x2F;spring.factories并配置org.springframework.boot.Sp">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/springbootLifeCycle.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/publishEventListener.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/springbootLifeCycle.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/publishEventListener.png">
 <meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/AutoConfigurationCompleteProcess.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/springbootLifeCyclePlus.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/springbootLifeCyclePlus.png">
 <meta property="article:published_time" content="2023-07-11T08:24:08.000Z">
-<meta property="article:modified_time" content="2023-07-12T14:15:44.198Z">
+<meta property="article:modified_time" content="2023-07-14T14:08:55.540Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/springbootLifeCycle.png">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdImg/springboot/springbootLifeCycle.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -455,7 +455,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年7月12日 晚上
+                    本文最后更新于：2023年7月14日 晚上
                   
                 
               </p>
@@ -474,7 +474,7 @@
 </ol>
 <h4 id="1-1-2-生命周期全流程"><a href="#1-1-2-生命周期全流程" class="headerlink" title="1.1.2 生命周期全流程"></a>1.1.2 生命周期全流程</h4><p><strong>黄色文本框：</strong>事件</p>
 <p><strong>蓝色、红色文本框：</strong>监听</p>
-<p><img src="/../img/mdimg/springboot/springbootLifeCycle.png" srcset="/img/loading.gif" lazyload alt="springboot生命周期"></p>
+<p><img src="/../img/mdImg/springboot/springbootLifeCycle.png" srcset="/img/loading.gif" lazyload alt="springboot生命周期"></p>
 <h3 id="1-2-事件触发时机"><a href="#1-2-事件触发时机" class="headerlink" title="1.2 事件触发时机"></a>1.2 事件触发时机</h3><h4 id="1-2-1-各种回调监听器"><a href="#1-2-1-各种回调监听器" class="headerlink" title="1.2.1 各种回调监听器"></a>1.2.1 各种回调监听器</h4><ul>
 <li><strong>BootstrapRegistryInitializer</strong>：	感知特定阶段：感知引导初始化<ul>
 <li><code>META-INF/spring.factories</code></li>
@@ -515,7 +515,7 @@
 <li>事件发布:：<code>ApplicationEventPublisherluware</code>或<code>注入：ApplicationEventMulticaster</code></li>
 <li>事件监听：<code>组件 ＋ @EventListener</code></li>
 </ul>
-<p><img src="/../img/mdimg/springboot/publishEventListener.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/publishEventListener.png" srcset="/img/loading.gif" lazyload></p>
 <p>步骤：</p>
 <ol>
 <li><p>创建需要发布事件的信息：自定义一个<code>事件类</code>继承<code>ApplicationEvent</code>并重写构造器方法（因为<code>ApplicationEvent</code>是一个抽象类所以必须重写）</p>
@@ -594,7 +594,7 @@
 <li><strong>@Import(AutoConfigurationImportSelector.class)<strong>：</strong>加载所有的自动配置类（扫描SPI文件），加载starter导入的组件</strong></li>
 </ul>
 <p><strong>@ComponentScan</strong>：<strong>组件扫描注解，排除一些注解（因为前面注解已经扫描过了，此注解负责排除一些已经注入的组件）</strong></p>
-<p> <img src="/../img/mdimg/springboot/springbootLifeCyclePlus.png" srcset="/img/loading.gif" lazyload alt="springboot生命周期（进阶）"></p>
+<p> <img src="/../img/mdImg/springboot/springbootLifeCyclePlus.png" srcset="/img/loading.gif" lazyload alt="springboot生命周期（进阶）"></p>
 <h2 id="3、自定义stater"><a href="#3、自定义stater" class="headerlink" title="3、自定义stater"></a>3、自定义stater</h2><h4 id="基本抽取："><a href="#基本抽取：" class="headerlink" title="基本抽取："></a>基本抽取：</h4><ul>
 <li>创建<code>starter</code>项目，把公共代码放入此项目，并把公共代码需要的所有依赖导入</li>
 <li>自定义编写<code>xxxAutoConfiguration</code>，并导入此场景需要的所有组件<ul>

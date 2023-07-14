@@ -25,21 +25,21 @@
 <meta property="og:site_name" content="xleiaの个人博客">
 <meta property="og:description" content="SpringBoot3-场景整合在Linux系统上安装docker容器 123456789101112sudo yum install -y yum-utilssudo yum-config-manager \&gt; --add-repo \&gt; https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;centos&#x2F;docker-ce.reposudo yum install d">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/axynScenario.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/DecouplingScenarios.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/PeakShavingScenario.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/BufferingScenario.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/messageMode.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/kafkaPrinciple.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/springSecurityFilterChainFrame.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/FilterChainProxy.png">
-<meta property="og:image" content="https://xleia.gitee.io/img/mdimg/springboot/securityFilterChain.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/axynScenario.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/DecouplingScenarios.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/PeakShavingScenario.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/BufferingScenario.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/messageMode.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/kafkaPrinciple.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/springSecurityFilterChainFrame.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/FilterChainProxy.png">
+<meta property="og:image" content="https://xleia.gitee.io/img/mdImg/springboot/securityFilterChain.png">
 <meta property="article:published_time" content="2023-07-12T16:00:12.337Z">
-<meta property="article:modified_time" content="2023-07-14T09:48:35.359Z">
+<meta property="article:modified_time" content="2023-07-14T14:10:48.232Z">
 <meta property="article:author" content="Xleia">
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://xleia.gitee.io/img/mdimg/springboot/axynScenario.png">
+<meta name="twitter:image" content="https://xleia.gitee.io/img/mdImg/springboot/axynScenario.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -460,7 +460,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年7月14日 下午
+                    本文最后更新于：2023年7月14日 晚上
                   
                 
               </p>
@@ -618,15 +618,15 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WeatherController</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    WeatherInterface weatherInterface;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/weather&quot;)</span><br>    <span class="hljs-keyword">public</span> Mono&lt;String&gt; <span class="hljs-title function_">weather</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam(&quot;city&quot;)</span> String city)</span>&#123;<br>        <span class="hljs-comment">// 查询天气</span><br>        <span class="hljs-keyword">return</span> weatherInterface.weather(city);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="4、消息服务"><a href="#4、消息服务" class="headerlink" title="4、消息服务"></a>4、消息服务</h2><h3 id="消息队列场景"><a href="#消息队列场景" class="headerlink" title="消息队列场景"></a>消息队列场景</h3><h4 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h4><p>场景一：</p>
-<p><img src="/../img/mdimg/springboot/axynScenario.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/axynScenario.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h4><p>场景二：</p>
-<p><img src="/../img/mdimg/springboot/DecouplingScenarios.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/DecouplingScenarios.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="削峰"><a href="#削峰" class="headerlink" title="削峰"></a>削峰</h4><p>场景三：</p>
-<p><img src="/../img/mdimg/springboot/PeakShavingScenario.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/PeakShavingScenario.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="缓冲"><a href="#缓冲" class="headerlink" title="缓冲"></a>缓冲</h4><p>场景四：</p>
-<p><img src="/../img/mdimg/springboot/BufferingScenario.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="消息中间件–Kafka"><a href="#消息中间件–Kafka" class="headerlink" title="消息中间件–Kafka"></a>消息中间件–Kafka</h3><h4 id="1、消息模式"><a href="#1、消息模式" class="headerlink" title="1、消息模式"></a>1、消息模式</h4><p><img src="/../img/mdimg/springboot/messageMode.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2、Kafka工作原理"><a href="#2、Kafka工作原理" class="headerlink" title="2、Kafka工作原理"></a>2、Kafka工作原理</h4><p><img src="/../img/mdimg/springboot/kafkaPrinciple.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/BufferingScenario.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="消息中间件–Kafka"><a href="#消息中间件–Kafka" class="headerlink" title="消息中间件–Kafka"></a>消息中间件–Kafka</h3><h4 id="1、消息模式"><a href="#1、消息模式" class="headerlink" title="1、消息模式"></a>1、消息模式</h4><p><img src="/../img/mdImg/springboot/messageMode.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2、Kafka工作原理"><a href="#2、Kafka工作原理" class="headerlink" title="2、Kafka工作原理"></a>2、Kafka工作原理</h4><p><img src="/../img/mdImg/springboot/kafkaPrinciple.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="SpringBoot整合kafka"><a href="#SpringBoot整合kafka" class="headerlink" title="SpringBoot整合kafka"></a>SpringBoot整合kafka</h3><h4 id="发布消息"><a href="#发布消息" class="headerlink" title="发布消息"></a>发布消息</h4><p>导入坐标：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!--整合Kafka--&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.kafka<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-kafka<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
 
@@ -679,10 +679,10 @@
 <p>SpringSecurity利用FilterChainProxy封装一系列拦截器链，实现安全拦截</p>
 <p>Servlet三大组件：Servlet、Filter、Listener</p>
 </blockquote>
-<p><img src="/../img/mdimg/springboot/springSecurityFilterChainFrame.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/springSecurityFilterChainFrame.png" srcset="/img/loading.gif" lazyload></p>
 <h6 id="FilterChainProxy"><a href="#FilterChainProxy" class="headerlink" title="FilterChainProxy"></a>FilterChainProxy</h6><p>使用<code>FilterChainProxy</code>对不同路径下的请求定义不同的过滤规则。例如：</p>
-<p><img src="/../img/mdimg/springboot/FilterChainProxy.png" srcset="/img/loading.gif" lazyload></p>
-<h6 id="SecurityFilterChain"><a href="#SecurityFilterChain" class="headerlink" title="SecurityFilterChain"></a>SecurityFilterChain</h6><p><img src="/../img/mdimg/springboot/securityFilterChain.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/mdImg/springboot/FilterChainProxy.png" srcset="/img/loading.gif" lazyload></p>
+<h6 id="SecurityFilterChain"><a href="#SecurityFilterChain" class="headerlink" title="SecurityFilterChain"></a>SecurityFilterChain</h6><p><img src="/../img/mdImg/springboot/securityFilterChain.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="3、使用"><a href="#3、使用" class="headerlink" title="3、使用"></a>3、使用</h4><p>自定义<code>SecurityConfiguration.java</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 1、自定义请求授权规则：http.authorizeHttpRequests()</span><br><span class="hljs-comment"> * 2、自定义登录规则：http.formLogin()</span><br><span class="hljs-comment"> * 3、自定义用户信息查询规则：UserDetailsService</span><br><span class="hljs-comment"> * 4、开启方法级别的精确权限控制：<span class="hljs-doctag">@EnableMethodSecurity</span></span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-meta">@EnableMethodSecurity</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecurityConfiguration</span> &#123;<br><br>    <span class="hljs-meta">@Bean</span><br>    SecurityFilterChain <span class="hljs-title function_">securityFilterChain</span><span class="hljs-params">(HttpSecurity http)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">// 请求授权</span><br>        http.authorizeHttpRequests(registry -&gt; &#123;<br>            registry.requestMatchers(<span class="hljs-string">&quot;/&quot;</span>).permitAll() <span class="hljs-comment">//首页所有人都可访问</span><br>                .anyRequest().authenticated(); <span class="hljs-comment">// 剩下的任意请求都需要认证</span><br>        &#125;);<br>        <span class="hljs-comment">// 开启默认表单登录功能表单登录功能</span><br>        http.formLogin(formLogin -&gt; &#123;<br>            formLogin.loginPage(<span class="hljs-string">&quot;/login&quot;</span>).permitAll(); <span class="hljs-comment">// 自定义登录页位置，并且所有人都能访问</span><br>        &#125;);<br>        <span class="hljs-keyword">return</span> http.build();<br>    &#125;<br><br>    <span class="hljs-comment">// 查询用户详细，此处使用的是在内存中添加，也可改为查询数据库的</span><br>    <span class="hljs-meta">@Bean</span><br>    UserDetailsService <span class="hljs-title function_">userDetailsService</span><span class="hljs-params">(PasswordEncoder passwordEncoder)</span> &#123;<br>        <span class="hljs-type">UserDetails</span> <span class="hljs-variable">zhangsan</span> <span class="hljs-operator">=</span> User.withUsername(<span class="hljs-string">&quot;zhangsan&quot;</span>)  <span class="hljs-comment">// 自定义用户账号，不使用security默认</span><br>            .password(passwordEncoder.encode(<span class="hljs-string">&quot;123456&quot;</span>))  <span class="hljs-comment">// 自定义用户密码，必须加密，否则报错</span><br>            .roles(<span class="hljs-string">&quot;admin&quot;</span>)  						<span class="hljs-comment">// 设置用户角色</span><br>            .authorities(<span class="hljs-string">&quot;file_reda&quot;</span>, <span class="hljs-string">&quot;file_write&quot;</span>,<span class="hljs-string">&quot;world_exec&quot;</span>) <span class="hljs-comment">// 设置用户权限</span><br>            .build();<br>        <span class="hljs-type">UserDetails</span> <span class="hljs-variable">lisi</span> <span class="hljs-operator">=</span> User.withUsername(<span class="hljs-string">&quot;lisi&quot;</span>)<br>            .password(passwordEncoder.encode(<span class="hljs-string">&quot;123456&quot;</span>))<br>            .roles(<span class="hljs-string">&quot;hr&quot;</span>)<br>            .authorities(<span class="hljs-string">&quot;file_reda&quot;</span>)<br>            .build();<br><br>        <span class="hljs-comment">// 默认内存保存所有用户信息</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InMemoryUserDetailsManager</span>(zhangsan, lisi);<br>    &#125;<br><br>    <span class="hljs-comment">// 放一个密码加密器</span><br>    <span class="hljs-meta">@Bean</span><br>    PasswordEncoder <span class="hljs-title function_">passwordEncoder</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BCryptPasswordEncoder</span>();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
