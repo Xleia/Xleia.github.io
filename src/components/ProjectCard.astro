@@ -1,0 +1,26 @@
+---
+import { projectPath, type Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="project-card">
+  <div class="project-card-top">
+    <span class="project-symbol" aria-hidden="true">{project.symbol}</span>
+    <span class="project-category">{project.category}</span>
+  </div>
+  <h3><a class="project-title-link" href={projectPath(project)}>{project.name}</a></h3>
+  <p class="project-summary">{project.summary}</p>
+  <div class="tech-tags" aria-label="主要技术">
+    {project.technologies.slice(0, 3).map((tech) => (
+      <span class="tech-tag">{tech}</span>
+    ))}
+  </div>
+  <a class="project-more" href={projectPath(project)}>
+    了解项目 <span aria-hidden="true">→</span>
+  </a>
+</article>

@@ -1,13 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionPlaceholder from '../../components/SectionPlaceholder.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { PROJECTS } from '../../data/projects';
 ---
 
-<BaseLayout title="项目" description="Xleia 的独立开发项目与应用。">
-  <SectionPlaceholder
-    eyebrow="Projects"
-    title="项目中心"
-    summary="这里将介绍 KOTO、Train Libre 中文版，以及未来的个人项目。"
-    phase="P2"
-  />
+<BaseLayout title="项目" description="探索 Xleia 的 KOTO、Train Libre 中文版与未来的个人开发项目。">
+  <section class="page-intro" aria-labelledby="projects-title">
+    <p class="eyebrow">Projects</p>
+    <h1 id="projects-title">项目中心</h1>
+    <p class="lead">从实际问题出发，把学习和技术探索变成能够持续迭代的产品。</p>
+    <p class="muted-note">项目介绍已建立；公开体验、安装与下载方式将在确认后补充。</p>
+  </section>
+  <div class="project-grid">
+    {PROJECTS.map((project) => <ProjectCard project={project} />)}
+  </div>
 </BaseLayout>

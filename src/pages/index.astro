@@ -1,26 +1,56 @@
 ---
-import Counter from '../components/react/Counter';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { PROJECTS } from '../data/projects';
 ---
 
-<BaseLayout title="开发中">
+<BaseLayout title="首页" description="Xleia 的个人开发者主页：软件项目、技术文章与跨领域技术实验。">
   <section class="hero" aria-labelledby="home-title">
-    <p class="eyebrow">Xleia · Personal Hub</p>
+    <p class="eyebrow">Xleia · Build & Explore</p>
     <h1 id="home-title">开发、学习与创造。</h1>
     <p class="lead">
-      这是个人网站重构的 P1-2 布局预览。未来将在这里展示 KOTO、
-      Train Libre、技术文章，以及 AI 与跨领域技术实验。
+      这里记录正在构建的产品、技术探索和学习过程。
+      从 KOTO、Train Libre，到 AI、后端与更多跨领域实验。
     </p>
     <div class="action-links">
-      <a class="button-link" href="/projects/">项目入口 <span aria-hidden="true">→</span></a>
-      <a class="text-link" href="/lab/">查看 Lab <span aria-hidden="true">→</span></a>
+      <a class="button-link" href="/projects/">探索项目 <span aria-hidden="true">→</span></a>
+      <a class="text-link" href="/lab/">进入 Lab <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <section class="placeholder-card" aria-labelledby="test-heading">
-    <h2 id="test-heading">工程验证 · React Island</h2>
-    <p>仅此测试按钮启用 React 客户端交互，页面其他布局均由 Astro 输出。</p>
-    <Counter client:load />
-    <p>正式主页内容将在 P2 实现。</p>
+  <section class="home-section" aria-labelledby="featured-projects">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Featured Projects</p>
+        <h2 id="featured-projects">正在探索的项目</h2>
+      </div>
+      <a class="text-link" href="/projects/">全部项目 <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="project-grid">
+      {PROJECTS.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="explore-more">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Keep Exploring</p>
+        <h2 id="explore-more">技术记录与实验</h2>
+      </div>
+    </div>
+    <div class="explore-grid">
+      <article class="explore-card">
+        <p class="eyebrow">Writing</p>
+        <h3>技术博客</h3>
+        <p>整理历史技术笔记，记录开发实践和新的学习成果。19 篇旧文章将在 P3 迁移。</p>
+        <a class="text-link" href="/blog/">前往博客 <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="explore-card">
+        <p class="eyebrow">Tech Lab</p>
+        <h3>跨领域技术实验室</h3>
+        <p>尝试 AI、后端、云原生、数据与移动开发等技术，沉淀原型和实验结论。</p>
+        <a class="text-link" href="/lab/">查看实验室 <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
   </section>
 </BaseLayout>
