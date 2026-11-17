@@ -57,6 +57,19 @@ for (const markdownFile of markdownFiles) {
   }
 }
 
+// Ensure real legacy tables survive the conversion from HTML to Markdown.
+const expectedLegacyTables = [
+  { file: 'src/content/blog/2023-06-25-10.md', count: 6 },
+  { file: 'src/content/blog/2023-06-22-08.md', count: 1 },
+  { file: 'src/content/blog/2023-06-30-12.md', count: 8 },
+  { file: 'src/content/blog/2023-07-13-18.md', count: 1 },
+];
+for (const { file, count } of expectedLegacyTables) {
+  const markdown = readFileSync(file, 'utf8');
+  const actual = (markdown.match(/<table\\s+class="legacy-table">/g) ?? []).length;
+  if (actual !== count) failures.push(`Expected ${count} restored legacy tables in ${file}, found ${actual}`);
+}
+
 if (markdownFiles.length !== 19) failures.push(`Expected 19 historical posts, found ${markdownFiles.length}`);
 if (new Set(originalArticleRoutes).size !== 19) failures.push('Expected 19 unique historical URLs');
 if (articleImageReferences !== 75) failures.push(`Expected 75 image references, found ${articleImageReferences}`);
