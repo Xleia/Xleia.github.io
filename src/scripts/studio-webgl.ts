@@ -1,4 +1,7 @@
 import { STUDIO_ZONES, type StudioZone, type Vec3 } from '../data/studio';
+import { loadStudioLamp } from './studio-assets';
+import { createShadowMap } from './studio-shadows';
+import { loadStudioTexture } from './studio-textures';
 
 // V0.3: richer hand-built geometry, material response and warm/cool lighting; no CDN or extra runtime dependency.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
@@ -268,63 +271,100 @@ layout(location=3) in float aEmissive;
 layout(location=4) in float aMaterial;
 uniform vec3 uEye; uniform vec3 uRight; uniform vec3 uUp; uniform vec3 uForward;
 uniform float uFocal; uniform float uAspect;
+uniform vec3 uLightEye, uLightRight, uLightUp, uLightForward;
 out vec3 vWorld; out vec3 vNormal; out vec3 vColor; out float vEmit; out float vMaterial; out float vDistance;
+out vec3 vShadowClip;
 void main(){
   vec3 rel=aPosition-uEye;
   float d=dot(rel,uForward);
   gl_Position=vec4(dot(rel,uRight)*uFocal/uAspect, dot(rel,uUp)*uFocal, (d*500.05-50.0)/499.95, d);
   vWorld=aPosition; vNormal=aNormal; vColor=aColor; vEmit=aEmissive; vMaterial=aMaterial; vDistance=d;
+  vec3 shadowRel=aPosition-uLightEye;
+  float shadowDepth=dot(shadowRel,uLightForward);
+  vShadowClip=vec3(dot(shadowRel,uLightRight)/6.0,dot(shadowRel,uLightUp)/5.0,(shadowDepth-9.0)/9.0);
 }`;
 const frag = `#version 300 es
 precision highp float;
 in vec3 vWorld; in vec3 vNormal; in vec3 vColor; in float vEmit; in float vMaterial; in float vDistance;
+in vec3 vShadowClip;
 uniform vec3 uEye;
+uniform sampler2D uWalnutAlbedo, uWalnutRoughness;
+uniform sampler2DShadow uShadowMap;
+uniform bool uHasShadow;
+uniform vec2 uShadowPixel;
 out vec4 outputColor;
-void main(){
+const float PI=3.14159265;
+
+float distributionGGX(vec3 N,vec3 H,float roughness) {
+  float a=roughness*roughness, a2=a*a;
+  float NdotH=max(dot(N,H),0.0);
+  float den=NdotH*NdotH*(a2-1.0)+1.0;
+  return a2/max(PI*den*den,0.0001);
+}
+float geometrySchlickGGX(float NdotV,float roughness) {
+  float k=(roughness+1.0)*(roughness+1.0)/8.0;
+  return NdotV/max(NdotV*(1.0-k)+k,0.0001);
+}
+vec3 fresnelSchlick(float cosTheta,vec3 F0) {
+  return F0+(1.0-F0)*pow(1.0-cosTheta,5.0);
+}
+vec3 specularBRDF(vec3 N,vec3 V,vec3 L,float roughness,vec3 F0) {
+  vec3 H=normalize(V+L);
+  float NdotV=max(dot(N,V),0.001),NdotL=max(dot(N,L),0.0);
+  float D=distributionGGX(N,H,roughness);
+  float G=geometrySchlickGGX(NdotV,roughness)*geometrySchlickGGX(NdotL,roughness);
+  vec3 F=fresnelSchlick(max(dot(H,V),0.0),F0);
+  return D*G*F/max(4.0*NdotV*NdotL,0.001);
+}
+float shadowVisibility(vec3 N) {
+  if(!uHasShadow)return 1.0;
+  vec3 p=vShadowClip*0.5+0.5;
+  if(p.x<=0.01||p.x>=0.99||p.y<=0.01||p.y>=0.99||p.z<=0.0||p.z>=1.0)return 1.0;
+  float bias=max(0.001,0.0025*(1.0-max(N.y,0.0)));
+  float sum=0.0;
+  for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++){
+    sum+=texture(uShadowMap,vec3(p.xy+vec2(float(x),float(y))*uShadowPixel,p.z-bias));
+  }
+  return 0.32+0.68*(sum/9.0);
+}
+void main() {
   vec3 N=normalize(vNormal);
-  vec3 L1=vec3(-1.12,1.62,-1.11)-vWorld;
+  vec3 V=normalize(uEye-vWorld);
+  vec3 L1=vec3(-1.12,2.55,-1.11)-vWorld;
   vec3 L2=vec3(.0,1.72,-.91)-vWorld;
   vec3 L3=vec3(3.65,1.37,-2.15)-vWorld;
   float warm=max(dot(N,normalize(L1)),0.0)*5.8/(2.6+dot(L1,L1));
   float screen=max(dot(N,normalize(L2)),0.0)*2.4/(2.0+dot(L2,L2));
   float lab=max(dot(N,normalize(L3)),0.0)*1.9/(1.6+dot(L3,L3));
-  vec3 ambient=mix(vec3(.20,.25,.34),vec3(.42,.43,.46), clamp(N.y*.5+.5,0.0,1.0));
-  vec3 diffuse=ambient + warm*vec3(1.02,.70,.44)+screen*vec3(.32,.59,1.05)+lab*vec3(.36,.85,1.06);
-  vec3 c=vColor*diffuse;
-  float roughness=.88;
-  if(vMaterial>.5 && vMaterial<1.5) {
-    // Walnut grain is deliberately restrained; avoid a flat repeating stripe.
-    float grain=sin(vWorld.z*63.0+sin(vWorld.x*8.7)*1.9)
-               +.38*sin(vWorld.z*114.0+vWorld.x*5.2);
-    c*=.94+.055*grain;
-    roughness=.69;
-  } else if(vMaterial>1.5 && vMaterial<2.5) {
-    roughness=.30;
-  } else if(vMaterial>2.5 && vMaterial<3.5) {
-    float weave=.96+.027*sin(vWorld.x*150.0)*sin(vWorld.z*140.0);
-    c*=weave;roughness=.96;
-  } else if(vMaterial>3.5) {
-    roughness=.20;
+  float roughness=.86,metallic=0.0;
+  vec3 albedo=vColor;
+  if(vMaterial>.5&&vMaterial<1.5) {
+    vec2 uv=vWorld.xz*vec2(.53,1.34);
+    vec3 tex=texture(uWalnutAlbedo,uv).rgb;
+    albedo*=mix(vec3(1.0),clamp(tex/vec3(.58,.42,.30),vec3(.65),vec3(1.4)),.35);
+    roughness=mix(.65,texture(uWalnutRoughness,uv).r,.45);
+  }else if(vMaterial>1.5&&vMaterial<2.5){
+    roughness=.31;metallic=.78;
+  }else if(vMaterial>2.5&&vMaterial<3.5){
+    albedo*=.96+.035*sin(vWorld.x*140.0)*sin(vWorld.z*135.0);
+    roughness=.96;
+  }else if(vMaterial>3.5){
+    roughness=.25;metallic=.12;
   }
-  vec3 V=normalize(uEye-vWorld);
-  vec3 H1=normalize(normalize(L1)+V);
-  vec3 H2=normalize(normalize(L2)+V);
-  float exponent=mix(10.0,96.0,1.0-roughness);
-  float spec1=pow(max(dot(N,H1),0.0),exponent)*warm;
-  float spec2=pow(max(dot(N,H2),0.0),exponent)*screen;
-  c+=vec3(1.0,.83,.62)*spec1*(.08+.27*(1.0-roughness));
-  c+=vec3(.49,.73,1.0)*spec2*(.04+.23*(1.0-roughness));
-  // Cheap contact shadowing anchors furniture without extra shadow-map passes.
-  if(vWorld.y<.03 && N.y>.8) {
-    float desk=exp(-2.1*(vWorld.x*vWorld.x+(vWorld.z+.7)*(vWorld.z+.7)));
-    float shelf=exp(-1.6*((vWorld.x+3.25)*(vWorld.x+3.25)+(vWorld.z+2.25)*(vWorld.z+2.25)));
-    float labFloor=exp(-1.8*((vWorld.x-3.15)*(vWorld.x-3.15)+(vWorld.z+1.95)*(vWorld.z+1.95)));
-    c*=1.0-.17*max(desk,max(shelf,labFloor));
-  }
+  roughness=clamp(roughness,.12,1.0);
+  vec3 F0=mix(vec3(.04),albedo,metallic);
+  float visibility=shadowVisibility(N);
+  vec3 ambient=mix(vec3(.19,.24,.32),vec3(.40,.42,.44),clamp(N.y*.5+.5,0.0,1.0));
+  vec3 diffuse=ambient+warm*visibility*vec3(.98,.70,.46)+screen*vec3(.32,.59,1.05)+lab*vec3(.36,.85,1.06);
+  vec3 c=albedo*(1.0-metallic)*diffuse;
+  c+=specularBRDF(N,V,normalize(L1),roughness,F0)*warm*visibility*vec3(1.2,.86,.61)*.58;
+  c+=specularBRDF(N,V,normalize(L2),roughness,F0)*screen*vec3(.47,.72,1.2)*.45;
+  c+=specularBRDF(N,V,normalize(L3),roughness,F0)*lab*vec3(.40,.85,1.12)*.32;
   c+=vColor*vEmit*1.05;
   float fog=clamp((vDistance-8.0)/21.0,0.0,.35);
   c=mix(c,vec3(.045,.072,.12),fog);
-  outputColor=vec4(pow(max(c,vec3(0.0)),vec3(.87)),1.0);
+  c=vec3(1.0)-exp(-max(c,vec3(0.0))*1.25);
+  outputColor=vec4(pow(c,vec3(.85)),1.0);
 }`;
 
 function compile(gl:WebGL2RenderingContext,kind:number,code:string) {
@@ -364,7 +404,7 @@ function basis(camera:Camera){
 const dot=(a:Vec3,b:Vec3)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 const sub=(a:Vec3,b:Vec3):Vec3=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
 
-export function mountStudio(): void {
+export async function mountStudio(): Promise<void> {
   const root=document.querySelector<HTMLElement>('[data-studio]'); if(!root)return;
   const canvas=root.querySelector<HTMLCanvasElement>('[data-studio-canvas]');
   const stage=root.querySelector<HTMLElement>('[data-studio-stage]');
@@ -374,6 +414,13 @@ export function mountStudio(): void {
   const view=root.querySelector<HTMLButtonElement>('[data-studio-view]');
   const note=root.querySelector<HTMLElement>('[data-studio-error]');
   if(!canvas||!stage||!fallback||!details||!reset||!view)return;
+
+  // Asset pipeline is deliberately bounded to a single same-origin reviewed glTF.
+  // Built-in geometry remains available when the optional model is unavailable.
+  try {
+    const imported=await loadStudioLamp('/models/studio/pendant-lamp.gltf');
+    for(const item of imported) vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind);
+  } catch(error) { console.warn('Optional Studio glTF model unavailable; using base geometry',error); }
 
   const candidate=canvas.getContext('webgl2',{alpha:false,antialias:true,powerPreference:'high-performance'});
   if(!candidate){if(note){note.hidden=false;note.textContent='此设备无法初始化 WebGL2，已使用完整的 2D 导航。';}return;}
@@ -386,7 +433,20 @@ export function mountStudio(): void {
     return;
   }
   const loc=(name:string)=>gl.getUniformLocation(graphics.program,name);
-  const uniforms={eye:loc('uEye'),right:loc('uRight'),up:loc('uUp'),forward:loc('uForward'),focal:loc('uFocal'),aspect:loc('uAspect')};
+  const uniforms={
+    eye:loc('uEye'),right:loc('uRight'),up:loc('uUp'),forward:loc('uForward'),
+    focal:loc('uFocal'),aspect:loc('uAspect'),
+    lightEye:loc('uLightEye'),lightRight:loc('uLightRight'),
+    lightUp:loc('uLightUp'),lightForward:loc('uLightForward'),
+    shadowMap:loc('uShadowMap'),hasShadow:loc('uHasShadow'),shadowPixel:loc('uShadowPixel'),
+    albedo:loc('uWalnutAlbedo'),roughness:loc('uWalnutRoughness')
+  };
+  const light=basis({target:[0,0,-.6],azimuth:-.42,elevation:.92,distance:9.0});
+  let shadow:ReturnType<typeof createShadowMap>|undefined;
+  try { shadow=createShadowMap(gl); }
+  catch(error){ console.warn('Shadow map unsupported; rendering without directional shadows',error); }
+  const albedoTex=loadStudioTexture(gl,'/textures/studio/walnut-albedo.svg',()=>requestFrame());
+  const roughnessTex=loadStudioTexture(gl,'/textures/studio/walnut-roughness.svg',()=>requestFrame());
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const narrow=window.matchMedia('(max-width: 760px)');
   const pins=Array.from(root.querySelectorAll<HTMLButtonElement>('[data-studio-pin]'));
@@ -401,10 +461,19 @@ export function mountStudio(): void {
   function redraw(){
     if(!in3d)return;
     const b=basis(current),focal=1/Math.tan(40*Math.PI/360),aspect=width/height;
+    if(shadow)shadow.render(light,graphics.vao,graphics.count);
     gl.viewport(0,0,canvasEl.width,canvasEl.height);gl.clearColor(.045,.073,.122,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     gl.useProgram(graphics.program);gl.bindVertexArray(graphics.vao);
     gl.uniform3fv(uniforms.eye,new Float32Array(b.eye));gl.uniform3fv(uniforms.right,new Float32Array(b.right));gl.uniform3fv(uniforms.up,new Float32Array(b.up));gl.uniform3fv(uniforms.forward,new Float32Array(b.forward));
-    gl.uniform1f(uniforms.focal,focal);gl.uniform1f(uniforms.aspect,aspect);gl.drawArrays(gl.TRIANGLES,0,graphics.count);
+    gl.uniform1f(uniforms.focal,focal);gl.uniform1f(uniforms.aspect,aspect);
+    gl.uniform3fv(uniforms.lightEye,light.eye);gl.uniform3fv(uniforms.lightRight,light.right);
+    gl.uniform3fv(uniforms.lightUp,light.up);gl.uniform3fv(uniforms.lightForward,light.forward);
+    gl.uniform1i(uniforms.hasShadow,shadow?1:0);
+    gl.uniform2f(uniforms.shadowPixel,1/1024,1/1024);
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,albedoTex);gl.uniform1i(uniforms.albedo,0);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,roughnessTex);gl.uniform1i(uniforms.roughness,1);
+    if(shadow){gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,shadow.texture);gl.uniform1i(uniforms.shadowMap,2);}
+    gl.drawArrays(gl.TRIANGLES,0,graphics.count);
     for(const pin of pins){
       const zone=STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin);if(!zone)continue;
       const v=sub(zone.pin,b.eye),depth=dot(v,b.forward);
@@ -465,6 +534,6 @@ export function mountStudio(): void {
   window.addEventListener('keydown',onKey);
   const observer=new ResizeObserver(resize);observer.observe(stage);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();in3d=false;applyView();if(note){note.hidden=false;note.textContent='WebGL 上下文中断，已切换到完整 2D 导航。';}});
-  window.addEventListener('pagehide',()=>{observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);},{once:true});
+  window.addEventListener('pagehide',()=>{observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);},{once:true});
   applyView();
 }
