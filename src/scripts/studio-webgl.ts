@@ -472,7 +472,8 @@ export async function mountStudio(): Promise<void> {
     gl.uniform2f(uniforms.shadowPixel,1/1024,1/1024);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,albedoTex);gl.uniform1i(uniforms.albedo,0);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,roughnessTex);gl.uniform1i(uniforms.roughness,1);
-    if(shadow){gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,shadow.texture);gl.uniform1i(uniforms.shadowMap,2);}
+    gl.uniform1i(uniforms.shadowMap,2);
+    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,shadow?.texture??null);
     gl.drawArrays(gl.TRIANGLES,0,graphics.count);
     for(const pin of pins){
       const zone=STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin);if(!zone)continue;
