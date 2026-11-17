@@ -189,3 +189,42 @@
     align-items: start;
   }
 }
+
+/* P2-2: subtle interactive emphasis without adding JavaScript. */
+.project-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 15rem;
+  aspect-ratio: 1;
+  top: -9rem;
+  right: -5rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 7%, transparent);
+}
+
+.project-card:hover,
+.project-card:focus-within {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+  box-shadow: 0 18px 40px var(--color-shadow);
+}
+
+.project-card .project-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card { transition: none; }
+  .project-card:hover,
+  .project-card:focus-within { transform: none; }
+}
