@@ -49,6 +49,24 @@ for (const filename of htmlFiles) {
       : '/' + filenameFromRoot;
   const pageUrl = new URL(route, siteOrigin);
 
+  // P2-3: Public project pages must not link to private app deployments,
+  // unverified downloads or upstream builds presented as this fork.
+  // To approve a future public project URL, review it and add the exact URL
+  // to this allowlist in the same PR as the project page change.
+  if (route === '/projects/koto/' || route === '/projects/train-libre/') {
+    const approvedProjectExternalLinks = new Set(['https://github.com/Xleia']);
+    for (const match of html.matchAll(/\\bhref="([^"]+)"/g)) {
+      let target;
+      try { target = new URL(match[1].replaceAll('&amp;', '&'), pageUrl); }
+      catch { continue; } // The generic link validator below reports malformed URLs.
+      if ((target.protocol === 'https:' || target.protocol === 'http:') &&
+          target.origin !== siteOrigin &&
+          !approvedProjectExternalLinks.has(target.href)) {
+        failures.push(`Unapproved external URL on project detail page ${route}; review publication safety first.`);
+      }
+    }
+  }
+
   if (!html.includes('<html lang="zh-CN"')) failures.push(`Missing lang attribute: ${route}`);
   if (!html.includes('<meta name="description"')) failures.push(`Missing description: ${route}`);
 
