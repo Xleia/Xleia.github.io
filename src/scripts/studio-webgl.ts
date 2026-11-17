@@ -1,6 +1,6 @@
 import { STUDIO_ZONES, type StudioZone, type Vec3 } from '../data/studio';
 
-// V0.2: actual WebGL2 geometry, lighting and depth testing; no CDN, GLB or extra runtime dependency.
+// V0.3: richer hand-built geometry, material response and warm/cool lighting; no CDN or extra runtime dependency.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
 const HOME: Camera = { target: [0, 1.23, -.28], azimuth: .34, elevation: .28, distance: 12.6 };
 const TAU = Math.PI * 2;
@@ -45,6 +45,35 @@ function cylinder(x:number,y:number,z:number,rad:number,height:number,col:string
     addTri([x,y+height/2,z],p3,p2,[0,1,0],col,emit);
   }
 }
+
+/** Tapered cylinders and low-poly ellipsoids make the V0.3 furniture less box-like. */
+function tapered(x:number,y:number,z:number,bottom:number,top:number,height:number,col:string,emit=0,kind=0,segments=14) {
+  for(let i=0;i<segments;i++){
+    const a=i*TAU/segments,b=(i+1)*TAU/segments;
+    const pa:Vec3=[x+bottom*Math.cos(a),y-height/2,z+bottom*Math.sin(a)];
+    const pb:Vec3=[x+bottom*Math.cos(b),y-height/2,z+bottom*Math.sin(b)];
+    const pc:Vec3=[x+top*Math.cos(b),y+height/2,z+top*Math.sin(b)];
+    const pd:Vec3=[x+top*Math.cos(a),y+height/2,z+top*Math.sin(a)];
+    const angle=(a+b)/2, slope=(bottom-top)/height;
+    const normal:Vec3=[Math.cos(angle),slope,Math.sin(angle)];
+    quad(pa,pb,pc,pd,normal,col,emit,kind);
+    addTri([x,y+height/2,z],pd,pc,[0,1,0],col,emit,kind);
+  }
+}
+function ellipsoid(x:number,y:number,z:number,rx:number,ry:number,rz:number,col:string,emit=0,kind=0) {
+  const rings=7,segments=12;
+  const pt=(a:number,b:number):Vec3=>[x+rx*Math.sin(a)*Math.cos(b),y+ry*Math.cos(a),z+rz*Math.sin(a)*Math.sin(b)];
+  for(let j=0;j<rings;j++){
+    const a=j*Math.PI/rings,b=(j+1)*Math.PI/rings;
+    for(let i=0;i<segments;i++){
+      const c=i*TAU/segments,d=(i+1)*TAU/segments;
+      const p=pt(a,c),q=pt(a,d),r=pt(b,d),u=pt(b,c);
+      const n:Vec3=[Math.sin((a+b)/2)*Math.cos((c+d)/2),Math.cos((a+b)/2),Math.sin((a+b)/2)*Math.sin((c+d)/2)];
+      quad(p,q,r,u,n,col,emit,kind);
+    }
+  }
+}
+
 function buildScene(){
   const {floor,plank,wall,left,wood,woodDark,bezel,screen,keyboard,metal,cyan,gold,darkBlue,paper,green,slate,rug}=palette;
   // Architectural shell: floorboards, warm/cool wall surfaces and a large nighttime window.
@@ -126,6 +155,107 @@ function buildScene(){
   // Lighting accents to make the scene feel occupied at night.
   box(-1.2,.884,-1.09,.62,.005,.56,'#d6a071',.20);
   box(3.47,.90,-2.07,.5,.005,.46,'#497a9a',.31);
+
+  // V0.3 joinery: layered walnut edge, inset drawers, brass handles and desk cable raceway.
+  box(0,.715,-.70,3.49,.050,1.51,'#3b291f',0,1);
+  box(0,.875,-.70,3.50,.024,1.55,'#a5764e',0,1);
+  for(const x of [-.82,.82]){
+    box(x,.55,.06,1.28,.31,.052,'#63422e',0,1);
+    box(x,.55,.096,.43,.027,.026,'#c2a076',.11,2);
+  }
+  box(0,.53,-1.45,2.65,.09,.07,'#2c313c',0,2);
+  for(const x of [-1.52,1.52])for(const z of [-1.26,-.20])
+    box(x,.08,z,.19,.062,.19,'#222b33',0,2);
+
+  // Peripherals: rounded speakers, headphones, coaster, ceramic cup and layered notes.
+  for(const x of [-.98,1.18]) {
+    box(x,1.038,-1.035,.27,.38,.28,'#1c2733',0,2);
+    cylinder(x,1.075,-.873,.105,.029,'#344b60',0,18);
+    cylinder(x,1.075,-.851,.065,.01,'#121e2b',0,18);
+  }
+  box(-.96,.895,-.37,.27,.016,.27,'#926b4c',0,1);
+  cylinder(-.96,.995,-.37,.086,.15,'#e5d5bb',0,18);
+  cylinder(-.96,1.073,-.37,.065,.018,'#483022',0,18);
+  for(let i=0;i<4;i++)box(-.53+i*.004,.884+i*.006,-.36,.33,.007,.23,
+    i%2?'#ccb392':'#ecdbbb',0,3);
+  for(let i=0;i<13;i++) {
+    const a=Math.PI*(i/12);
+    ellipsoid(1.50+Math.cos(a)*.20,1.12+Math.sin(a)*.34,-1.11,.033,.035,.045,'#222e3c',0,2);
+  }
+  box(1.35,.89,-1.08,.14,.045,.15,'#304252',0,2);
+
+  // Desk lamp: flared brass shade, softer translucent-inspired lower diffuser.
+  tapered(-1.12,1.62,-1.11,.29,.12,.22,'#cb9961',.20,2,20);
+  tapered(-1.12,1.49,-1.11,.23,.18,.045,'#fff1c7',.64,4,20);
+  cylinder(-1.12,1.67,-1.11,.073,.055,'#efe0c2',.27,2,16);
+  // Monitor: header, accent framing, subtitle rails and live waveform markers.
+  box(0,2.205,-.962,1.68,.018,.022,'#65879b',.12,2);
+  box(0,1.51,-.949,1.37,.022,.015,'#29627b',.23,2);
+  for(let i=0;i<5;i++) box(-.56+i*.27,1.35,-.936,.18,.019,.015,
+    i%2===0?'#5794b2':'#3b6c92',.42);
+  ellipsoid(.67,1.97,-.944,.035,.035,.012,'#78dfd5',.92,4);
+
+  // Bookcase carpentry, labels, book stacks and one trailing plant.
+  box(-3.26,.10,-1.92,1.58,.09,.95,'#3d2d26',0,1);
+  for(const level of [0,1,2,3])for(const i of [1,4,8,10]) {
+    const x=-3.89+i*.118;
+    box(x,.34+level*.555,-1.696,.075,.022,.019,'#d2bb89',.10,2);
+  }
+  for(let i=0;i<4;i++){
+    box(-3.77+i*.042,2.55+i*.017,-1.90,.46,.032,.32,
+      ['#4b6672','#9d735b','#a89976','#53634d'][i],0,3);
+  }
+  tapered(-2.72,2.52,-1.94,.15,.23,.24,'#796650',0,1);
+  for(let i=0;i<9;i++){
+    const a=i*TAU/9;
+    ellipsoid(-2.72+Math.cos(a)*.20,2.76+Math.sin(a*2)*.09,-1.94+Math.sin(a)*.16,
+      .12,.17,.09,'#426d55',0,3);
+  }
+
+  // Window depth, sill, mullions, external lights and a subtle warm light strip.
+  box(.45,1.225,-3.05,4.20,.095,.25,'#283747',0,2);
+  box(.45,3.20,-3.12,4.23,.12,.21,'#394a5b',0,2);
+  for(let i=0;i<7;i++){
+    const x=-1.18+i*.53;
+    box(x,2.95,-3.13,.025,.08,.008,i%2===0?'#f2c68e':'#a0b5cd',.68,4);
+  }
+  box(-.65,3.45,-3.17,2.2,.035,.07,'#d3a06a',.37,2);
+  for(const x of [-1.72,2.59])box(x,2.20,-3.09,.14,2.05,.18,'#334257',0,3);
+
+  // Lab surface: mini server rack, circuit-board traces, instrument keys, glass tubes.
+  box(3.20,.925,-1.93,1.34,.025,.83,'#374b59',0,2);
+  box(3.75,1.28,-1.76,.29,.61,.28,'#1f2b37',0,2);
+  for(let i=0;i<4;i++)box(3.75,1.07+i*.12,-1.602,.18,.018,.013,
+    i%2===0?'#6cc4c7':'#658ca5',.55,4);
+  for(let i=0;i<4;i++){
+    const x=2.69+i*.25;
+    box(x,1.01,-1.76,.14,.018,.23,'#396d6b',.23,2);
+    box(x,1.03,-1.70,.045,.012,.025,'#bcdfba',.49,4);
+  }
+  tapered(3.44,1.31,-2.14,.095,.075,.38,'#7fa4b3',.10,4,16);
+  ellipsoid(3.44,1.50,-2.14,.10,.09,.10,'#5acbce',.75,4);
+  for(let i=0;i<3;i++) box(2.83+i*.12,1.62,-2.324,.075,.017,.019,'#b7e1ef',.66,4);
+
+  // Train Libre phone: screen hierarchy, slim stand and tiny activity indicator.
+  box(2.14,1.64,.727,.37,.65,.009,'#1e475e',.45,4);
+  box(2.14,1.87,.738,.27,.061,.009,'#78bfd2',.72,4);
+  for(let i=0;i<4;i++)box(2.04+i*.069,1.65+(i%2)*.040,.737,.050,.075+(i%2)*.08,.008,
+    i===2?'#7abf9a':'#4d9ab2',.56,4);
+  box(2.14,1.42,.738,.25,.014,.008,'#8bc1c2',.65,4);
+
+  // About corner: sofa cushions, stitched seams, framed paper and a small floor lamp.
+  for(const x of [-3.20,-2.49])ellipsoid(x,.68,1.53,.31,.14,.32,'#75858c',0,3);
+  for(const x of [-3.46,-2.24])box(x,.65,1.69,.035,.36,.70,'#263747',0,3);
+  box(-2.99,1.93,-3.087,.62,.42,.02,'#685d50',0,1);
+  box(-2.99,1.95,-3.071,.39,.013,.009,'#b9d4cf',.18,4);
+  for(let i=0;i<4;i++)box(-3.14+i*.09,1.82,-3.07,.045,.045,.009,'#bba27d',.11,3);
+  tapered(-3.82,.65,.57,.22,.15,.25,'#81634e',0,1);
+  for(let i=0;i<10;i++){
+    const a=i*TAU/10;
+    ellipsoid(-3.83+Math.cos(a)*.20,1.16+Math.sin(i*2.9)*.13,.57+Math.sin(a)*.18,
+      .115,.17,.075,i%3?'#457859':'#638d65',0,3);
+  }
+
 }
 buildScene();
 
@@ -161,11 +291,36 @@ void main(){
   vec3 ambient=mix(vec3(.20,.25,.34),vec3(.42,.43,.46), clamp(N.y*.5+.5,0.0,1.0));
   vec3 diffuse=ambient + warm*vec3(1.02,.70,.44)+screen*vec3(.32,.59,1.05)+lab*vec3(.36,.85,1.06);
   vec3 c=vColor*diffuse;
-  if(vMaterial>.5){float grain=.93+.07*sin(vWorld.z*41.0+sin(vWorld.x*8.0)*.8);c*=grain;}
+  float roughness=.88;
+  if(vMaterial>.5 && vMaterial<1.5) {
+    // Walnut grain is deliberately restrained; avoid a flat repeating stripe.
+    float grain=sin(vWorld.z*63.0+sin(vWorld.x*8.7)*1.9)
+               +.38*sin(vWorld.z*114.0+vWorld.x*5.2);
+    c*=.94+.055*grain;
+    roughness=.69;
+  } else if(vMaterial>1.5 && vMaterial<2.5) {
+    roughness=.30;
+  } else if(vMaterial>2.5 && vMaterial<3.5) {
+    float weave=.96+.027*sin(vWorld.x*150.0)*sin(vWorld.z*140.0);
+    c*=weave;roughness=.96;
+  } else if(vMaterial>3.5) {
+    roughness=.20;
+  }
   vec3 V=normalize(uEye-vWorld);
-  vec3 H=normalize(normalize(L1)+V);
-  float spec=pow(max(dot(N,H),0.0),36.0)*warm*.14;
-  c+=vec3(spec);
+  vec3 H1=normalize(normalize(L1)+V);
+  vec3 H2=normalize(normalize(L2)+V);
+  float exponent=mix(10.0,96.0,1.0-roughness);
+  float spec1=pow(max(dot(N,H1),0.0),exponent)*warm;
+  float spec2=pow(max(dot(N,H2),0.0),exponent)*screen;
+  c+=vec3(1.0,.83,.62)*spec1*(.08+.27*(1.0-roughness));
+  c+=vec3(.49,.73,1.0)*spec2*(.04+.23*(1.0-roughness));
+  // Cheap contact shadowing anchors furniture without extra shadow-map passes.
+  if(vWorld.y<.03 && N.y>.8) {
+    float desk=exp(-2.1*(vWorld.x*vWorld.x+(vWorld.z+.7)*(vWorld.z+.7)));
+    float shelf=exp(-1.6*((vWorld.x+3.25)*(vWorld.x+3.25)+(vWorld.z+2.25)*(vWorld.z+2.25)));
+    float labFloor=exp(-1.8*((vWorld.x-3.15)*(vWorld.x-3.15)+(vWorld.z+1.95)*(vWorld.z+1.95)));
+    c*=1.0-.17*max(desk,max(shelf,labFloor));
+  }
   c+=vColor*vEmit*1.05;
   float fog=clamp((vDistance-8.0)/21.0,0.0,.35);
   c=mix(c,vec3(.045,.072,.12),fog);
