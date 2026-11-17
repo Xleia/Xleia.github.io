@@ -187,7 +187,7 @@ function buildScene(){
   // Desk lamp: flared brass shade, softer translucent-inspired lower diffuser.
   tapered(-1.12,1.62,-1.11,.29,.12,.22,'#cb9961',.20,2,20);
   tapered(-1.12,1.49,-1.11,.23,.18,.045,'#fff1c7',.64,4,20);
-  cylinder(-1.12,1.67,-1.11,.073,.055,'#efe0c2',.27,2,16);
+  cylinder(-1.12,1.67,-1.11,.073,.055,'#efe0c2',.27,16);
   // Monitor: header, accent framing, subtitle rails and live waveform markers.
   box(0,2.205,-.962,1.68,.018,.022,'#65879b',.12,2);
   box(0,1.51,-.949,1.37,.022,.015,'#29627b',.23,2);
