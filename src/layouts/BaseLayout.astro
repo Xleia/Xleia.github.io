@@ -7,10 +7,12 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description } = Astro.props;
-const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
+const { title, description = SITE.description, canonicalPath, noindex = false } = Astro.props;
+const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, SITE.url).toString();
 ---
 
 <!doctype html>
@@ -19,6 +21,7 @@ const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light dark" />
     <meta property="og:type" content="website" />
