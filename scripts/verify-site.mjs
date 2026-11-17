@@ -66,7 +66,7 @@ const expectedLegacyTables = [
 ];
 for (const { file, count } of expectedLegacyTables) {
   const markdown = readFileSync(file, 'utf8');
-  const actual = (markdown.match(/<table\\s+class="legacy-table">/g) ?? []).length;
+  const actual = (markdown.match(/<table\s+class="legacy-table">/g) ?? []).length;
   if (actual !== count) failures.push(`Expected ${count} restored legacy tables in ${file}, found ${actual}`);
 }
 
