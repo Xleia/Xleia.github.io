@@ -5,13 +5,13 @@ import '../../styles/studio.css';
 ---
 
 <BaseLayout
-  title="Studio · 空间原型"
-  description="Xleia Studio 夜间私人工作室空间原型。体验可聚焦的工作台、书架与实验区，或使用完整的 2D 备用导航。"
+  title="Studio · WebGL 工作室预览"
+  description="Xleia Studio WebGL2 夜间私人工作室预览：真实 3D 几何、暖冷灯光、五个互动区域和完整的 2D 导航。"
   noindex
 >
   <header class="studio-intro">
     <div>
-      <p class="eyebrow">Spatial Prototype / V0.1</p>
+      <p class="eyebrow">3D Workspace / V0.2</p>
       <h1>Xleia <span>Studio.</span></h1>
       <p>一间深夜仍亮着灯的个人工作室。每个角落，都连接着一个正在构建或记录的想法。</p>
     </div>
@@ -25,6 +25,7 @@ import '../../styles/studio.css';
       <span class="studio-toolbar-tip">拖动旋转 · 滚轮缩放 · 点击热点聚焦</span>
     </div>
 
+    <p class="studio-error" data-studio-error role="status" hidden></p>
     <div class="studio-stage" data-studio-stage hidden>
       <canvas data-studio-canvas aria-hidden="true"></canvas>
       {STUDIO_ZONES.map((zone) => (
@@ -74,10 +75,10 @@ import '../../styles/studio.css';
       </div>
     </div>
   </section>
-  <p class="studio-caveat">这是场景比例与交互验证原型，采用无需额外依赖的透视几何绘制；不是最终的 Three.js / GLB 美术资产。未使用真实项目截图或私有应用地址。</p>
+  <p class="studio-caveat">这是基于原生 WebGL2 的真实低多边形 3D 场景，具有深度遮挡与基础灯光；仍非最终高精度 GLB/Three.js 影视级模型。屏幕均为示意画面，不代表已公开的产品页面。</p>
 </BaseLayout>
 
 <script>
-  import { mountStudio } from '../../scripts/studio-scene';
+  import { mountStudio } from '../../scripts/studio-webgl';
   mountStudio();
 </script>

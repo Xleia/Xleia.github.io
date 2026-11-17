@@ -40,3 +40,9 @@
 @media(max-width:760px) { .studio-toolbar-tip { flex-basis:100%; margin-left:0; } .studio-stage { height:480px; } .studio-fallback-grid { grid-template-columns:1fr; } .studio-hotspot { font-size:.68rem; padding:.37rem .52rem; gap:.35rem; } }
 @media(max-width:430px) { .studio-stage { height:390px; } .studio-hotspot { font-size:.65rem; } }
 @media(prefers-reduced-motion:reduce) { .studio-hotspot { transition:none; } }
+
+/* V0.2 WebGL preview enhancements. */
+.studio-stage { background:radial-gradient(ellipse at 65% 30%, #243650 0%, #0b1424 75%); }
+.studio-error { margin:0; padding:.75rem 1.2rem; color:#ffdab2; background:#372c31; border-bottom:1px solid #816c5e; }
+.studio-stage canvas { image-rendering:auto; }
+.studio-scene-label { background:rgb(11 22 38 / 65%); padding:.35rem .6rem; border-radius:.4rem; }
