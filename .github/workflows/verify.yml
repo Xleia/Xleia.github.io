@@ -1,0 +1,28 @@
+name: Verify Astro source
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Use supported Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+      # P1 bootstrap: replace with 'npm ci' once package-lock.json is committed.
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Check types and Astro templates
+        run: npm run check
+      - name: Build static site
+        run: npm run build

@@ -1,0 +1,30 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Xleia 的个人开发者网站、项目与技术实验室。',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} · Xleia</title>
+  </head>
+  <body>
+    <slot />
+    <footer class="site-footer">
+      <div class="container">© {new Date().getFullYear()} Xleia</div>
+    </footer>
+  </body>
+</html>
