@@ -32,6 +32,37 @@ if (!existsSync(outputDirectory)) {
   throw new Error('dist/ not found. Run npm run build first.');
 }
 
+
+// Verify the complete original article inventory and copied public assets.
+const sourceBlogDirectory = 'src/content/blog';
+const markdownFiles = filesUnder(sourceBlogDirectory).filter((file) => file.endsWith('.md'));
+const originalArticleRoutes = [];
+const articleImagePaths = new Set();
+let articleImageReferences = 0;
+
+for (const markdownFile of markdownFiles) {
+  const source = readFileSync(markdownFile, 'utf8');
+  const legacyPath = source.match(/^legacyPath: "([^"]+)"$/m)?.[1];
+  if (!legacyPath || !/^\/2023\/\d{2}\/\d{2}\/[^/]+\/$/.test(legacyPath)) {
+    failures.push(`Invalid historical route in ${markdownFile}`);
+    continue;
+  }
+  originalArticleRoutes.push(legacyPath);
+
+  for (const match of source.matchAll(/!\[[^\]]*\]\((\/img\/[^\s)]+)\)/g)) {
+    articleImageReferences++;
+    articleImagePaths.add(match[1]);
+    const imageFile = outputPath(match[1]);
+    if (!imageFile || !existsSync(imageFile)) failures.push(`Missing article image ${match[1]} in ${markdownFile}`);
+  }
+}
+
+if (markdownFiles.length !== 19) failures.push(`Expected 19 historical posts, found ${markdownFiles.length}`);
+if (new Set(originalArticleRoutes).size !== 19) failures.push('Expected 19 unique historical URLs');
+if (articleImageReferences !== 75) failures.push(`Expected 75 image references, found ${articleImageReferences}`);
+if (articleImagePaths.size !== 74) failures.push(`Expected 74 distinct article images, found ${articleImagePaths.size}`);
+expectedRoutes.push(...originalArticleRoutes);
+
 for (const route of expectedRoutes) {
   const filename = outputPath(route);
   if (!filename || !existsSync(filename)) failures.push(`Missing route: ${route}`);

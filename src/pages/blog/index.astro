@@ -1,13 +1,34 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionPlaceholder from '../../components/SectionPlaceholder.astro';
+
+const articles = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const categories = [...new Set(articles.map((article) => article.data.category))].sort();
+const prettyDate = (value: Date) => value.toISOString().slice(0, 10);
 ---
 
-<BaseLayout title="博客" description="Xleia 的技术文章与学习笔记。">
-  <SectionPlaceholder
-    eyebrow="Writing"
-    title="技术博客"
-    summary="这里将迁移 19 篇历史 Markdown 文章，并逐步整理新的技术笔记。"
-    phase="P3"
-  />
+<BaseLayout title="博客" description="Xleia 的历史技术笔记及开发实践，2023 年归档文章。">
+  <section class="page-intro">
+    <p class="eyebrow">Writing / Archive</p>
+    <h1>技术博客</h1>
+    <p class="lead">完整归档 2023 年发布的 {articles.length} 篇技术笔记。旧版内容保留原貌，涉及的技术版本与配置不保证适用于当前环境。</p>
+  </section>
+  <section aria-labelledby="archive-heading">
+    <h2 id="archive-heading">全部文章</h2>
+    <div class="archive-categories" aria-label="文章技术主题">
+      {categories.map((category) => <span class="tech-tag">{category}</span>)}
+    </div>
+    <ol class="article-list">
+      {articles.map((article) => (
+        <li class="article-list-item">
+          <span class="article-date"><time datetime={prettyDate(article.data.pubDate)}>{prettyDate(article.data.pubDate)}</time></span>
+          <div class="article-info">
+            <a href={article.data.legacyPath}>{article.data.title}</a>
+            <span class="article-category">{article.data.category}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
 </BaseLayout>

@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { PROJECTS } from '../data/projects';
+import { getCollection } from 'astro:content';
+const recentArticles = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
 ---
 
 <BaseLayout title="首页" description="Xleia 的个人开发者主页，展示独立项目、技术文章，以及 AI、后端、云与更多跨领域技术探索。">
@@ -72,8 +76,8 @@ import { PROJECTS } from '../data/projects';
           <span class="discover-label">WRITING</span>
         </div>
         <h3>技术笔记与文章</h3>
-        <p>Java、Spring、Redis、数据结构等历史笔记正在整理。已归档的 19 篇文章将在博客迁移阶段重新发布。</p>
-        <span class="discover-status">19 篇历史文章 · 迁移准备中</span>
+        <p>已收录 19 篇 2023 年历史技术笔记，涵盖 Java、Spring、Redis、数据结构和 Git 等主题。</p>
+        <span class="discover-status">19 篇历史文章 · 归档已建立</span>
         <a class="discover-link" href="/blog/">进入博客 <span aria-hidden="true">↗</span></a>
       </article>
       <article class="discover-card lab-card">
@@ -94,6 +98,30 @@ import { PROJECTS } from '../data/projects';
         <a class="discover-link" href="/lab/">探索 Lab <span aria-hidden="true">↗</span></a>
       </article>
     </div>
+  </section>
+
+  <section class="home-section recent-writing" aria-labelledby="recent-writing-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">03 / From the Archive</p>
+        <h2 id="recent-writing-title">最近的历史文章</h2>
+        <p class="section-description">按照原始发表日期排列，保留 2023 年的笔记内容与旧链接。</p>
+      </div>
+      <a class="section-more" href="/blog/">阅读全部 <span aria-hidden="true">↗</span></a>
+    </div>
+    <ol class="article-list">
+      {recentArticles.map((article) => (
+        <li class="article-list-item">
+          <span class="article-date">
+            <time datetime={article.data.pubDate.toISOString().slice(0, 10)}>{article.data.pubDate.toISOString().slice(0, 10)}</time>
+          </span>
+          <div class="article-info">
+            <a href={article.data.legacyPath}>{article.data.title}</a>
+            <span class="article-category">{article.data.category}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <section class="home-outro" aria-label="关于这个网站">

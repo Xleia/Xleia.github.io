@@ -1,0 +1,46 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('blog');
+  return articles.map((article) => {
+    const parts = article.data.legacyPath.split('/').filter(Boolean);
+    if (parts.length !== 4) throw new Error(`Invalid historical URL ${article.data.legacyPath}`);
+    return {
+      params: { year: parts[0], month: parts[1], day: parts[2], slug: parts[3] },
+      props: { article },
+    };
+  });
+}
+
+interface Props {
+  article: CollectionEntry<'blog'>;
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const date = article.data.pubDate.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={article.data.title} description={`历史技术笔记：${article.data.title}`} canonicalPath={article.data.legacyPath}>
+  <article class="post">
+    <nav class="breadcrumb" aria-label="面包屑导航">
+      <a href="/">首页</a><span aria-hidden="true">/</span>
+      <a href="/blog/">博客</a><span aria-hidden="true">/</span>
+      <span aria-current="page">历史文章</span>
+    </nav>
+    <header class="post-header">
+      <p class="eyebrow">{article.data.category}</p>
+      <h1>{article.data.title}</h1>
+      <p class="post-meta"><time datetime={date}>{date}</time> · 历史归档</p>
+      <p class="post-notice">本文保留 2023 年历史笔记内容。部分技术版本、配置和解决方法可能已过时，实际使用前请核实最新文档。</p>
+    </header>
+    <div class="post-content">
+      <Content />
+    </div>
+    <footer class="post-footer">
+      <a class="text-link" href="/blog/">← 返回文章目录</a>
+    </footer>
+  </article>
+</BaseLayout>

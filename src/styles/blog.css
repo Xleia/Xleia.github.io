@@ -1,0 +1,26 @@
+/* P3: historical Markdown archive */
+.article-list { list-style: none; padding: 0; margin: 1.5rem 0 0; border-top: 1px solid var(--color-border); }
+.article-list-item { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1.2rem; border-bottom: 1px solid var(--color-border); padding: 1.1rem 0; }
+.article-date { font-variant-numeric: tabular-nums; color: var(--color-muted); font-size: .9rem; }
+.article-info { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; align-items: baseline; }
+.article-info a { color: var(--color-text); font-weight: 650; text-decoration: none; }
+.article-info a:hover { color: var(--color-accent); text-decoration: underline; }
+.article-category { color: var(--color-muted); font-size: .82rem; }
+.archive-categories { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+.post { max-width: 53rem; margin-inline: auto; min-width: 0; }
+.post-header h1 { overflow-wrap: anywhere; }
+.post-meta { color: var(--color-muted); font-size: .9rem; }
+.post-notice { color: var(--color-muted); padding: 1rem 1.1rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-alt); }
+.post-content { margin-top: 2rem; overflow-wrap: anywhere; line-height: 1.85; }
+.post-content h2 { margin-top: 2.6rem; padding-top: .6rem; border-top: 1px solid var(--color-border); }
+.post-content h3 { margin-top: 2rem; }
+.post-content p { margin-block: 1rem; }
+.post-content img { display: block; max-width: 100%; height: auto; margin: 1.3rem auto; border-radius: var(--radius-sm); }
+.post-content pre { max-width: 100%; overflow-x: auto; padding: 1.2rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); line-height: 1.55; }
+.post-content :not(pre) > code { padding: .12rem .3rem; border-radius: .3rem; background: var(--color-surface-alt); overflow-wrap: anywhere; }
+.post-content table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.post-content th, .post-content td { padding: .6rem .85rem; border: 1px solid var(--color-border); }
+.post-content blockquote { margin-inline: 0; padding: .4rem 1rem; border-left: 3px solid var(--color-accent); background: var(--color-surface-alt); }
+.post-content a { overflow-wrap: anywhere; }
+.post-footer { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--color-border); }
+@media (max-width: 600px) { .article-list-item { grid-template-columns: 1fr; gap: .25rem; } .post-content pre { padding: .8rem; } }
