@@ -1,0 +1,37 @@
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  aria-label="切换深浅主题"
+  title="切换深浅主题"
+>
+  <span data-theme-icon aria-hidden="true">◐</span>
+</button>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+  if (toggle) {
+    const icon = toggle.querySelector<HTMLElement>('[data-theme-icon]');
+
+    const refreshLabel = () => {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      const description = isDark ? '切换为浅色模式' : '切换为深色模式';
+      toggle.setAttribute('aria-label', description);
+      toggle.setAttribute('title', description);
+      if (icon) icon.textContent = isDark ? '☀' : '☾';
+    };
+
+    refreshLabel();
+    toggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = nextTheme;
+      try {
+        window.localStorage.setItem('xleia-theme', nextTheme);
+      } catch {
+        // Private browsing or disabled storage: the current page can still switch.
+      }
+      refreshLabel();
+    });
+  }
+</script>

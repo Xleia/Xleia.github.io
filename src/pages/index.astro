@@ -4,16 +4,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="开发中">
-  <main class="container">
-    <h1>Xleia · 新个人网站</h1>
-    <p class="intro">
-      Astro + React + TypeScript 工程已建立。此页面仅用于 P1 初始化验证，
-      正式首页将在 P2 实现。
+  <section class="hero" aria-labelledby="home-title">
+    <p class="eyebrow">Xleia · Personal Hub</p>
+    <h1 id="home-title">开发、学习与创造。</h1>
+    <p class="lead">
+      这是个人网站重构的 P1-2 布局预览。未来将在这里展示 KOTO、
+      Train Libre、技术文章，以及 AI 与跨领域技术实验。
     </p>
-    <section aria-labelledby="test-heading">
-      <h2 id="test-heading">React Island 验证</h2>
-      <p>点击按钮检查浏览器端 React 是否正常加载。</p>
-      <Counter client:load />
-    </section>
-  </main>
+    <div class="action-links">
+      <a class="button-link" href="/projects/">项目入口 <span aria-hidden="true">→</span></a>
+      <a class="text-link" href="/lab/">查看 Lab <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="placeholder-card" aria-labelledby="test-heading">
+    <h2 id="test-heading">工程验证 · React Island</h2>
+    <p>仅此测试按钮启用 React 客户端交互，页面其他布局均由 Astro 输出。</p>
+    <Counter client:load />
+    <p>正式主页内容将在 P2 实现。</p>
+  </section>
 </BaseLayout>

@@ -1,4 +1,7 @@
 ---
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
@@ -6,10 +9,8 @@ interface Props {
   description?: string;
 }
 
-const {
-  title,
-  description = 'Xleia 的个人开发者网站、项目与技术实验室。',
-} = Astro.props;
+const { title, description = SITE.description } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
 ---
 
 <!doctype html>
@@ -19,12 +20,36 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} · Xleia</title>
+    <meta name="color-scheme" content="light dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={`${title} · ${SITE.name}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{title} · {SITE.name}</title>
+
+    <!-- Apply saved/system theme before the page paints. No React hydration required. -->
+    <script is:inline>
+      (() => {
+        let saved;
+        try {
+          saved = localStorage.getItem('xleia-theme');
+        } catch {
+          // Storage can be blocked in private or restricted browser contexts.
+        }
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme =
+          saved === 'light' || saved === 'dark' ? saved : prefersDark ? 'dark' : 'light';
+      })();
+    </script>
   </head>
-  <body>
-    <slot />
-    <footer class="site-footer">
-      <div class="container">© {new Date().getFullYear()} Xleia</div>
-    </footer>
+  <body id="page-top">
+    <a href="#main-content" class="skip-link">跳转到正文</a>
+    <SiteHeader />
+    <main id="main-content" class="site-main container">
+      <slot />
+    </main>
+    <SiteFooter />
   </body>
 </html>
