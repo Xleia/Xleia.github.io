@@ -24,3 +24,9 @@
 .post-content a { overflow-wrap: anywhere; }
 .post-footer { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--color-border); }
 @media (max-width: 600px) { .article-list-item { grid-template-columns: 1fr; gap: .25rem; } .post-content pre { padding: .8rem; } }
+
+.archive-controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+.archive-controls label { display: flex; flex-direction: column; gap: .3rem; min-width: min(100%, 15rem); color: var(--color-muted); font-size: .85rem; }
+.archive-controls input, .archive-controls select { width: 100%; padding: .6rem .75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); }
+.archive-count { margin: 1rem 0 .5rem; color: var(--color-muted); font-size: .9rem; }
+.article-list-item[hidden] { display: none; }

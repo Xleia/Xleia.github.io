@@ -16,12 +16,23 @@ const prettyDate = (value: Date) => value.toISOString().slice(0, 10);
   </section>
   <section aria-labelledby="archive-heading">
     <h2 id="archive-heading">全部文章</h2>
-    <div class="archive-categories" aria-label="文章技术主题">
-      {categories.map((category) => <span class="tech-tag">{category}</span>)}
+    <div class="archive-controls" role="search" aria-label="筛选历史文章">
+      <label>
+        <span>关键词</span>
+        <input id="blog-search" type="search" placeholder="搜索标题或分类" autocomplete="off" />
+      </label>
+      <label>
+        <span>主题</span>
+        <select id="blog-category">
+          <option value="">全部主题</option>
+          {categories.map((category) => <option value={category}>{category}</option>)}
+        </select>
+      </label>
     </div>
-    <ol class="article-list">
+    <p id="blog-count" class="archive-count" aria-live="polite">共 {articles.length} 篇文章</p>
+    <ol class="article-list" id="blog-article-list">
       {articles.map((article) => (
-        <li class="article-list-item">
+        <li class="article-list-item" data-category={article.data.category} data-title={article.data.title}>
           <span class="article-date"><time datetime={prettyDate(article.data.pubDate)}>{prettyDate(article.data.pubDate)}</time></span>
           <div class="article-info">
             <a href={article.data.legacyPath}>{article.data.title}</a>
@@ -32,3 +43,29 @@ const prettyDate = (value: Date) => value.toISOString().slice(0, 10);
     </ol>
   </section>
 </BaseLayout>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>('#blog-search');
+  const category = document.querySelector<HTMLSelectElement>('#blog-category');
+  const count = document.querySelector<HTMLElement>('#blog-count');
+  const entries = Array.from(document.querySelectorAll<HTMLElement>('#blog-article-list .article-list-item'));
+
+  const applyFilter = () => {
+    const query = search?.value.trim().toLocaleLowerCase() ?? '';
+    const selectedCategory = category?.value ?? '';
+    let visible = 0;
+
+    for (const entry of entries) {
+      const title = (entry.dataset.title ?? '').toLocaleLowerCase();
+      const topic = entry.dataset.category ?? '';
+      const matches = (!query || title.includes(query) || topic.toLocaleLowerCase().includes(query))
+        && (!selectedCategory || topic === selectedCategory);
+      entry.hidden = !matches;
+      if (matches) visible++;
+    }
+    if (count) count.textContent = `符合条件的文章：${visible} 篇`;
+  };
+
+  search?.addEventListener('input', applyFilter);
+  category?.addEventListener('change', applyFilter);
+</script>
