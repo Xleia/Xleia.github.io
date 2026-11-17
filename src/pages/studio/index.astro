@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { STUDIO_ZONES } from '../../data/studio';
+import '../../styles/studio.css';
+---
+
+<BaseLayout
+  title="Studio · 空间原型"
+  description="Xleia Studio 夜间私人工作室空间原型。体验可聚焦的工作台、书架与实验区，或使用完整的 2D 备用导航。"
+  noindex
+>
+  <header class="studio-intro">
+    <div>
+      <p class="eyebrow">Spatial Prototype / V0.1</p>
+      <h1>Xleia <span>Studio.</span></h1>
+      <p>一间深夜仍亮着灯的个人工作室。每个角落，都连接着一个正在构建或记录的想法。</p>
+    </div>
+    <div class="studio-intro-status"><span aria-hidden="true">●</span> 独立预览 · 尚未替换正式首页</div>
+  </header>
+
+  <section class="studio-shell" data-studio aria-label="Xleia Studio 交互式工作室原型">
+    <div class="studio-toolbar" aria-label="场景控制">
+      <button type="button" data-studio-reset disabled>重置视角</button>
+      <button type="button" data-studio-view disabled>切换 2D 模式</button>
+      <span class="studio-toolbar-tip">拖动旋转 · 滚轮缩放 · 点击热点聚焦</span>
+    </div>
+
+    <div class="studio-stage" data-studio-stage hidden>
+      <canvas data-studio-canvas aria-hidden="true"></canvas>
+      {STUDIO_ZONES.map((zone) => (
+        <button
+          type="button"
+          class="studio-hotspot"
+          data-studio-pin={zone.id}
+          aria-label={`聚焦${zone.name}区域`}
+          aria-pressed="false"
+        >
+          <span class="studio-hotspot-pulse" aria-hidden="true"></span>
+          <span>{zone.name}</span>
+        </button>
+      ))}
+      <div class="studio-scene-label" aria-hidden="true">WORKSPACE / NIGHT MODE</div>
+    </div>
+
+    <div class="studio-details" data-studio-details hidden aria-live="polite">
+      {STUDIO_ZONES.map((zone) => (
+        <article class="studio-detail" data-studio-panel={zone.id} hidden>
+          <span class="studio-detail-kicker">{zone.kicker}</span>
+          <h2>{zone.name}</h2>
+          <p>{zone.description}</p>
+          <div class="studio-detail-actions">
+            <a href={zone.href}>{zone.linkLabel} <span aria-hidden="true">↗</span></a>
+            <button type="button" data-studio-close>返回工作室</button>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="studio-fallback" data-studio-fallback>
+      <div class="studio-fallback-head">
+        <p class="eyebrow">Explore / 2D Navigation</p>
+        <h2>探索工作室</h2>
+        <p>无需 3D 功能，也可以访问工作室里的全部内容。</p>
+      </div>
+      <div class="studio-fallback-grid">
+        {STUDIO_ZONES.map((zone, index) => (
+          <a href={zone.href} class="studio-fallback-card">
+            <span class="studio-fallback-index">0{index + 1}</span>
+            <strong>{zone.name}</strong>
+            <span>{zone.description}</span>
+            <span class="studio-fallback-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <p class="studio-caveat">这是场景比例与交互验证原型，采用无需额外依赖的透视几何绘制；不是最终的 Three.js / GLB 美术资产。未使用真实项目截图或私有应用地址。</p>
+</BaseLayout>
+
+<script>
+  import { mountStudio } from '../../scripts/studio-scene';
+  mountStudio();
+</script>
