@@ -32,6 +32,12 @@ if (!existsSync(outputDirectory)) {
   throw new Error('dist/ not found. Run npm run build first.');
 }
 
+// Keep WebGL2 shadow sampler precision explicit: TypeScript/Astro checks do not compile GLSL.
+const studioShaderSource = readFileSync('src/scripts/studio-webgl.ts','utf8');
+if (!/uniform\\s+(?:lowp|mediump|highp)\\s+sampler2DShadow\\s+uShadowMap\\s*;/.test(studioShaderSource)) {
+  failures.push('Studio WebGL2 shadow sampler must declare explicit precision');
+}
+
 
 // Studio V0.4: enforce local-only glTF / texture delivery and validate embedded geometry.
 const studioAssets = [
