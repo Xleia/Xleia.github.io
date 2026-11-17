@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面未找到" description="抱歉，没有找到请求的页面。">
+  <section class="page-intro" aria-labelledby="not-found-title">
+    <p class="eyebrow">404 · Not Found</p>
+    <h1 id="not-found-title">页面未找到</h1>
+    <p class="lead">地址可能已变更，或者页面暂时不存在。你可以返回首页或通过导航查找内容。</p>
+    <a class="button-link" href="/">返回首页 <span aria-hidden="true">→</span></a>
+  </section>
+</BaseLayout>

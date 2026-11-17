@@ -26,10 +26,5 @@ jobs:
         run: npm run check
       - name: Build static site
         run: npm run build
-      - name: Verify generated navigation entry pages
-        run: |
-          test -f dist/index.html
-          test -f dist/projects/index.html
-          test -f dist/blog/index.html
-          test -f dist/lab/index.html
-          test -f dist/about/index.html
+      - name: Verify generated routes and links
+        run: npm run verify:site
