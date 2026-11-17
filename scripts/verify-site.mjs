@@ -34,7 +34,7 @@ if (!existsSync(outputDirectory)) {
 
 // Keep WebGL2 shadow sampler precision explicit: TypeScript/Astro checks do not compile GLSL.
 const studioShaderSource = readFileSync('src/scripts/studio-webgl.ts','utf8');
-if (!/uniform\\s+(?:lowp|mediump|highp)\\s+sampler2DShadow\\s+uShadowMap\\s*;/.test(studioShaderSource)) {
+if (!/uniform\s+(?:lowp|mediump|highp)\s+sampler2DShadow\s+uShadowMap\s*;/.test(studioShaderSource)) {
   failures.push('Studio WebGL2 shadow sampler must declare explicit precision');
 }
 
