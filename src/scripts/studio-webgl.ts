@@ -289,7 +289,7 @@ in vec3 vWorld; in vec3 vNormal; in vec3 vColor; in float vEmit; in float vMater
 in vec3 vShadowClip;
 uniform vec3 uEye;
 uniform sampler2D uWalnutAlbedo, uWalnutRoughness;
-uniform sampler2DShadow uShadowMap;
+uniform highp sampler2DShadow uShadowMap;
 uniform bool uHasShadow;
 uniform vec2 uShadowPixel;
 out vec4 outputColor;
