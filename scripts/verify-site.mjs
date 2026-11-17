@@ -33,6 +33,51 @@ if (!existsSync(outputDirectory)) {
 }
 
 
+// Studio V0.4: enforce local-only glTF / texture delivery and validate embedded geometry.
+const studioAssets = [
+  'models/studio/pendant-lamp.gltf',
+  'textures/studio/walnut-albedo.svg',
+  'textures/studio/walnut-roughness.svg'
+];
+for (const asset of studioAssets) {
+  if (!existsSync(join(outputDirectory, asset))) failures.push('Missing Studio asset: '+asset);
+}
+const modelPath=join(outputDirectory, studioAssets[0]);
+if (existsSync(modelPath)) {
+  try {
+    const model=JSON.parse(readFileSync(modelPath,'utf8'));
+    if (model.asset?.version !== '2.0' || model.buffers?.length !== 1 ||
+        !model.buffers[0].uri.startsWith('data:application/octet-stream;base64,')) {
+      throw new Error('Unsupported or externally referenced model');
+    }
+    const raw=Buffer.from(model.buffers[0].uri.split(',')[1],'base64');
+    if(raw.length!==model.buffers[0].byteLength || raw.length>5_000_000)
+      throw new Error('Embedded glTF buffer size mismatch');
+    if(model.meshes?.length!==4 || model.nodes?.length!==4 || model.materials?.length!==3)
+      throw new Error('Unexpected glTF mesh inventory');
+    for(const accessor of model.accessors??[]) {
+      const view=model.bufferViews?.[accessor.bufferView];
+      if(!view || view.buffer!==0 || accessor.componentType!==5126 || accessor.type!=='VEC3')
+        throw new Error('Unexpected glTF accessor');
+      const stride=view.byteStride??12, base=(view.byteOffset??0)+(accessor.byteOffset??0);
+      const end=base+(accessor.count-1)*stride+12;
+      if(accessor.count<=0||end>raw.length)throw new Error('Out-of-bounds glTF accessor');
+    }
+  } catch(error) {
+    failures.push('Invalid Studio glTF asset: '+String(error));
+  }
+}
+for (const asset of studioAssets.slice(1)) {
+  const name=join(outputDirectory,asset);
+  if(existsSync(name)) {
+    const svg=readFileSync(name,'utf8');
+    if(!svg.includes('xmlns="http://www.w3.org/2000/svg"')||
+       /<script\b|href\s*=\s*["']https?:/i.test(svg))
+      failures.push('Studio texture must remain local and script-free: '+asset);
+  }
+}
+
+
 // Verify the complete original article inventory and copied public assets.
 const sourceBlogDirectory = 'src/content/blog';
 const markdownFiles = filesUnder(sourceBlogDirectory).filter((file) => file.endsWith('.md'));
