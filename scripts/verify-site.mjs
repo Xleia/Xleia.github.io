@@ -55,7 +55,7 @@ for (const filename of htmlFiles) {
   // to this allowlist in the same PR as the project page change.
   if (route === '/projects/koto/' || route === '/projects/train-libre/') {
     const approvedProjectExternalLinks = new Set(['https://github.com/Xleia']);
-    for (const match of html.matchAll(/\\bhref="([^"]+)"/g)) {
+    for (const match of html.matchAll(/\bhref="([^"]+)"/g)) {
       let target;
       try { target = new URL(match[1].replaceAll('&amp;', '&'), pageUrl); }
       catch { continue; } // The generic link validator below reports malformed URLs.
