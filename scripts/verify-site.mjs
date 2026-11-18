@@ -149,6 +149,49 @@ for(const key of ["low:{pixelRatio:1,shadowSize:512}",
                   "high:{pixelRatio:1.75,shadowSize:1536}"]) {
   if(!studioShaderSource.includes(key)) failures.push('Studio GPU quality tier missing: '+key);
 }
+// V0.7: validate LOD variants, locally hosted fabric maps and sampler contracts.
+for(const id of ['desk','bookshelf','chair']){
+  const highFile=join(outputDirectory,'models/studio/'+id+'.gltf');
+  const lowFile=join(outputDirectory,'models/studio/'+id+'-low.gltf');
+  if(!existsSync(lowFile)){failures.push('Studio low LOD missing: '+id);continue;}
+  try{
+    const high=JSON.parse(readFileSync(highFile,'utf8'));
+    const low=JSON.parse(readFileSync(lowFile,'utf8'));
+    if(low.nodes.length>=high.nodes.length || low.nodes.length<5)
+      throw new Error('LOD node count must be reduced');
+    if(low.meshes.length!==high.meshes.length ||
+       low.buffers[0].byteLength!==high.buffers[0].byteLength)
+      throw new Error('Unexpected LOD buffer structure');
+    for(const node of low.nodes)
+      if(node.mesh===undefined || !low.meshes[node.mesh])
+        throw new Error('Invalid LOD mesh index');
+  }catch(error){failures.push('Invalid Studio LOD '+id+': '+String(error));}
+}
+for(const name of ['fabric-albedo.svg','fabric-roughness.svg']){
+  const path=join(outputDirectory,'textures/studio',name);
+  if(!existsSync(path)){failures.push('Studio fabric texture missing: '+name);continue;}
+  const svg=readFileSync(path,'utf8');
+  if(!svg.includes('xmlns="http://www.w3.org/2000/svg"')||
+     svg.includes('<script')||svg.includes('href="https:')||svg.includes('href="http:'))
+    failures.push('Unsafe fabric texture: '+name);
+}
+for(const contract of [
+  "const meshLevels={high:buildLevel('high'),low:buildLevel('low')}",
+  'graphics.count=meshLevels[currentLOD].length/13',
+  "const BENCHMARK_MS=5000",
+  'shadowDirty=true',
+  'requestAnimationFrame(step)',
+  'uniform sampler2D uWalnutAlbedo, uWalnutRoughness, uFabricAlbedo, uFabricRoughness',
+  'gl.uniform1i(uniforms.fabricAlbedo,3)'
+]){
+  if(!studioShaderSource.includes(contract))
+    failures.push('Missing Studio V0.7 shader/runtime contract: '+contract);
+}
+const studioUI=readFileSync('src/pages/studio/index.astro','utf8');
+if(!studioUI.includes('data-studio-benchmark') ||
+   !studioUI.includes('data-studio-benchmark-status'))
+  failures.push('Missing Studio V0.7 benchmark controls');
+
 const chairAsset=join(outputDirectory,'models/studio/chair.gltf');
 if(existsSync(chairAsset)) {
   const chair=JSON.parse(readFileSync(chairAsset,'utf8'));
