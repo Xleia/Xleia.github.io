@@ -1,9 +1,9 @@
 import { STUDIO_ZONES, type StudioZone, type Vec3 } from '../data/studio';
-import { loadStudioLamp } from './studio-assets';
+import { loadStudioModel } from './studio-assets';
 import { createShadowMap } from './studio-shadows';
 import { loadStudioTexture } from './studio-textures';
 
-// V0.3: richer hand-built geometry, material response and warm/cool lighting; no CDN or extra runtime dependency.
+// V0.5: modular glTF furniture meshes, material shading and cached depth shadows; no CDN required.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
 const HOME: Camera = { target: [0, 1.23, -.28], azimuth: .34, elevation: .28, distance: 12.6 };
 const TAU = Math.PI * 2;
@@ -20,6 +20,13 @@ const palette = {
 
 // Interleaved per-vertex data: xyz position, xyz normal, rgb albedo, emissive strength, material kind.
 const vertices: number[] = [];
+type FurnitureGroup = 'desk' | 'bookshelf' | 'chair';
+const furnitureRanges: Array<{group:FurnitureGroup;from:number;to:number}> = [];
+function legacyFurniture(group:FurnitureGroup,build:()=>void) {
+  const from=vertices.length;
+  build();
+  furnitureRanges.push({group,from,to:vertices.length});
+}
 const addTri = (a: Vec3,b: Vec3,c: Vec3,normal: Vec3,col: string,emissive=0,kind=0) => {
   const color = rgb(col);
   for (const p of [a,b,c]) vertices.push(...p,...normal,...color,emissive,kind);
@@ -98,6 +105,7 @@ function buildScene(){
   for(const x of [-1.56,.39,2.47]) box(x,2.2,-3.11,.075,1.98,.13,metal);
   for(const y of [1.29,2.21,3.14])box(.45,y,-3.11,4.09,.075,.13,metal);
   // Tall left bookshelf, occupied with differently sized books and trailing plants.
+  legacyFurniture('bookshelf',()=>{
   for(const x of [-3.98,-2.52])box(x,1.45,-2.34,.13,2.9,.92,woodDark);
   for(const y of [.15,.69,1.24,1.8,2.35,2.78])box(-3.25,y,-2.34,1.62,.082,.97,wood);
   const spines=['#8b5a45','#486d80','#a88a5c','#59634d','#546981','#a46b5a','#71546d'];
@@ -106,9 +114,12 @@ function buildScene(){
     box(-3.89+i*.118,.22+r*.555+height/2,-1.95,.09,height,.47,spines[(i+r*2)%spines.length]);
     if(i%4===0)box(-3.89+i*.118,.22+r*.555+height*.78,-1.695,.075,.015,.015,gold,.3);
   }
+  });
   // Main walnut desk, brass accents, KOTO monitor and actual layered glowing screen.
+  legacyFurniture('desk',()=>{
   box(0,.81,-.72,3.57,.14,1.6,wood,0,1);
   for(const x of [-1.55,1.55])for(const z of [-1.3,-.19])box(x,.39,z,.135,.78,.15,woodDark,0,1);
+  });
   box(0,1.65,-1.05,1.85,1.12,.13,bezel);
   box(0,1.65,-.971,1.7,.96,.02,screen,1.03);
   box(0,1.32,-.952,1.52,.22,.014,'#173652',.51);
@@ -125,12 +136,14 @@ function buildScene(){
   cylinder(-.94,.98,-.36,.09,.18,paper);box(-.65,.89,-.33,.40,.015,.28,'#dbbb8a');
   // Chair with cushion, mechanical base and a rug (separate from the workbench).
   box(.04,.06,1.24,3.98,.035,2.27,rug);
+  legacyFurniture('chair',()=>{
   box(.04,.49,.82,1.06,.20,.93,slate); box(.04,1.03,1.17,1.06,1.12,.20,'#445365');
   cylinder(.04,.23,.9,.065,.55,metal);
   for(const a of [0,1,2,3,4]){
     const ang=a*TAU/5;
     box(.04+Math.cos(ang)*.25,.11,.9+Math.sin(ang)*.25,.36,.05,.08,bezel);
   }
+  });
   // Phone display with bright gym UI color blocks; not a screenshot or download link.
   box(2.14,.67,.51,.87,1.13,.76,woodDark,0,1); box(2.14,1.26,.51,1.0,.095,.82,wood,0,1);
   box(2.14,1.64,.65,.47,.77,.09,bezel);box(2.14,1.65,.707,.38,.65,.017,'#256c87',.65);
@@ -160,6 +173,7 @@ function buildScene(){
   box(3.47,.90,-2.07,.5,.005,.46,'#497a9a',.31);
 
   // V0.3 joinery: layered walnut edge, inset drawers, brass handles and desk cable raceway.
+  legacyFurniture('desk',()=>{
   box(0,.715,-.70,3.49,.050,1.51,'#3b291f',0,1);
   box(0,.875,-.70,3.50,.024,1.55,'#a5764e',0,1);
   for(const x of [-.82,.82]){
@@ -170,6 +184,7 @@ function buildScene(){
   for(const x of [-1.52,1.52])for(const z of [-1.26,-.20])
     box(x,.08,z,.19,.062,.19,'#222b33',0,2);
 
+  });
   // Peripherals: rounded speakers, headphones, coaster, ceramic cup and layered notes.
   for(const x of [-.98,1.18]) {
     box(x,1.038,-1.035,.27,.38,.28,'#1c2733',0,2);
@@ -199,6 +214,7 @@ function buildScene(){
   ellipsoid(.67,1.97,-.944,.035,.035,.012,'#78dfd5',.92,4);
 
   // Bookcase carpentry, labels, book stacks and one trailing plant.
+  legacyFurniture('bookshelf',()=>{
   box(-3.26,.10,-1.92,1.58,.09,.95,'#3d2d26',0,1);
   for(const level of [0,1,2,3])for(const i of [1,4,8,10]) {
     const x=-3.89+i*.118;
@@ -215,6 +231,7 @@ function buildScene(){
       .12,.17,.09,'#426d55',0,3);
   }
 
+  });
   // Window depth, sill, mullions, external lights and a subtle warm light strip.
   box(.45,1.225,-3.05,4.20,.095,.25,'#283747',0,2);
   box(.45,3.20,-3.12,4.23,.12,.21,'#394a5b',0,2);
@@ -261,6 +278,7 @@ function buildScene(){
 
 }
 buildScene();
+const baseSceneVertices=vertices.slice();
 
 const vert = `#version 300 es
 precision highp float;
@@ -415,12 +433,36 @@ export async function mountStudio(): Promise<void> {
   const note=root.querySelector<HTMLElement>('[data-studio-error]');
   if(!canvas||!stage||!fallback||!details||!reset||!view)return;
 
-  // Asset pipeline is deliberately bounded to a single same-origin reviewed glTF.
-  // Built-in geometry remains available when the optional model is unavailable.
-  try {
-    const imported=await loadStudioLamp('/models/studio/pendant-lamp.gltf');
-    for(const item of imported) vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind);
-  } catch(error) { console.warn('Optional Studio glTF model unavailable; using base geometry',error); }
+  // The source furniture remains a reliable fallback. Only remove a furniture
+  // range after its independently stored glTF asset has loaded and validated.
+  const assets=[
+    {id:'desk',url:'/models/studio/desk.gltf'},
+    {id:'bookshelf',url:'/models/studio/bookshelf.gltf'},
+    {id:'chair',url:'/models/studio/chair.gltf'},
+    {id:'lamp',url:'/models/studio/pendant-lamp.gltf'}
+  ] as const;
+  const results=await Promise.allSettled(assets.map(asset=>loadStudioModel(asset.url)));
+  const loaded=new Set<FurnitureGroup>();
+  const imported: Array<Awaited<ReturnType<typeof loadStudioModel>>> = [];
+  results.forEach((result,i)=>{
+    if(result.status==='fulfilled'){
+      imported.push(result.value);
+      if(assets[i].id!=='lamp')loaded.add(assets[i].id as FurnitureGroup);
+    }else console.warn('Studio asset fallback:',assets[i].id,result.reason);
+  });
+  const ranges=furnitureRanges.filter(range=>loaded.has(range.group)).sort((a,b)=>a.from-b.from);
+  vertices.length=0;
+  let cursor=0;
+  for(const range of ranges){
+    for(let i=cursor;i<range.from;i++)vertices.push(baseSceneVertices[i]);
+    cursor=range.to;
+  }
+  for(let i=cursor;i<baseSceneVertices.length;i++)vertices.push(baseSceneVertices[i]);
+  for(const model of imported)
+    for(const item of model)
+      vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind);
+  const runtimeStatus=root.querySelector<HTMLElement>('[data-studio-runtime-status]');
+  if(runtimeStatus)runtimeStatus.textContent=`独立家具 ${loaded.size}/3 · ${results[3].status==='fulfilled'?'吊灯已加载':'吊灯使用回退'}`;
 
   const candidate=canvas.getContext('webgl2',{alpha:false,antialias:true,powerPreference:'high-performance'});
   if(!candidate){if(note){note.hidden=false;note.textContent='此设备无法初始化 WebGL2，已使用完整的 2D 导航。';}return;}
@@ -443,6 +485,7 @@ export async function mountStudio(): Promise<void> {
   };
   const light=basis({target:[0,0,-.6],azimuth:-.42,elevation:.92,distance:9.0});
   let shadow:ReturnType<typeof createShadowMap>|undefined;
+  let shadowDirty=true;
   try { shadow=createShadowMap(gl); }
   catch(error){ console.warn('Shadow map unsupported; rendering without directional shadows',error); }
   const albedoTex=loadStudioTexture(gl,'/textures/studio/walnut-albedo.svg',()=>requestFrame());
@@ -461,7 +504,7 @@ export async function mountStudio(): Promise<void> {
   function redraw(){
     if(!in3d)return;
     const b=basis(current),focal=1/Math.tan(40*Math.PI/360),aspect=width/height;
-    if(shadow)shadow.render(light,graphics.vao,graphics.count);
+    if(shadow&&shadowDirty){shadow.render(light,graphics.vao,graphics.count);shadowDirty=false;}
     gl.viewport(0,0,canvasEl.width,canvasEl.height);gl.clearColor(.045,.073,.122,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     gl.useProgram(graphics.program);gl.bindVertexArray(graphics.vao);
     gl.uniform3fv(uniforms.eye,new Float32Array(b.eye));gl.uniform3fv(uniforms.right,new Float32Array(b.right));gl.uniform3fv(uniforms.up,new Float32Array(b.up));gl.uniform3fv(uniforms.forward,new Float32Array(b.forward));
