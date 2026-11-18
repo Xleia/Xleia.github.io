@@ -3,7 +3,7 @@ import { loadStudioModel } from './studio-assets';
 import { createShadowMap } from './studio-shadows';
 import { loadStudioTexture } from './studio-textures';
 
-// V0.5: modular glTF furniture meshes, material shading and cached depth shadows; no CDN required.
+// V0.6: glTF roughness/metallic factors propagated to GGX shader; modular furniture and cached shadows; no CDN required.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
 const HOME: Camera = { target: [0, 1.23, -.28], azimuth: .34, elevation: .28, distance: 12.6 };
 const TAU = Math.PI * 2;
@@ -29,7 +29,11 @@ function legacyFurniture(group:FurnitureGroup,build:()=>void) {
 }
 const addTri = (a: Vec3,b: Vec3,c: Vec3,normal: Vec3,col: string,emissive=0,kind=0) => {
   const color = rgb(col);
-  for (const p of [a,b,c]) vertices.push(...p,...normal,...color,emissive,kind);
+  for (const p of [a,b,c]) vertices.push(
+    ...p,...normal,...color,emissive,kind,
+    kind===2?.78:kind===4?.12:0,
+    kind===1?.65:kind===2?.31:kind===3?.95:kind===4?.25:.86
+  );
 };
 function quad(a: Vec3,b: Vec3,c: Vec3,d: Vec3,n: Vec3,col: string,emit=0,kind=0) {
   addTri(a,b,c,n,col,emit,kind); addTri(a,c,d,n,col,emit,kind);
@@ -287,16 +291,19 @@ layout(location=1) in vec3 aNormal;
 layout(location=2) in vec3 aColor;
 layout(location=3) in float aEmissive;
 layout(location=4) in float aMaterial;
+layout(location=5) in float aMetallic;
+layout(location=6) in float aRoughness;
 uniform vec3 uEye; uniform vec3 uRight; uniform vec3 uUp; uniform vec3 uForward;
 uniform float uFocal; uniform float uAspect;
 uniform vec3 uLightEye, uLightRight, uLightUp, uLightForward;
 out vec3 vWorld; out vec3 vNormal; out vec3 vColor; out float vEmit; out float vMaterial; out float vDistance;
 out vec3 vShadowClip;
+out float vMetallic; out float vRoughness;
 void main(){
   vec3 rel=aPosition-uEye;
   float d=dot(rel,uForward);
   gl_Position=vec4(dot(rel,uRight)*uFocal/uAspect, dot(rel,uUp)*uFocal, (d*500.05-50.0)/499.95, d);
-  vWorld=aPosition; vNormal=aNormal; vColor=aColor; vEmit=aEmissive; vMaterial=aMaterial; vDistance=d;
+  vWorld=aPosition; vNormal=aNormal; vColor=aColor; vEmit=aEmissive; vMaterial=aMaterial; vDistance=d; vMetallic=aMetallic; vRoughness=aRoughness;
   vec3 shadowRel=aPosition-uLightEye;
   float shadowDepth=dot(shadowRel,uLightForward);
   vShadowClip=vec3(dot(shadowRel,uLightRight)/6.0,dot(shadowRel,uLightUp)/5.0,(shadowDepth-9.0)/9.0);
@@ -305,6 +312,7 @@ const frag = `#version 300 es
 precision highp float;
 in vec3 vWorld; in vec3 vNormal; in vec3 vColor; in float vEmit; in float vMaterial; in float vDistance;
 in vec3 vShadowClip;
+in float vMetallic; in float vRoughness;
 uniform vec3 uEye;
 uniform sampler2D uWalnutAlbedo, uWalnutRoughness;
 uniform highp sampler2DShadow uShadowMap;
@@ -354,20 +362,17 @@ void main() {
   float warm=max(dot(N,normalize(L1)),0.0)*5.8/(2.6+dot(L1,L1));
   float screen=max(dot(N,normalize(L2)),0.0)*2.4/(2.0+dot(L2,L2));
   float lab=max(dot(N,normalize(L3)),0.0)*1.9/(1.6+dot(L3,L3));
-  float roughness=.86,metallic=0.0;
+  float roughness=clamp(vRoughness,.12,1.0),metallic=clamp(vMetallic,0.0,1.0);
   vec3 albedo=vColor;
   if(vMaterial>.5&&vMaterial<1.5) {
     vec2 uv=vWorld.xz*vec2(.53,1.34);
     vec3 tex=texture(uWalnutAlbedo,uv).rgb;
     albedo*=mix(vec3(1.0),clamp(tex/vec3(.58,.42,.30),vec3(.65),vec3(1.4)),.35);
-    roughness=mix(.65,texture(uWalnutRoughness,uv).r,.45);
+    roughness=mix(roughness,texture(uWalnutRoughness,uv).r,.45);
   }else if(vMaterial>1.5&&vMaterial<2.5){
-    roughness=.31;metallic=.78;
+    // Metal BRDF factors originate in the glTF material when available.
   }else if(vMaterial>2.5&&vMaterial<3.5){
     albedo*=.96+.035*sin(vWorld.x*140.0)*sin(vWorld.z*135.0);
-    roughness=.96;
-  }else if(vMaterial>3.5){
-    roughness=.25;metallic=.12;
   }
   roughness=clamp(roughness,.12,1.0);
   vec3 F0=mix(vec3(.04),albedo,metallic);
@@ -403,12 +408,12 @@ function setup(gl:WebGL2RenderingContext){
   const buffer=gl.createBuffer(),vao=gl.createVertexArray();if(!buffer||!vao)throw new Error('WebGL buffer allocation failed');
   gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
-  const stride=11*4;
-  for(const [index,size,offset] of [[0,3,0],[1,3,3],[2,3,6],[3,1,9],[4,1,10]]){
+  const stride=13*4;
+  for(const [index,size,offset] of [[0,3,0],[1,3,3],[2,3,6],[3,1,9],[4,1,10],[5,1,11],[6,1,12]]){
     gl.enableVertexAttribArray(index);gl.vertexAttribPointer(index,size,gl.FLOAT,false,stride,offset*4);
   }
   gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);
-  return {program,vao,buffer,count:vertices.length/11};
+  return {program,vao,buffer,count:vertices.length/13};
 }
 function basis(camera:Camera){
   const a=camera.azimuth,e=camera.elevation;
@@ -460,7 +465,7 @@ export async function mountStudio(): Promise<void> {
   for(let i=cursor;i<baseSceneVertices.length;i++)vertices.push(baseSceneVertices[i]);
   for(const model of imported)
     for(const item of model)
-      vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind);
+      vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind,item.metallic,item.roughness);
   const runtimeStatus=root.querySelector<HTMLElement>('[data-studio-runtime-status]');
   if(runtimeStatus)runtimeStatus.textContent=`独立家具 ${loaded.size}/3 · ${results[3].status==='fulfilled'?'吊灯已加载':'吊灯使用回退'}`;
 
