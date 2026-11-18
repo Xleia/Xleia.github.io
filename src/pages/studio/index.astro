@@ -11,7 +11,7 @@ import '../../styles/studio.css';
 >
   <header class="studio-intro">
     <div>
-      <p class="eyebrow">3D Workspace / V0.4</p>
+      <p class="eyebrow">3D Workspace / V0.5</p>
       <h1>Xleia <span>Studio.</span></h1>
       <p>一间深夜仍亮着灯的个人工作室。每个角落，都连接着一个正在构建或记录的想法。</p>
     </div>
@@ -23,6 +23,7 @@ import '../../styles/studio.css';
       <button type="button" data-studio-reset disabled>重置视角</button>
       <button type="button" data-studio-view disabled>切换 2D 模式</button>
       <span class="studio-toolbar-tip">拖动旋转 · 滚轮缩放 · 点击热点聚焦</span>
+      <span class="studio-runtime-status" data-studio-runtime-status role="status">正在检查 3D 家具资源</span>
     </div>
 
     <p class="studio-error" data-studio-error role="status" hidden></p>
@@ -75,7 +76,7 @@ import '../../styles/studio.css';
       </div>
     </div>
   </section>
-  <p class="studio-caveat">这是 V0.4 渲染管线预览：独立 glTF 吊灯、木质颜色与粗糙度贴图、GGX 微表面高光和 Shadow Map 深度阴影；大部分房间仍采用程序化几何，并非最终照片级模型。</p>
+  <p class="studio-caveat">V0.5 已将胡桃木书桌、书架与人体工学椅拆分为独立 glTF 家具模型，保留已验证的木纹贴图、微表面材质和深度阴影；任一模型加载失败时会保留旧家具。当前仍是低多边形预览，并非照片级模型。</p>
 </BaseLayout>
 
 <script>

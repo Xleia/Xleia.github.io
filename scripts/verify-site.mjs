@@ -73,6 +73,67 @@ if (existsSync(modelPath)) {
     failures.push('Invalid Studio glTF asset: '+String(error));
   }
 }
+// V0.5: check three independent furniture models, transform bounds and material contracts.
+const furnitureAssets = [
+  {file:'models/studio/desk.gltf',minimumNodes:12},
+  {file:'models/studio/bookshelf.gltf',minimumNodes:50},
+  {file:'models/studio/chair.gltf',minimumNodes:15}
+];
+for (const {file,minimumNodes} of furnitureAssets) {
+  const path=join(outputDirectory,file);
+  if(!existsSync(path)){failures.push('Missing modular furniture asset: '+file);continue;}
+  try {
+    const model=JSON.parse(readFileSync(path,'utf8'));
+    if(model.asset?.version!=='2.0'||model.buffers?.length!==1||model.extensionsRequired?.length)
+      throw new Error('Unapproved glTF format or extensions');
+    if(!model.buffers[0].uri?.startsWith('data:application/octet-stream;base64,'))
+      throw new Error('External buffers not approved');
+    const raw=Buffer.from(model.buffers[0].uri.split(',')[1],'base64');
+    if(raw.length!==model.buffers[0].byteLength||raw.length>3_000_000)
+      throw new Error('Unexpected embedded buffer size');
+    if(model.nodes?.length<minimumNodes||model.nodes.length>512||model.meshes?.length>256)
+      throw new Error('Incorrect furniture node inventory');
+    for(const node of model.nodes){
+      if(node.mesh===undefined||!model.meshes[node.mesh]||node.children?.length)
+        throw new Error('Unsupported furniture node structure');
+      if(node.translation?.length!==3||!node.translation.every(Number.isFinite)||
+         node.scale?.length!==3||!node.scale.every(n=>Number.isFinite(n)&&n>0&&n<=50))
+        throw new Error('Invalid furniture transform');
+      if(node.rotation&&
+         (node.rotation.length!==4||!node.rotation.every(Number.isFinite)))
+        throw new Error('Invalid furniture quaternion');
+    }
+    for(const mesh of model.meshes){
+      for(const primitive of mesh.primitives??[]){
+        if((primitive.mode??4)!==4||primitive.indices!==undefined)
+          throw new Error('Unsupported primitive format');
+        for(const id of [primitive.attributes?.POSITION,primitive.attributes?.NORMAL]){
+          const accessor=model.accessors?.[id],view=model.bufferViews?.[accessor?.bufferView];
+          if(!accessor||!view||view.buffer!==0||accessor.componentType!==5126||
+             accessor.type!=='VEC3'||accessor.count<1)
+            throw new Error('Invalid furniture accessor');
+          const step=view.byteStride??12,start=(view.byteOffset??0)+(accessor.byteOffset??0);
+          const end=start+(accessor.count-1)*step+12;
+          if(step<12||start<0||end>raw.length||end>(view.byteOffset??0)+view.byteLength)
+            throw new Error('Furniture data out of bounds');
+        }
+      }
+    }
+    if(!model.materials?.every(mat=>
+      Number.isInteger(mat.extras?.studioKind)&&
+      mat.extras.studioKind>=0&&mat.extras.studioKind<=4))
+      throw new Error('Missing Studio material classification');
+  } catch(error){failures.push('Studio furniture glTF invalid: '+file+' ('+String(error)+')');}
+}
+const sceneSource=readFileSync('src/scripts/studio-webgl.ts','utf8');
+for(const furniture of ['desk','bookshelf','chair']){
+  if(!sceneSource.includes("legacyFurniture('"+furniture+"'"))
+    failures.push('Missing fallback for Studio furniture: '+furniture);
+}
+if(!sceneSource.includes('let shadowDirty=true')||
+   !sceneSource.includes('shadow&&shadowDirty'))
+  failures.push('Studio static shadow cache is missing');
+
 for (const asset of studioAssets.slice(1)) {
   const name=join(outputDirectory,asset);
   if(existsSync(name)) {
