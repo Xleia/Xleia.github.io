@@ -11,6 +11,8 @@ export type AssetVertex = {
   albedo: [number,number,number];
   emissive: number;
   kind: number;
+  metallic: number;
+  roughness: number;
 };
 type Accessor = { bufferView:number; byteOffset?:number; componentType:number; count:number; type:string };
 type BufferView = { buffer:number; byteOffset?:number; byteStride?:number };
@@ -102,6 +104,10 @@ export async function loadStudioModel(url:string):Promise<AssetVertex[]>{
       const color=material?.pbrMetallicRoughness?.baseColorFactor??[1,1,1,1];
       const emissive=material?.emissiveFactor??[0,0,0];
       const metallic=material?.pbrMetallicRoughness?.metallicFactor??0;
+      const roughness=material?.pbrMetallicRoughness?.roughnessFactor??1;
+      if(!Number.isFinite(metallic)||metallic<0||metallic>1||
+         !Number.isFinite(roughness)||roughness<0||roughness>1)
+        throw new Error('Invalid glTF PBR material factors');
       const tagged=material?.extras?.studioKind;
       const kind=Number.isInteger(tagged)&&tagged!>=0&&tagged!<=4?tagged!:
         emissive.some(v=>v>.15)?4:metallic>.5?2:0;
@@ -114,7 +120,7 @@ export async function loadStudioModel(url:string):Promise<AssetVertex[]>{
         const rotated=rotate(local,q);
         const position=vec3(rotated.map((v,j)=>v+translation[j]));
         if([...position,...normal].some(v=>!Number.isFinite(v)))throw new Error('Nonfinite glTF geometry');
-        vertices.push({position,normal,albedo:[color[0],color[1],color[2]],emissive:Math.max(...emissive),kind});
+        vertices.push({position,normal,albedo:[color[0],color[1],color[2]],emissive:Math.max(...emissive),kind,metallic,roughness});
       }
       if(vertices.length>MAX_VERTICES)throw new Error('Studio model vertex budget exceeded');
     }
