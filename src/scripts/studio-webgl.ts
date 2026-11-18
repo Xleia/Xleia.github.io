@@ -2,8 +2,9 @@ import { STUDIO_ZONES, type StudioZone, type Vec3 } from '../data/studio';
 import { loadStudioModel } from './studio-assets';
 import { createShadowMap } from './studio-shadows';
 import { loadStudioTexture } from './studio-textures';
+import { createStudioGpuTimer } from './studio-gpu-timer';
 
-// V0.7: time-boxed rAF/CPU draw benchmarking and distance/quality furniture LOD.
+// V0.8: optional async GPU timing, honest loading telemetry, LOD and material shading.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
 const HOME: Camera = { target: [0, 1.23, -.28], azimuth: .34, elevation: .28, distance: 12.6 };
 const TAU = Math.PI * 2;
@@ -453,7 +454,9 @@ export async function mountStudio(): Promise<void> {
     }))),
     {id:'lamp' as const,level:'high' as const,url:'/models/studio/pendant-lamp.gltf'}
   ];
+  const assetLoadStart=performance.now();
   const results=await Promise.allSettled(assetURLs.map(asset=>loadStudioModel(asset.url)));
+  const modelFetchAndParseMs=performance.now()-assetLoadStart;
   const found=new Map<string,Awaited<ReturnType<typeof loadStudioModel>>>();
   results.forEach((result,i)=>{
     if(result.status==='fulfilled')
@@ -511,6 +514,7 @@ export async function mountStudio(): Promise<void> {
     fabricAlbedo:loc('uFabricAlbedo'),fabricRoughness:loc('uFabricRoughness')
   };
   const light=basis({target:[0,0,-.6],azimuth:-.42,elevation:.92,distance:9.0});
+  const gpuTimer=createStudioGpuTimer(gl);
   type Quality = 'low' | 'balanced' | 'high';
   const qualityProfiles:Record<Quality,{pixelRatio:number;shadowSize:number}> = {
     low:{pixelRatio:1,shadowSize:512},
@@ -528,6 +532,7 @@ export async function mountStudio(): Promise<void> {
   const benchmarkButton=root.querySelector<HTMLButtonElement>('[data-studio-benchmark]');
   const benchmarkStatus=root.querySelector<HTMLElement>('[data-studio-benchmark-status]');
   const BENCHMARK_MS=5000;
+  const formatMs=(n:number)=>n.toFixed(2)+'ms';
   const finishBenchmark=(aborted=false)=>{
     if(!benchStart)return;
     const elapsed=performance.now()-benchStart;
@@ -542,7 +547,14 @@ export async function mountStudio(): Promise<void> {
     const averageCPU=cpuTimes.reduce((a,b)=>a+b,0)/cpuTimes.length;
     const fps=1000*frameTimes.length/Math.max(elapsed,1);
     const p95=sorted[Math.min(sorted.length-1,Math.ceil(sorted.length*.95)-1)];
-    benchmarkStatus.textContent=`测量 ${(elapsed/1000).toFixed(1)}s · rAF ${fps.toFixed(1)} FPS · CPU 绘制均值 ${averageCPU.toFixed(2)}ms / P95 ${p95.toFixed(2)}ms · ${selectedQuality} / ${currentLOD} LOD（非 GPU 耗时）`;
+    const result=gpuTimer.results();
+    const gpu=result.supported
+      ?result.disjoint?'GPU 计时无效（disjoint）'
+        :result.timings.length
+          ?`GPU 已完成样本 ${result.timings.length} · 均值 ${formatMs(result.timings.reduce((a,b)=>a+b,0)/result.timings.length)}${result.pending?' · 仍有待完成查询':''}`
+          :'GPU 查询暂未返回完整样本'
+      :'GPU 计时扩展不可用';
+    benchmarkStatus.textContent=`测量 ${(elapsed/1000).toFixed(1)}s · rAF ${fps.toFixed(1)} FPS · CPU 均值 ${formatMs(averageCPU)} / P95 ${formatMs(p95)} · ${gpu} · 模型下载+解析 ${formatMs(modelFetchAndParseMs)} · ${selectedQuality} / ${currentLOD} LOD`;
   };
   const initializeShadow=()=>{
     shadow?.dispose();
@@ -571,6 +583,7 @@ export async function mountStudio(): Promise<void> {
   function redraw(){
     if(!in3d)return;
     const b=basis(current),focal=1/Math.tan(40*Math.PI/360),aspect=width/height;
+    if(benchStart)gpuTimer.start();
     if(shadow&&shadowDirty){shadow.render(light,graphics.vao,graphics.count);shadowDirty=false;}
     gl.viewport(0,0,canvasEl.width,canvasEl.height);gl.clearColor(.045,.073,.122,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     gl.useProgram(graphics.program);gl.bindVertexArray(graphics.vao);
@@ -588,6 +601,7 @@ export async function mountStudio(): Promise<void> {
     gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,fabricAlbedoTex);gl.uniform1i(uniforms.fabricAlbedo,3);
     gl.activeTexture(gl.TEXTURE4);gl.bindTexture(gl.TEXTURE_2D,fabricRoughnessTex);gl.uniform1i(uniforms.fabricRoughness,4);
     gl.drawArrays(gl.TRIANGLES,0,graphics.count);
+    if(benchStart){gpuTimer.stop();gpuTimer.poll();}
     for(const pin of pins){
       const zone=STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin);if(!zone)continue;
       const v=sub(zone.pin,b.eye),depth=dot(v,b.forward);
@@ -660,7 +674,7 @@ export async function mountStudio(): Promise<void> {
   reset.addEventListener('click',()=>select(undefined));
   benchmarkButton?.addEventListener('click',()=>{
     if(!in3d||document.hidden)return;
-    frameTimes.length=0;cpuTimes.length=0;
+    frameTimes.length=0;cpuTimes.length=0;gpuTimer.reset();
     benchStart=performance.now();benchLast=0;
     benchmarkButton.disabled=true;
     if(benchmarkStatus)benchmarkStatus.textContent='正在采集 5 秒动画帧间隔与 CPU 绘制耗时…';
@@ -671,6 +685,7 @@ export async function mountStudio(): Promise<void> {
     if(next!=='low'&&next!=='balanced'&&next!=='high')return;
     selectedQuality=next;
     if(benchStart)finishBenchmark(true);
+    gpuTimer.reset();
     initializeShadow();
     if(in3d)resize();
     requestFrame();
@@ -691,6 +706,6 @@ export async function mountStudio(): Promise<void> {
   window.addEventListener('keydown',onKey);
   const observer=new ResizeObserver(resize);observer.observe(stage);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();in3d=false;applyView();if(note){note.hidden=false;note.textContent='WebGL 上下文中断，已切换到完整 2D 导航。';}});
-  window.addEventListener('pagehide',()=>{if(benchStart)finishBenchmark(true);observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);gl.deleteTexture(fabricAlbedoTex);gl.deleteTexture(fabricRoughnessTex);},{once:true});
+  window.addEventListener('pagehide',()=>{if(benchStart)finishBenchmark(true);observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gpuTimer.dispose();gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);gl.deleteTexture(fabricAlbedoTex);gl.deleteTexture(fabricRoughnessTex);},{once:true});
   applyView();
 }
