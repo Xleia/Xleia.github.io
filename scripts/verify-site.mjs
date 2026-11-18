@@ -3,7 +3,7 @@ import { join, relative, sep } from 'node:path';
 
 const siteOrigin = 'https://xleia.github.io';
 const outputDirectory = 'dist';
-const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/404.html'];
+const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/studio/visual/', '/404.html'];
 const failures = [];
 
 function filesUnder(directory) {

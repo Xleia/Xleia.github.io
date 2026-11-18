@@ -61,3 +61,7 @@
 
 /* V0.8: keep longer GPU / asset telemetry readable on narrow screens. */
 .studio-benchmark-result {max-width:100%;overflow-wrap:anywhere;line-height:1.55;}
+
+.studio-visual-callout {display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:1.25rem;}
+.studio-visual-callout a {color:#f5c18e;text-decoration:underline;text-underline-offset:4px;font-weight:650;}
+.studio-visual-callout span {font-size:.84rem;}
