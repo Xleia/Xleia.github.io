@@ -134,6 +134,36 @@ if(!sceneSource.includes('let shadowDirty=true')||
    !sceneSource.includes('shadow&&shadowDirty'))
   failures.push('Studio static shadow cache is missing');
 
+// V0.6: assert packed PBR attributes, quality tiers and geometry granularity.
+const studioLoaderSource=readFileSync('src/scripts/studio-assets.ts','utf8');
+for(const key of ['metallic: number','roughness: number','metallic,roughness']) {
+  if(!studioLoaderSource.includes(key)) failures.push('Studio material-factor attribute missing: '+key);
+}
+for(const key of ['layout(location=5) in float aMetallic','layout(location=6) in float aRoughness',
+                  'uniform highp sampler2DShadow uShadowMap','const stride=13*4',
+                  'kind,item.metallic,item.roughness']) {
+  if(!studioShaderSource.includes(key)) failures.push('Studio V0.6 shader packing contract missing: '+key);
+}
+for(const key of ["low:{pixelRatio:1,shadowSize:512}",
+                  "balanced:{pixelRatio:1.5,shadowSize:1024}",
+                  "high:{pixelRatio:1.75,shadowSize:1536}"]) {
+  if(!studioShaderSource.includes(key)) failures.push('Studio GPU quality tier missing: '+key);
+}
+const chairAsset=join(outputDirectory,'models/studio/chair.gltf');
+if(existsSync(chairAsset)) {
+  const chair=JSON.parse(readFileSync(chairAsset,'utf8'));
+  const fine=chair.meshes?.find(mesh=>mesh.name==='rounded-cushion');
+  const accessor=chair.accessors?.[fine?.primitives?.[0]?.attributes?.POSITION];
+  if(!fine||!accessor||accessor.count<500)
+    failures.push('Studio V0.6 rounded upholstery mesh missing');
+  for(const name of ['Seat cushion','Back cushion']) {
+    const node=chair.nodes?.find(node=>node.name===name);
+    if(!node||chair.meshes[node.mesh]?.name!=='rounded-cushion')
+      failures.push('Studio '+name+' is not using rounded mesh');
+  }
+}
+
+
 for (const asset of studioAssets.slice(1)) {
   const name=join(outputDirectory,asset);
   if(existsSync(name)) {
