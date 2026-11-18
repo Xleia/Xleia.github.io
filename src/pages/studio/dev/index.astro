@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { STUDIO_ZONES } from '../../../data/studio';
+import '../../../styles/studio.css';
+---
+
+<BaseLayout
+  title="Studio · WebGL 工作室预览"
+  description="Xleia Studio WebGL2 夜间私人工作室预览：真实 3D 几何、暖冷灯光、五个互动区域和完整的 2D 导航。"
+  noindex
+>
+  <header class="studio-intro">
+    <div>
+      <p class="eyebrow">WebGL 技术预览 / V0.8</p>
+      <h1>Xleia <span>Studio.</span></h1>
+      <p>一间深夜仍亮着灯的个人工作室。每个角落，都连接着一个正在构建或记录的想法。</p>
+      <p class="studio-visual-callout"><a href="/studio/">打开新版夜间工作室视觉样板 <span aria-hidden="true">↗</span></a><span>夜间工作台与交互导航。</span></p>
+    </div>
+    <div class="studio-intro-status"><span aria-hidden="true">●</span> 独立预览 · 尚未替换正式首页</div>
+  </header>
+
+  <section class="studio-shell" data-studio aria-label="Xleia Studio 交互式工作室原型">
+    <div class="studio-toolbar" aria-label="场景控制">
+      <button type="button" data-studio-reset disabled>重置视角</button>
+      <button type="button" data-studio-view disabled>切换 2D 模式</button>
+      <span class="studio-toolbar-tip">拖动旋转 · 滚轮缩放 · 点击热点聚焦</span>
+      <label class="studio-quality-label" for="studio-quality">画质</label>
+      <select id="studio-quality" class="studio-quality-select" data-studio-quality aria-label="3D 画质级别">
+        <option value="low">省电</option>
+        <option value="balanced" selected>均衡</option>
+        <option value="high">高画质</option>
+      </select>
+      <span class="studio-runtime-status" data-studio-runtime-status role="status">正在检查 3D 家具资源</span>
+      <button type="button" data-studio-benchmark disabled>测量 5 秒 FPS</button>
+      <output class="studio-benchmark-result" data-studio-benchmark-status aria-live="polite">主动测量活动帧；支持时同时读取 GPU 样本</output>
+    </div>
+
+    <p class="studio-error" data-studio-error role="status" hidden></p>
+    <div class="studio-stage" data-studio-stage hidden>
+      <canvas data-studio-canvas aria-hidden="true"></canvas>
+      {STUDIO_ZONES.map((zone) => (
+        <button
+          type="button"
+          class="studio-hotspot"
+          data-studio-pin={zone.id}
+          aria-label={`聚焦${zone.name}区域`}
+          aria-pressed="false"
+        >
+          <span class="studio-hotspot-pulse" aria-hidden="true"></span>
+          <span>{zone.name}</span>
+        </button>
+      ))}
+      <div class="studio-scene-label" aria-hidden="true">WORKSPACE / NIGHT MODE</div>
+    </div>
+
+    <div class="studio-details" data-studio-details hidden aria-live="polite">
+      {STUDIO_ZONES.map((zone) => (
+        <article class="studio-detail" data-studio-panel={zone.id} hidden>
+          <span class="studio-detail-kicker">{zone.kicker}</span>
+          <h2>{zone.name}</h2>
+          <p>{zone.description}</p>
+          <div class="studio-detail-actions">
+            <a href={zone.href}>{zone.linkLabel} <span aria-hidden="true">↗</span></a>
+            <button type="button" data-studio-close>返回工作室</button>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="studio-fallback" data-studio-fallback>
+      <div class="studio-fallback-head">
+        <p class="eyebrow">Explore / 2D Navigation</p>
+        <h2>探索工作室</h2>
+        <p>无需 3D 功能，也可以访问工作室里的全部内容。</p>
+      </div>
+      <div class="studio-fallback-grid">
+        {STUDIO_ZONES.map((zone, index) => (
+          <a href={zone.href} class="studio-fallback-card">
+            <span class="studio-fallback-index">0{index + 1}</span>
+            <strong>{zone.name}</strong>
+            <span>{zone.description}</span>
+            <span class="studio-fallback-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <p class="studio-caveat">V0.8 新增可选非阻塞 GPU 计时、模型加载/解析时间、夜间暖冷灯带与家具细节。GPU 计时需要浏览器支持相关扩展；不支持时仅报告 rAF/CPU 数据。仍是独立开发预览。</p>
+</BaseLayout>
+
+<script>
+  import { mountStudio } from '../../../scripts/studio-webgl';
+  mountStudio();
+</script>

@@ -3,7 +3,7 @@ import { join, relative, sep } from 'node:path';
 
 const siteOrigin = 'https://xleia.github.io';
 const outputDirectory = 'dist';
-const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/studio/visual/', '/404.html'];
+const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/studio/visual/', '/studio/dev/', '/404.html'];
 const failures = [];
 
 function filesUnder(directory) {
@@ -187,7 +187,7 @@ for(const contract of [
   if(!studioShaderSource.includes(contract))
     failures.push('Missing Studio V0.7 shader/runtime contract: '+contract);
 }
-const studioUI=readFileSync('src/pages/studio/index.astro','utf8');
+const studioUI=readFileSync('src/pages/studio/dev/index.astro','utf8');
 if(!studioUI.includes('data-studio-benchmark') ||
    !studioUI.includes('data-studio-benchmark-status'))
   failures.push('Missing Studio V0.7 benchmark controls');
@@ -313,7 +313,7 @@ for (const filename of htmlFiles) {
   if (!html.includes('<meta name="description"')) failures.push(`Missing description: ${route}`);
 
   const canonicalMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/);
-  const expectedCanonical = pageUrl.href;
+  const expectedCanonical = route === '/studio/visual/' ? siteOrigin + '/studio/' : pageUrl.href;
   if (!canonicalMatch || canonicalMatch[1] !== expectedCanonical) {
     failures.push(`Unexpected canonical in ${route}: ${canonicalMatch?.[1] ?? 'missing'}`);
   }
