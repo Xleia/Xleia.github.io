@@ -23,6 +23,12 @@ import '../../styles/studio.css';
       <button type="button" data-studio-reset disabled>重置视角</button>
       <button type="button" data-studio-view disabled>切换 2D 模式</button>
       <span class="studio-toolbar-tip">拖动旋转 · 滚轮缩放 · 点击热点聚焦</span>
+      <label class="studio-quality-label" for="studio-quality">画质</label>
+      <select id="studio-quality" class="studio-quality-select" data-studio-quality aria-label="3D 画质级别">
+        <option value="low">省电</option>
+        <option value="balanced" selected>均衡</option>
+        <option value="high">高画质</option>
+      </select>
       <span class="studio-runtime-status" data-studio-runtime-status role="status">正在检查 3D 家具资源</span>
     </div>
 

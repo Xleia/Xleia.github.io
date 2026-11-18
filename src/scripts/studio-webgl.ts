@@ -436,6 +436,7 @@ export async function mountStudio(): Promise<void> {
   const reset=root.querySelector<HTMLButtonElement>('[data-studio-reset]');
   const view=root.querySelector<HTMLButtonElement>('[data-studio-view]');
   const note=root.querySelector<HTMLElement>('[data-studio-error]');
+  const quality=root.querySelector<HTMLSelectElement>('[data-studio-quality]');
   if(!canvas||!stage||!fallback||!details||!reset||!view)return;
 
   // The source furniture remains a reliable fallback. Only remove a furniture
@@ -489,10 +490,26 @@ export async function mountStudio(): Promise<void> {
     albedo:loc('uWalnutAlbedo'),roughness:loc('uWalnutRoughness')
   };
   const light=basis({target:[0,0,-.6],azimuth:-.42,elevation:.92,distance:9.0});
+  type Quality = 'low' | 'balanced' | 'high';
+  const qualityProfiles:Record<Quality,{pixelRatio:number;shadowSize:number}> = {
+    low:{pixelRatio:1,shadowSize:512},
+    balanced:{pixelRatio:1.5,shadowSize:1024},
+    high:{pixelRatio:1.75,shadowSize:1536}
+  };
+  const hardware=navigator as Navigator & {deviceMemory?:number};
+  let selectedQuality:Quality=(hardware.deviceMemory!==undefined && hardware.deviceMemory<=4)||
+    navigator.hardwareConcurrency<=4?'low':'balanced';
+  if(quality)quality.value=selectedQuality;
   let shadow:ReturnType<typeof createShadowMap>|undefined;
   let shadowDirty=true;
-  try { shadow=createShadowMap(gl); }
-  catch(error){ console.warn('Shadow map unsupported; rendering without directional shadows',error); }
+  const initializeShadow=()=>{
+    shadow?.dispose();
+    shadow=undefined;
+    try{shadow=createShadowMap(gl,qualityProfiles[selectedQuality].shadowSize);}
+    catch(error){console.warn('Studio shadow map disabled for current quality',error);}
+    shadowDirty=true;
+  };
+  initializeShadow();
   const albedoTex=loadStudioTexture(gl,'/textures/studio/walnut-albedo.svg',()=>requestFrame());
   const roughnessTex=loadStudioTexture(gl,'/textures/studio/walnut-roughness.svg',()=>requestFrame());
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -517,7 +534,8 @@ export async function mountStudio(): Promise<void> {
     gl.uniform3fv(uniforms.lightEye,light.eye);gl.uniform3fv(uniforms.lightRight,light.right);
     gl.uniform3fv(uniforms.lightUp,light.up);gl.uniform3fv(uniforms.lightForward,light.forward);
     gl.uniform1i(uniforms.hasShadow,shadow?1:0);
-    gl.uniform2f(uniforms.shadowPixel,1/1024,1/1024);
+    const texel=1/(shadow?.size??1024);
+    gl.uniform2f(uniforms.shadowPixel,texel,texel);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,albedoTex);gl.uniform1i(uniforms.albedo,0);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,roughnessTex);gl.uniform1i(uniforms.roughness,1);
     gl.uniform1i(uniforms.shadowMap,2);
@@ -547,7 +565,7 @@ export async function mountStudio(): Promise<void> {
     if(!in3d)return;
     const rect=stageEl.getBoundingClientRect();if(!rect.width||!rect.height)return;
     width=rect.width;height=rect.height;
-    const scale=Math.min(window.devicePixelRatio||1,1.75);
+    const scale=Math.min(window.devicePixelRatio||1,qualityProfiles[selectedQuality].pixelRatio);
     const w=Math.round(width*scale),h=Math.round(height*scale);
     if(canvasEl.width!==w||canvasEl.height!==h){canvasEl.width=w;canvasEl.height=h;}
     requestFrame();
@@ -567,6 +585,14 @@ export async function mountStudio(): Promise<void> {
   pins.forEach(pin=>pin.addEventListener('click',()=>select(STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin))));
   root.querySelectorAll<HTMLButtonElement>('[data-studio-close]').forEach(button=>button.addEventListener('click',()=>select(undefined)));
   reset.addEventListener('click',()=>select(undefined));
+  quality?.addEventListener('change',()=>{
+    const next=quality.value;
+    if(next!=='low'&&next!=='balanced'&&next!=='high')return;
+    selectedQuality=next;
+    initializeShadow();
+    if(in3d)resize();
+    requestFrame();
+  });
   view.addEventListener('click',()=>{in3d=!in3d;applyView();});
   canvas.addEventListener('pointerdown',event=>{dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);});
   canvas.addEventListener('pointermove',event=>{

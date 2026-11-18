@@ -24,8 +24,9 @@ function shader(gl:WebGL2RenderingContext,kind:number,source:string) {
   return item;
 }
 
-export function createShadowMap(gl:WebGL2RenderingContext) {
-  const size=1024;
+export function createShadowMap(gl:WebGL2RenderingContext,requestedSize=1024) {
+  const maximum=gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
+  const size=Math.min(Math.max(256,Math.floor(requestedSize)),maximum);
   const texture=gl.createTexture(),framebuffer=gl.createFramebuffer(),program=gl.createProgram();
   if(!texture||!framebuffer||!program)throw new Error('Shadow map resources unavailable');
   const vert=shader(gl,gl.VERTEX_SHADER,shadowVertex),frag=shader(gl,gl.FRAGMENT_SHADER,shadowFragment);

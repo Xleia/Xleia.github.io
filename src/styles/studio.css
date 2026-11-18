@@ -49,3 +49,8 @@
 
 /* V0.5 modular model load visibility. */
 .studio-runtime-status { color:#bcd0df; font-size:.74rem; width:100%; opacity:.84; }
+
+/* V0.6: accessible quality control without loading a heavyweight settings UI. */
+.studio-quality-label {font-size:.78rem;color:#b7cade;}
+.studio-quality-select {border:1px solid #61758d;color:#eaf2fc;background:#25364f;border-radius:.5rem;padding:.45rem .6rem;font:inherit;font-size:.81rem;}
+.studio-quality-select:focus-visible {outline:3px solid #ffd079;outline-offset:2px;}
