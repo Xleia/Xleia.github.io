@@ -28,6 +28,12 @@
     .has-depth:not(.is-focused):not(.is-list) .world{cursor:grab}
     .has-depth.is-dragging .world{cursor:grabbing}
     @media (min-width:721px){#sceneStage{position:absolute;inset:0}}
+    @media(min-width:721px){
+      .studio[data-zone="blog"] .project-card{left:auto;right:clamp(25px,3vw,64px)}
+      .studio[data-zone="blog"] .room-controls{right:auto;left:clamp(25px,3vw,64px)}
+    }
+    .pin.object-hover .pin-label{opacity:1;transform:translate(-50%,0)}
+    .pin.object-hover .pin-orbit{background:#30617e;border-color:#d8eaf7}
   </style>
 </head>
 <body>
@@ -142,10 +148,10 @@
         const width = Math.max(bounds.width,bounds.height * aspect);
         const height = width / aspect;
         const zone = selected && zones[selected];
-        const scale = zone && !(workbench && selected === 'koto') ? (mobile.matches ? Math.min(zone.zoom,1.5) : zone.zoom) : 1;
+        const scale = zone && !workbench ? (mobile.matches ? Math.min(zone.zoom,1.5) : zone.zoom) : 1;
         let x = (bounds.width-width) / 2;
         let y = (bounds.height-height) / 2;
-        if (zone) {
+        if (zone && !workbench) {
           x = clamp(bounds.width * .5-zone.x * width * scale,bounds.width-width * scale,0);
           y = clamp(bounds.height * (mobile.matches ? .5 : .42)-zone.y * height * scale,bounds.height-height * scale,0);
         }
@@ -167,8 +173,10 @@
       function focusZone(id,trigger) {
         const zone = zones[id];
         if (!zone) return;
+        highlight(null);
         lastTrigger = trigger;
         selected = id;
+        studio.dataset.zone = id;
         listPanel.hidden = true;
         listToggle.setAttribute('aria-pressed','false');
         document.getElementById('listToggleLabel').textContent = '2D 导航';
@@ -186,8 +194,8 @@
           cardTitle.focus({preventScroll:true});
           status.textContent = '已聚焦 ' + zone.name + '。项目介绍已展开，可按 Escape 返回全景。';
         }
-        if (workbench && id === 'koto') workbench.focus(showCard);
-        else { workbench?.reset(); showCard(); }
+        if (workbench) workbench.focus(id,showCard);
+        else showCard();
         updateButtons();
         layout();
         if (mobile.matches && trigger.classList.contains('dock-button')) {
@@ -197,6 +205,7 @@
 
       function reset(restoreFocus = false) {
         selected = null;
+        delete studio.dataset.zone;
         workbench?.reset();
         card.hidden = true;
         listPanel.hidden = true;
@@ -212,6 +221,7 @@
       function openList() {
         if (!listPanel.hidden) { reset(false); listToggle.focus({preventScroll:true}); return; }
         reset(false);
+        highlight(null);
         lastTrigger = listToggle;
         listPanel.hidden = false;
         studio.classList.add('is-list');
@@ -229,26 +239,49 @@
         if (!view) return;
         workbench = view;
         studio.classList.add('has-depth');
-        document.querySelector('.hint').textContent = '左右拖动环顾 · 点击聚焦 · Esc 返回';
-        document.querySelector('.mobile-instruction').textContent = '左右轻扫环顾工作台，点击编号进入';
-        if (selected === 'koto') workbench.focus(() => {});
+        document.querySelector('.hint').textContent = '左右拖动环顾 · 点击物件聚焦 · Esc 返回';
+        document.querySelector('.mobile-instruction').textContent = '左右轻扫环顾房间，轻点物件或编号进入';
+        if (selected) workbench.focus(selected,() => {});
         layout();
       }).catch(depthUnavailable);
 
+      function objectAt(event) {
+        const bounds = world.getBoundingClientRect();
+        return workbench?.pick((event.clientX-bounds.left)/bounds.width,(event.clientY-bounds.top)/bounds.height);
+      }
+      let hovered = null;
+      function highlight(pin) {
+        if (pin === hovered) return;
+        hovered?.classList.remove('object-hover');
+        hovered = pin;
+        hovered?.classList.add('object-hover');
+        world.style.cursor = pin ? 'pointer' : '';
+      }
+      sceneStage.addEventListener('pointerleave', () => highlight(null));
       sceneStage.addEventListener('pointerdown', event => {
         if (!workbench || selected || !listPanel.hidden || !event.isPrimary || event.button !== 0 || event.target.closest('button')) return;
-        drag = {id:event.pointerId,start:event.clientX};
+        drag = {id:event.pointerId,start:event.clientX,top:event.clientY,moved:false};
+        highlight(null);
         sceneStage.setPointerCapture(event.pointerId);
         studio.classList.add('is-dragging');
       });
       sceneStage.addEventListener('pointermove', event => {
-        if (drag?.id !== event.pointerId || !workbench || selected) return;
+        if (!workbench || selected || !listPanel.hidden) return;
+        if (!drag) {
+          if (event.pointerType !== 'touch') highlight(objectAt(event));
+          return;
+        }
+        if (drag.id !== event.pointerId) return;
+        if (Math.hypot(event.clientX-drag.start,event.clientY-drag.top)>6) drag.moved=true;
+        if (!drag.moved) return;
         workbench.pan((event.clientX-drag.start) / (sceneStage.clientWidth*.28));
       });
       function endDrag(event) {
         if (drag?.id !== event.pointerId) return;
+        const pin = event.type === 'pointerup' && !drag.moved && !selected && listPanel.hidden ? objectAt(event) : null;
         drag = null;
         studio.classList.remove('is-dragging');
+        if (pin) { focusZone(pin.dataset.zone,pin); return; }
         if (!selected) workbench?.reset();
       }
       sceneStage.addEventListener('pointerup',endDrag);
