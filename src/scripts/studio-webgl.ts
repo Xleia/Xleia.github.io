@@ -281,6 +281,30 @@ function buildScene(){
       .115,.17,.075,i%3?'#457859':'#638d65',0,3);
   }
 
+
+  // V0.8 warm/cool finishing pass: low-cost architectural accents and
+  // furniture-integrated LED details. These are intentionally subtle.
+  // Warm indirect lighting along the walnut desk's front edge.
+  box(0,.739,.058,3.12,.014,.022,'#b67f53',.22,4);
+  for(const x of [-1.42,1.42])
+    box(x,.67,-.70,.022,.085,1.22,'#70513b',0,1);
+
+  // Dark wood wall slats on the right of the night window.
+  for(let i=0;i<7;i++){
+    const x=2.85+i*.205;
+    box(x,1.91,-3.225,.065,2.44,.045,i%3===0?'#47372d':'#3e3230',0,1);
+  }
+  // Restrained cyan Lab workbench under-light and warm bookshelf guide strip.
+  box(3.18,.759,-1.53,1.28,.016,.02,'#4d93a6',.19,4);
+  box(-3.25,2.69,-1.81,1.35,.017,.025,'#d1a16d',.18,4);
+
+  // Personal corner: low round coffee table, a framed note and brass edge.
+  cylinder(-2.06,.48,1.65,.36,.052,'#74513b',0,20);
+  cylinder(-2.06,.28,1.65,.045,.42,'#455060',0,14);
+  box(-2.93,2.66,-3.13,.92,.48,.046,'#58463b',0,1);
+  box(-2.93,2.66,-3.094,.76,.33,.015,'#6d7c83',.10,3);
+  box(-2.93,2.52,-3.081,.42,.019,.012,'#b9d2cc',.16,4);
+
 }
 buildScene();
 const baseSceneVertices=vertices.slice();
