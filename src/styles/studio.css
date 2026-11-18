@@ -54,3 +54,7 @@
 .studio-quality-label {font-size:.78rem;color:#b7cade;}
 .studio-quality-select {border:1px solid #61758d;color:#eaf2fc;background:#25364f;border-radius:.5rem;padding:.45rem .6rem;font:inherit;font-size:.81rem;}
 .studio-quality-select:focus-visible {outline:3px solid #ffd079;outline-offset:2px;}
+
+/* V0.7 performance instrumentation; no animation while benchmark is inactive. */
+.studio-benchmark-result {color:#afc9dc;font-size:.75rem;flex:1 1 100%;font-variant-numeric:tabular-nums;}
+.studio-toolbar [data-studio-benchmark] {white-space:nowrap;}

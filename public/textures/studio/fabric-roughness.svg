@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e4e4e4"/><defs><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".22" numOctaves="2" seed="24" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="256" height="256" filter="url(#grain)" opacity=".16"/></svg>

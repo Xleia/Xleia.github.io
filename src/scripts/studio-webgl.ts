@@ -314,7 +314,7 @@ in vec3 vWorld; in vec3 vNormal; in vec3 vColor; in float vEmit; in float vMater
 in vec3 vShadowClip;
 in float vMetallic; in float vRoughness;
 uniform vec3 uEye;
-uniform sampler2D uWalnutAlbedo, uWalnutRoughness;
+uniform sampler2D uWalnutAlbedo, uWalnutRoughness, uFabricAlbedo, uFabricRoughness;
 uniform highp sampler2DShadow uShadowMap;
 uniform bool uHasShadow;
 uniform vec2 uShadowPixel;
@@ -372,7 +372,9 @@ void main() {
   }else if(vMaterial>1.5&&vMaterial<2.5){
     // Metal BRDF factors originate in the glTF material when available.
   }else if(vMaterial>2.5&&vMaterial<3.5){
-    albedo*=.96+.035*sin(vWorld.x*140.0)*sin(vWorld.z*135.0);
+    vec2 fabricUV=vWorld.xz*2.25+vec2(vWorld.y*.65);
+    albedo*=mix(vec3(1.0),clamp(texture(uFabricAlbedo,fabricUV).rgb/.84,vec3(.7),vec3(1.3)),.28);
+    roughness=mix(roughness,texture(uFabricRoughness,fabricUV).r,.32);
   }
   roughness=clamp(roughness,.12,1.0);
   vec3 F0=mix(vec3(.04),albedo,metallic);
@@ -505,7 +507,8 @@ export async function mountStudio(): Promise<void> {
     lightEye:loc('uLightEye'),lightRight:loc('uLightRight'),
     lightUp:loc('uLightUp'),lightForward:loc('uLightForward'),
     shadowMap:loc('uShadowMap'),hasShadow:loc('uHasShadow'),shadowPixel:loc('uShadowPixel'),
-    albedo:loc('uWalnutAlbedo'),roughness:loc('uWalnutRoughness')
+    albedo:loc('uWalnutAlbedo'),roughness:loc('uWalnutRoughness'),
+    fabricAlbedo:loc('uFabricAlbedo'),fabricRoughness:loc('uFabricRoughness')
   };
   const light=basis({target:[0,0,-.6],azimuth:-.42,elevation:.92,distance:9.0});
   type Quality = 'low' | 'balanced' | 'high';
@@ -551,6 +554,8 @@ export async function mountStudio(): Promise<void> {
   initializeShadow();
   const albedoTex=loadStudioTexture(gl,'/textures/studio/walnut-albedo.svg',()=>requestFrame());
   const roughnessTex=loadStudioTexture(gl,'/textures/studio/walnut-roughness.svg',()=>requestFrame());
+  const fabricAlbedoTex=loadStudioTexture(gl,'/textures/studio/fabric-albedo.svg',()=>requestFrame());
+  const fabricRoughnessTex=loadStudioTexture(gl,'/textures/studio/fabric-roughness.svg',()=>requestFrame());
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const narrow=window.matchMedia('(max-width: 760px)');
   const pins=Array.from(root.querySelectorAll<HTMLButtonElement>('[data-studio-pin]'));
@@ -561,6 +566,7 @@ export async function mountStudio(): Promise<void> {
   let in3d=!(reduced.matches||narrow.matches),frame=0,width=1,height=1;
   let dragging=false,lastX=0,lastY=0;
   reset.disabled=false;view.disabled=false;
+  if(benchmarkButton)benchmarkButton.disabled=false;
 
   function redraw(){
     if(!in3d)return;
@@ -579,6 +585,8 @@ export async function mountStudio(): Promise<void> {
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,roughnessTex);gl.uniform1i(uniforms.roughness,1);
     gl.uniform1i(uniforms.shadowMap,2);
     gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,shadow?.texture??null);
+    gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,fabricAlbedoTex);gl.uniform1i(uniforms.fabricAlbedo,3);
+    gl.activeTexture(gl.TEXTURE4);gl.bindTexture(gl.TEXTURE_2D,fabricRoughnessTex);gl.uniform1i(uniforms.fabricRoughness,4);
     gl.drawArrays(gl.TRIANGLES,0,graphics.count);
     for(const pin of pins){
       const zone=STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin);if(!zone)continue;
@@ -683,6 +691,6 @@ export async function mountStudio(): Promise<void> {
   window.addEventListener('keydown',onKey);
   const observer=new ResizeObserver(resize);observer.observe(stage);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();in3d=false;applyView();if(note){note.hidden=false;note.textContent='WebGL 上下文中断，已切换到完整 2D 导航。';}});
-  window.addEventListener('pagehide',()=>{if(benchStart)finishBenchmark(true);observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);},{once:true});
+  window.addEventListener('pagehide',()=>{if(benchStart)finishBenchmark(true);observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);gl.deleteTexture(fabricAlbedoTex);gl.deleteTexture(fabricRoughnessTex);},{once:true});
   applyView();
 }
