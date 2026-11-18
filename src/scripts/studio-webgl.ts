@@ -3,7 +3,7 @@ import { loadStudioModel } from './studio-assets';
 import { createShadowMap } from './studio-shadows';
 import { loadStudioTexture } from './studio-textures';
 
-// V0.6: glTF roughness/metallic factors propagated to GGX shader; modular furniture and cached shadows; no CDN required.
+// V0.7: time-boxed rAF/CPU draw benchmarking and distance/quality furniture LOD.
 type Camera = { target: [number, number, number]; azimuth: number; elevation: number; distance: number };
 const HOME: Camera = { target: [0, 1.23, -.28], azimuth: .34, elevation: .28, distance: 12.6 };
 const TAU = Math.PI * 2;
@@ -441,34 +441,52 @@ export async function mountStudio(): Promise<void> {
 
   // The source furniture remains a reliable fallback. Only remove a furniture
   // range after its independently stored glTF asset has loaded and validated.
-  const assets=[
-    {id:'desk',url:'/models/studio/desk.gltf'},
-    {id:'bookshelf',url:'/models/studio/bookshelf.gltf'},
-    {id:'chair',url:'/models/studio/chair.gltf'},
-    {id:'lamp',url:'/models/studio/pendant-lamp.gltf'}
-  ] as const;
-  const results=await Promise.allSettled(assets.map(asset=>loadStudioModel(asset.url)));
-  const loaded=new Set<FurnitureGroup>();
-  const imported: Array<Awaited<ReturnType<typeof loadStudioModel>>> = [];
+  // Prepare high and reduced-detail geometry once; upload a new static buffer
+  // only when switching a distance/quality LOD. Keep per-object fallback.
+  type Level='high'|'low';
+  const furnitureKeys=['desk','bookshelf','chair'] as const;
+  const assetURLs=[
+    ...furnitureKeys.flatMap(id=>[...(['high','low'] as const)].map(level=>({
+      id,level,url:`/models/studio/${id}${level==='low'?'-low':''}.gltf`
+    }))),
+    {id:'lamp' as const,level:'high' as const,url:'/models/studio/pendant-lamp.gltf'}
+  ];
+  const results=await Promise.allSettled(assetURLs.map(asset=>loadStudioModel(asset.url)));
+  const found=new Map<string,Awaited<ReturnType<typeof loadStudioModel>>>();
   results.forEach((result,i)=>{
-    if(result.status==='fulfilled'){
-      imported.push(result.value);
-      if(assets[i].id!=='lamp')loaded.add(assets[i].id as FurnitureGroup);
-    }else console.warn('Studio asset fallback:',assets[i].id,result.reason);
+    if(result.status==='fulfilled')
+      found.set(assetURLs[i].id+':'+assetURLs[i].level,result.value);
+    else console.warn('Studio asset fallback:',assetURLs[i].url,result.reason);
   });
-  const ranges=furnitureRanges.filter(range=>loaded.has(range.group)).sort((a,b)=>a.from-b.from);
+  const buildLevel=(level:Level):Float32Array=>{
+    const enabled=new Set<FurnitureGroup>();
+    const imported:Array<Awaited<ReturnType<typeof loadStudioModel>>>=[];
+    for(const id of furnitureKeys){
+      const model=found.get(id+':'+level)??found.get(id+':high');
+      if(model){enabled.add(id);imported.push(model);}
+    }
+    const lamp=found.get('lamp:high');
+    if(lamp)imported.push(lamp);
+    const ranges=furnitureRanges.filter(range=>enabled.has(range.group)).sort((a,b)=>a.from-b.from);
+    const packed:number[]=[];
+    let cursor=0;
+    for(const range of ranges){
+      for(let i=cursor;i<range.from;i++)packed.push(baseSceneVertices[i]);
+      cursor=range.to;
+    }
+    for(let i=cursor;i<baseSceneVertices.length;i++)packed.push(baseSceneVertices[i]);
+    for(const model of imported)
+      for(const item of model)
+        packed.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind,item.metallic,item.roughness);
+    return new Float32Array(packed);
+  };
+  const meshLevels={high:buildLevel('high'),low:buildLevel('low')};
+  let currentLOD:Level='high';
   vertices.length=0;
-  let cursor=0;
-  for(const range of ranges){
-    for(let i=cursor;i<range.from;i++)vertices.push(baseSceneVertices[i]);
-    cursor=range.to;
-  }
-  for(let i=cursor;i<baseSceneVertices.length;i++)vertices.push(baseSceneVertices[i]);
-  for(const model of imported)
-    for(const item of model)
-      vertices.push(...item.position,...item.normal,...item.albedo,item.emissive,item.kind,item.metallic,item.roughness);
+  for(const n of meshLevels.high)vertices.push(n);
+  const loaded=furnitureKeys.filter(id=>found.has(id+':high')).length;
   const runtimeStatus=root.querySelector<HTMLElement>('[data-studio-runtime-status]');
-  if(runtimeStatus)runtimeStatus.textContent=`独立家具 ${loaded.size}/3 · ${results[3].status==='fulfilled'?'吊灯已加载':'吊灯使用回退'}`;
+  if(runtimeStatus)runtimeStatus.textContent=`独立家具 ${loaded}/3 · LOD: 高 · ${found.has('lamp:high')?'吊灯已加载':'吊灯使用回退'}`;
 
   const candidate=canvas.getContext('webgl2',{alpha:false,antialias:true,powerPreference:'high-performance'});
   if(!candidate){if(note){note.hidden=false;note.textContent='此设备无法初始化 WebGL2，已使用完整的 2D 导航。';}return;}
@@ -502,6 +520,27 @@ export async function mountStudio(): Promise<void> {
   if(quality)quality.value=selectedQuality;
   let shadow:ReturnType<typeof createShadowMap>|undefined;
   let shadowDirty=true;
+  let benchStart=0,benchLast=0;
+  const frameTimes:number[]=[],cpuTimes:number[]=[];
+  const benchmarkButton=root.querySelector<HTMLButtonElement>('[data-studio-benchmark]');
+  const benchmarkStatus=root.querySelector<HTMLElement>('[data-studio-benchmark-status]');
+  const BENCHMARK_MS=5000;
+  const finishBenchmark=(aborted=false)=>{
+    if(!benchStart)return;
+    const elapsed=performance.now()-benchStart;
+    benchStart=0;benchLast=0;
+    benchmarkButton&&(benchmarkButton.disabled=false);
+    if(!benchmarkStatus)return;
+    if(aborted||!frameTimes.length){
+      benchmarkStatus.textContent='采样已中断，请在可见 3D 页面重试';
+      return;
+    }
+    const sorted=[...cpuTimes].sort((a,b)=>a-b);
+    const averageCPU=cpuTimes.reduce((a,b)=>a+b,0)/cpuTimes.length;
+    const fps=1000*frameTimes.length/Math.max(elapsed,1);
+    const p95=sorted[Math.min(sorted.length-1,Math.ceil(sorted.length*.95)-1)];
+    benchmarkStatus.textContent=`测量 ${(elapsed/1000).toFixed(1)}s · rAF ${fps.toFixed(1)} FPS · CPU 绘制均值 ${averageCPU.toFixed(2)}ms / P95 ${p95.toFixed(2)}ms · ${selectedQuality} / ${currentLOD} LOD（非 GPU 耗时）`;
+  };
   const initializeShadow=()=>{
     shadow?.dispose();
     shadow=undefined;
@@ -550,15 +589,41 @@ export async function mountStudio(): Promise<void> {
       pin.style.left=`${x}px`;pin.style.top=`${y}px`;
     }
   }
-  function step(){
-    frame=0;const speed=reduced.matches?1:.14;let distance=0;
+  function step(now:number){
+    frame=0;
+    if(benchStart){
+      if(document.hidden||!in3d){finishBenchmark(true);}
+      else if(benchLast&&now>benchLast&&now-benchLast<300)
+        frameTimes.push(now-benchLast);
+      benchLast=now;
+    }
+    const cpuStart=performance.now();
+    const speed=reduced.matches?1:.14;let distance=0;
     for(let i=0;i<3;i++){
       const delta=target.target[i]-current.target[i];current.target[i]+=delta*speed;distance+=Math.abs(delta);
     }
     for(const key of ['azimuth','elevation','distance'] as const){
       const delta=target[key]-current[key];current[key]+=delta*speed;distance+=Math.abs(delta);
     }
-    redraw();if(distance>.003)requestFrame();
+    // Hysteresis avoids repeated buffer uploads near the switch threshold.
+    const nextLOD:Level=selectedQuality==='low'||(currentLOD==='high'&&current.distance>14.0)
+      ||(currentLOD==='low'&&current.distance>12.8)?'low':'high';
+    if(nextLOD!==currentLOD){
+      currentLOD=nextLOD;
+      gl.bindBuffer(gl.ARRAY_BUFFER,graphics.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER,meshLevels[currentLOD],gl.STATIC_DRAW);
+      graphics.count=meshLevels[currentLOD].length/13;
+      shadowDirty=true;
+      if(runtimeStatus)
+        runtimeStatus.textContent=`独立家具 ${loaded}/3 · LOD: ${currentLOD==='high'?'高':'低'} · ${found.has('lamp:high')?'吊灯已加载':'吊灯使用回退'}`;
+    }
+    redraw();
+    if(benchStart){
+      cpuTimes.push(performance.now()-cpuStart);
+      if(performance.now()-benchStart>=BENCHMARK_MS)finishBenchmark();
+      else requestFrame();
+    }
+    if(distance>.003)requestFrame();
   }
   function requestFrame(){if(in3d&&!frame)frame=window.requestAnimationFrame(step);}
   function resize(){
@@ -585,15 +650,24 @@ export async function mountStudio(): Promise<void> {
   pins.forEach(pin=>pin.addEventListener('click',()=>select(STUDIO_ZONES.find(z=>z.id===pin.dataset.studioPin))));
   root.querySelectorAll<HTMLButtonElement>('[data-studio-close]').forEach(button=>button.addEventListener('click',()=>select(undefined)));
   reset.addEventListener('click',()=>select(undefined));
+  benchmarkButton?.addEventListener('click',()=>{
+    if(!in3d||document.hidden)return;
+    frameTimes.length=0;cpuTimes.length=0;
+    benchStart=performance.now();benchLast=0;
+    benchmarkButton.disabled=true;
+    if(benchmarkStatus)benchmarkStatus.textContent='正在采集 5 秒动画帧间隔与 CPU 绘制耗时…';
+    requestFrame();
+  });
   quality?.addEventListener('change',()=>{
     const next=quality.value;
     if(next!=='low'&&next!=='balanced'&&next!=='high')return;
     selectedQuality=next;
+    if(benchStart)finishBenchmark(true);
     initializeShadow();
     if(in3d)resize();
     requestFrame();
   });
-  view.addEventListener('click',()=>{in3d=!in3d;applyView();});
+  view.addEventListener('click',()=>{if(benchStart)finishBenchmark(true);in3d=!in3d;applyView();});
   canvas.addEventListener('pointerdown',event=>{dragging=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);});
   canvas.addEventListener('pointermove',event=>{
     if(!dragging)return;
@@ -609,6 +683,6 @@ export async function mountStudio(): Promise<void> {
   window.addEventListener('keydown',onKey);
   const observer=new ResizeObserver(resize);observer.observe(stage);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();in3d=false;applyView();if(note){note.hidden=false;note.textContent='WebGL 上下文中断，已切换到完整 2D 导航。';}});
-  window.addEventListener('pagehide',()=>{observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);},{once:true});
+  window.addEventListener('pagehide',()=>{if(benchStart)finishBenchmark(true);observer.disconnect();window.removeEventListener('keydown',onKey);if(frame)cancelAnimationFrame(frame);gl.deleteBuffer(graphics.buffer);gl.deleteVertexArray(graphics.vao);gl.deleteProgram(graphics.program);shadow?.dispose();gl.deleteTexture(albedoTex);gl.deleteTexture(roughnessTex);},{once:true});
   applyView();
 }

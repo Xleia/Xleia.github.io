@@ -11,7 +11,7 @@ import '../../styles/studio.css';
 >
   <header class="studio-intro">
     <div>
-      <p class="eyebrow">3D Workspace / V0.6</p>
+      <p class="eyebrow">3D Workspace / V0.7</p>
       <h1>Xleia <span>Studio.</span></h1>
       <p>一间深夜仍亮着灯的个人工作室。每个角落，都连接着一个正在构建或记录的想法。</p>
     </div>
@@ -30,6 +30,8 @@ import '../../styles/studio.css';
         <option value="high">高画质</option>
       </select>
       <span class="studio-runtime-status" data-studio-runtime-status role="status">正在检查 3D 家具资源</span>
+      <button type="button" data-studio-benchmark disabled>测量 5 秒 FPS</button>
+      <output class="studio-benchmark-result" data-studio-benchmark-status aria-live="polite">仅测活动帧，不代表静止页面帧率</output>
     </div>
 
     <p class="studio-error" data-studio-error role="status" hidden></p>
@@ -82,7 +84,7 @@ import '../../styles/studio.css';
       </div>
     </div>
   </section>
-  <p class="studio-caveat">V0.6 增强了圆润坐垫模型、glTF 金属度与粗糙度驱动的微表面材质，并增加省电/均衡/高画质设置与自适应阴影分辨率。仍是渐进式 WebGL2 资产与渲染原型，尚非完整照片级美术。</p>
+  <p class="studio-caveat">V0.7 增加高/低细节 glTF 家具切换和按需 5 秒活动帧率测量，并继续优化 PBR 纹理。测得的 CPU 绘制耗时不等于 GPU 耗时；场景仍为独立 WebGL2 开发预览。</p>
 </BaseLayout>
 
 <script>
