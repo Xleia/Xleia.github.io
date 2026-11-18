@@ -192,6 +192,19 @@ if(!studioUI.includes('data-studio-benchmark') ||
    !studioUI.includes('data-studio-benchmark-status'))
   failures.push('Missing Studio V0.7 benchmark controls');
 
+// V0.8: instrumentation is opt-in and independent of CPU/rAF timing.
+const gpuTimerSource=readFileSync('src/scripts/studio-gpu-timer.ts','utf8');
+for(const contract of ['EXT_disjoint_timer_query_webgl2','GPU_DISJOINT_EXT','QUERY_RESULT_AVAILABLE',
+                       'TIME_ELAPSED_EXT','waiting.length>=8']){
+  if(!gpuTimerSource.includes(contract))failures.push('Studio GPU timing safety contract missing: '+contract);
+}
+for(const contract of ["createStudioGpuTimer(gl)","gpuTimer.start()","gpuTimer.stop()",
+                       'gpuTimer.poll()','gpuTimer.results()','gpuTimer.dispose()',
+                       'modelFetchAndParseMs','gl.drawArrays(gl.TRIANGLES,0,graphics.count)']){
+  if(!studioShaderSource.includes(contract))failures.push('Studio V0.8 telemetry missing: '+contract);
+}
+if(!studioShaderSource.includes('V0.8 warm/cool finishing pass'))
+  failures.push('Studio V0.8 night-scene details missing');
 const chairAsset=join(outputDirectory,'models/studio/chair.gltf');
 if(existsSync(chairAsset)) {
   const chair=JSON.parse(readFileSync(chairAsset,'utf8'));

@@ -58,3 +58,6 @@
 /* V0.7 performance instrumentation; no animation while benchmark is inactive. */
 .studio-benchmark-result {color:#afc9dc;font-size:.75rem;flex:1 1 100%;font-variant-numeric:tabular-nums;}
 .studio-toolbar [data-studio-benchmark] {white-space:nowrap;}
+
+/* V0.8: keep longer GPU / asset telemetry readable on narrow screens. */
+.studio-benchmark-result {max-width:100%;overflow-wrap:anywhere;line-height:1.55;}
