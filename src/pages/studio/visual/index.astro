@@ -9,7 +9,7 @@
   <link rel="canonical" href="https://xleia.github.io/studio/visual/">
   <link rel="preload" as="image" href="room.webp">
   <title>Xleia Studio · 夜间工作室视觉样板</title>
-  <style>
+  <style is:inline>
     :root{color-scheme:dark;--ink:#f6f1e9;--muted:#bdc5c9;--warm:#e8bb89;--blue:#a8d5f7;--line:rgba(255,255,255,.18);font-family:Inter,"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-synthesis:none}
     *{box-sizing:border-box}body{margin:0;background:#10171d;color:var(--ink)}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid #b9dfff;outline-offset:5px}button:disabled{cursor:default}svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}button{border:0}button[hidden],[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;z-index:100;top:10px;left:10px;padding:12px 20px;background:#142738;border-radius:5px;transform:translateY(-150%)}.skip-link:focus{transform:none}
     .studio{position:relative;min-height:720px;height:100svh;overflow:hidden;isolation:isolate;background:#0a1118}.world{position:absolute;top:0;left:0;transform-origin:0 0;transition:transform 1000ms cubic-bezier(.22,.7,.17,1);will-change:transform}.room{width:100%;height:100%;display:block;object-fit:fill;user-select:none;-webkit-user-drag:none}.room-shadow{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,12,20,.6),transparent 22%,transparent 60%,rgba(5,12,20,.86)),linear-gradient(90deg,rgba(5,12,20,.13),transparent 30%,transparent 85%,rgba(5,12,20,.1));z-index:1}.site-header{position:absolute;z-index:5;left:40px;right:40px;top:29px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:14px}.brand-symbol{width:29px;height:29px;border:1px solid rgba(255,255,255,.55);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-style:italic;font-size:24px;font-weight:400}.brand-name{font-weight:550;font-size:20px;letter-spacing:.01em}.brand-name span{font-weight:300;color:#d3d8dc}.brand-tag{font-size:10px;letter-spacing:.23em;text-transform:uppercase;margin-top:6px;color:#c2c9d0}.header-right{display:flex;align-items:center;gap:24px;font-size:12px;color:#d0d5da}.night-label{display:flex;align-items:center;gap:8px;letter-spacing:.12em}.night-label:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--warm);box-shadow:0 0 9px rgba(255,176,87,.65)}.header-link{display:flex;align-items:center;gap:7px;transition:color .2s}.header-link:hover{color:white}.header-link svg{width:14px;height:14px}
@@ -90,7 +90,7 @@
     <p class="sr-only" id="sceneStatus" role="status" aria-live="polite"></p>
     <noscript><p class="noscript">交互需要 JavaScript。也可直接打开：<a href="/projects/koto/">KOTO</a><a href="/blog/">Blog</a><a href="/lab/">Lab</a><a href="/projects/train-libre/">Train Libre</a><a href="/about/">About</a></p></noscript>
   </main>
-  <script>
+  <script is:inline>
     (() => {
       'use strict';
       const studio = document.getElementById('studio');
