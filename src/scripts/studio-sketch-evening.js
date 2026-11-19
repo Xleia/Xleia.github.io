@@ -54,7 +54,7 @@ function resize(){
 
 function sync(){
   clearInterval(timer);
-  const pause=document.hidden||motion.matches||menu.open;
+  const pause=document.hidden||motion.matches||menu.open||room.inert;
   room.classList.toggle('resting',pause);
   if(pause||!ctx||!photo.naturalWidth)return;
   lastTime=performance.now();
@@ -64,6 +64,7 @@ function sync(){
 new ResizeObserver(()=>{resize();sync();}).observe(room);
 photo.addEventListener('load',sync);
 menu.addEventListener('toggle',sync);
+room.addEventListener('viewchange',sync);
 document.addEventListener('visibilitychange',sync);
 motion.addEventListener('change',sync);
 window.addEventListener('pagehide',()=>clearInterval(timer));
