@@ -3,7 +3,7 @@ import { join, relative, sep } from 'node:path';
 
 const siteOrigin = 'https://xleia.github.io';
 const outputDirectory = 'dist';
-const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/studio/visual/', '/studio/sketch/', '/studio/dev/', '/404.html'];
+const expectedRoutes = ['/', '/projects/', '/projects/koto/', '/projects/train-libre/', '/blog/', '/lab/', '/about/', '/studio/', '/studio/room/', '/studio/visual/', '/studio/sketch/', '/studio/dev/', '/404.html'];
 const failures = [];
 
 function filesUnder(directory) {
@@ -313,7 +313,8 @@ for (const filename of htmlFiles) {
   if (!html.includes('<meta name="description"')) failures.push(`Missing description: ${route}`);
 
   const canonicalMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/);
-  const expectedCanonical = ['/studio/visual/','/studio/sketch/'].includes(route) ? siteOrigin + '/studio/' : pageUrl.href;
+  const canonicalAliases = { '/studio/': '/', '/studio/visual/': '/studio/room/', '/studio/sketch/': '/studio/room/' };
+  const expectedCanonical = new URL(canonicalAliases[route] ?? route, siteOrigin).href;
   if (!canonicalMatch || canonicalMatch[1] !== expectedCanonical) {
     failures.push(`Unexpected canonical in ${route}: ${canonicalMatch?.[1] ?? 'missing'}`);
   }

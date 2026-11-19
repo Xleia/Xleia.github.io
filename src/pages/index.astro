@@ -1,135 +1,53 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { PROJECTS } from '../data/projects';
 import { getCollection } from 'astro:content';
-const recentArticles = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+
+const articles = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const date = (value: Date) => value.toISOString().slice(0, 10);
 ---
+<BaseLayout title="个人博客" description="Xleia 的开发与学习笔记。阅读 Java、Spring、Redis、Git 和数据结构文章。">
+  <div class="journal">
+    <header class="masthead">
+      <h1>Xleia 的个人博客</h1>
+      <p>我把开发时遇到的问题和学过的东西记在这里。</p>
+    </header>
 
-<BaseLayout title="首页" description="Xleia 的个人开发者主页，展示独立项目、技术文章，以及 AI、后端、云与更多跨领域技术探索。">
-  <section class="home-hero" aria-labelledby="home-title">
-    <div class="home-hero-copy">
-      <p class="home-hero-kicker"><span class="kicker-dot" aria-hidden="true"></span> XLEIA / PERSONAL WORKSPACE</p>
-      <h1 id="home-title">把想法写成代码，<span class="gradient-text">把探索留在这里。</span></h1>
-      <p class="home-hero-description">
-        一个关于构建、学习与实践的个人空间。
-        这里整理独立开发的应用、技术笔记，以及 AI、后端、数据、云服务和移动开发等领域的探索。
-      </p>
-      <div class="action-links hero-actions">
-        <a class="button-link" href="/projects/">查看我的项目 <span aria-hidden="true">↗</span></a>
-        <a class="outlined-link" href="/blog/">阅读技术文章 <span aria-hidden="true">→</span></a>
-      </div>
-      <p class="home-hero-footnote">持续记录 · 保持好奇 · 小步迭代</p>
-    </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="hero-visual-top">
-        <span class="visual-dots"><i></i><i></i><i></i></span>
-        <span class="visual-label">xleia / workspace</span>
-        <span class="visual-status">●</span>
-      </div>
-      <div class="hero-visual-center">
-        <div class="hero-ring hero-ring-outer"></div>
-        <div class="hero-ring hero-ring-inner"></div>
-        <span class="hero-visual-mark">X<span>.</span></span>
-        <span class="hero-visual-note note-one">BUILD</span>
-        <span class="hero-visual-note note-two">EXPLORE</span>
-        <span class="hero-visual-note note-three">LEARN</span>
-      </div>
-      <div class="hero-visual-bottom">
-        <span><b>01</b> Projects</span>
-        <span><b>02</b> Writing</span>
-        <span><b>03</b> Tech Lab</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="featured-projects">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">01 / Featured Projects</p>
-        <h2 id="featured-projects">从想法到作品</h2>
-        <p class="section-description">围绕实际需求持续探索。每个项目都有自己的技术选择与成长路径。</p>
-      </div>
-      <a class="section-more" href="/projects/">全部项目 <span aria-hidden="true">↗</span></a>
-    </div>
-    <div class="project-grid">
-      {PROJECTS.map((project) => <ProjectCard project={project} />)}
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="explore-more">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">02 / Writing & Experiments</p>
-        <h2 id="explore-more">记录思考，验证想法</h2>
-        <p class="section-description">不止是成品，也保存问题、尝试过的方案和技术实验中的发现。</p>
-      </div>
-    </div>
-
-    <div class="discover-grid">
-      <article class="discover-card writing-card">
-        <div class="discover-card-top">
-          <span class="discover-icon" aria-hidden="true">≡</span>
-          <span class="discover-label">WRITING</span>
-        </div>
-        <h3>技术笔记与文章</h3>
-        <p>已收录 19 篇 2023 年历史技术笔记，涵盖 Java、Spring、Redis、数据结构和 Git 等主题。</p>
-        <span class="discover-status">19 篇历史文章 · 归档已建立</span>
-        <a class="discover-link" href="/blog/">进入博客 <span aria-hidden="true">↗</span></a>
-      </article>
-      <article class="discover-card lab-card">
-        <div class="discover-card-top">
-          <span class="discover-icon" aria-hidden="true">⌘</span>
-          <span class="discover-label">TECH LAB</span>
-        </div>
-        <h3>跨领域技术实验室</h3>
-        <p>一个为新技术预留的空间。实验可以是在线 Demo，也可以是后端服务、原型、代码仓库或技术报告。</p>
-        <div class="focus-tags" aria-label="计划探索的技术领域">
-          <span>AI & Agent</span>
-          <span>Backend</span>
-          <span>Cloud & DevOps</span>
-          <span>Data</span>
-          <span>Mobile</span>
-          <span>Security</span>
-        </div>
-        <a class="discover-link" href="/lab/">探索 Lab <span aria-hidden="true">↗</span></a>
-      </article>
-    </div>
-  </section>
-
-  <section class="home-section recent-writing" aria-labelledby="recent-writing-title">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">03 / From the Archive</p>
-        <h2 id="recent-writing-title">最近的历史文章</h2>
-        <p class="section-description">按照原始发表日期排列，保留 2023 年的笔记内容与旧链接。</p>
-      </div>
-      <a class="section-more" href="/blog/">阅读全部 <span aria-hidden="true">↗</span></a>
-    </div>
-    <ol class="article-list">
-      {recentArticles.map((article) => (
-        <li class="article-list-item">
-          <span class="article-date">
-            <time datetime={article.data.pubDate.toISOString().slice(0, 10)}>{article.data.pubDate.toISOString().slice(0, 10)}</time>
-          </span>
-          <div class="article-info">
-            <a href={article.data.legacyPath}>{article.data.title}</a>
-            <span class="article-category">{article.data.category}</span>
-          </div>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <section class="home-outro" aria-label="关于这个网站">
-    <div>
-      <p class="eyebrow">Always Iterating</p>
-      <h2>保持创造，也保持记录。</h2>
-      <p>这个网站会随着项目和兴趣变化而更新。更多背景与公开联系信息将逐步整理到关于页面。</p>
-    </div>
-    <a class="outlined-link" href="/about/">了解更多 <span aria-hidden="true">→</span></a>
-  </section>
+    <section aria-labelledby="notes">
+      <header class="section-title">
+        <h2 id="notes">最近的笔记</h2>
+        <a href="/blog/">全部 {articles.length} 篇</a>
+      </header>
+      <ol class="notes">
+        {articles.slice(0, 6).map(({data}) => (
+          <li>
+            <p class="byline"><time datetime={date(data.pubDate)}>{date(data.pubDate)}</time><span>{data.category}</span></p>
+            <h3><a href={data.legacyPath}>{data.title}</a></h3>
+          </li>
+        ))}
+      </ol>
+    </section>
+    <aside aria-label="关于作者与工作室">
+      <a href="/about/">关于我</a><span aria-hidden="true">·</span><a href="/studio/room/">逛逛我的夜间工作室</a>
+    </aside>
+  </div>
 </BaseLayout>
+
+<style>
+  .journal { max-width: 46rem; margin: 0 auto; }
+  .masthead { padding: clamp(1rem, 4vw, 3rem) 0 2.2rem; }
+  h1, h2, h3 { font-family: Georgia, "Songti SC", "Noto Serif CJK SC", serif; }
+  h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -.045em; line-height: 1.2; }
+  .masthead p, .byline, aside { color: var(--color-muted); }
+  .section-title, aside, .byline { display: flex; align-items: baseline; gap: 1rem; }
+  .section-title { justify-content: space-between; border-bottom: 1px solid var(--color-text); padding-bottom: .65rem; }
+  h2 { margin: 0; font-size: 1.3rem; }
+  .section-title a, aside { font-size: .9rem; }
+  .notes { padding: 0; margin: 0; list-style: none; }
+  .notes li { padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); }
+  .byline { margin: 0; font-size: .82rem; font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+  h3 { font-size: clamp(1.1rem, 2.3vw, 1.45rem); margin: .35rem 0 0; line-height: 1.55; overflow-wrap: anywhere; }
+  h3 a, aside a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--color-accent); text-decoration: underline; }
+  aside { padding: 1.6rem 0; flex-wrap: wrap; }
+</style>
