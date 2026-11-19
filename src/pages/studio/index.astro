@@ -1,5 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import { STUDIO_ZONES } from '../../data/studio';
+const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()).slice(0,3);
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -67,7 +69,7 @@ import { STUDIO_ZONES } from '../../data/studio';
     .detail img{position:absolute;left:50%;top:50%;width:max(calc(100cqw / var(--crop)),calc(100cqh * 1.777 / var(--height)));transform:translate(var(--cx),var(--cy))}
     .detail[data-scene="shelf"]{--crop:.25;--height:.65;--cx:-14%;--cy:-42%}
     .detail[data-scene="sketch"]{--crop:.47;--height:.26;--cx:-53%;--cy:-86%}
-    .detail a{position:absolute;bottom:24px;right:20px;padding:9px 15px;border-radius:22px;background:#211d1bdb;color:inherit}
+
     @media(prefers-reduced-motion:reduce){.layered.walking .plane{transform:none}}
     .wall{--depth:.18}.middle{--depth:.62}.front{--depth:1}
     .layered.travel .plane{transition:transform .85s cubic-bezier(.35,0,.35,1)}
@@ -78,10 +80,32 @@ import { STUDIO_ZONES } from '../../data/studio';
     .view .tip{bottom:74px}
     @media(max-aspect-ratio:1/1){.spot.lamp{display:none}}
     @media(prefers-reduced-motion:reduce){.view:not([hidden]){animation:none}.lamp-off{transition:none}}
+    :root{--ink:#f6e9d4;--wood:#211d19ed;--edge:#d6ba893f;--gold:#e3ba80;--pad:clamp(12px,3vw,32px);color-scheme:dark}
+    .location,summary,.return,.tip,.paper-tools button,nav,.catalogue{color:var(--ink);border:1px solid var(--edge);background:var(--wood);box-shadow:0 3px 18px #0004}
+    .location{position:fixed;z-index:1;left:var(--pad);top:max(18px,env(safe-area-inset-top));margin:0;padding:9px 14px;border-radius:24px;pointer-events:none;font:14px/1.4 Georgia,serif}
+    .location small{font:inherit;color:var(--gold);padding-right:9px}
+    .return,.paper-tools button,summary{min-height:44px}
+    .tip{max-width:calc(100% - 24px);white-space:normal;text-align:center;width:max-content}
+    .catalogue,.paper-desk{position:absolute;right:var(--pad);bottom:max(84px,12vh);max-height:calc(100% - 160px);overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+    .catalogue{width:min(360px,calc(100% - 2 * var(--pad)));padding:20px;border-radius:12px}
+    .catalogue h2{font:normal 24px/1.2 Georgia,serif;margin:0 0 12px}.catalogue a{display:block;padding:9px 0;color:var(--ink);text-decoration:none;border-top:1px solid var(--edge)}
+    .catalogue a:hover,.catalogue a:focus-visible{color:var(--gold);text-decoration:underline}.catalogue small{display:block;color:#d5bd99}
+    .detail:has(.paper-desk:not([hidden]))>img{filter:brightness(.62)}
+    .open-paper{left:auto;right:20px}
+    .paper-desk{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(680px,88vw,92vh);max-height:none;overflow:visible}
+    .paper{display:block;width:100%;aspect-ratio:3/2;background:#eadabe;border:1px solid #b99d72;border-radius:2px 8px 8px 2px;box-shadow:0 10px 38px #0008;touch-action:none;cursor:crosshair}
+    .paper-tools{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:8px}
+    .paper-tools button{border-radius:20px;padding:5px 14px}.paper-tools :disabled{opacity:.56;cursor:default}
+    .paper-status{color:var(--ink);text-shadow:0 1px 4px black;margin-right:auto;font-size:14px}
+    .touch-copy{display:none}
+    @media(pointer:coarse){.wheel-copy{display:none}.touch-copy{display:inline}}
+    @media(max-height:480px){.paper-desk{width:min(54vw,82vh)}.catalogue{bottom:14px;max-height:calc(100% - 78px)}}
+    [hidden]{display:none!important}
   </style>
 </head>
 <body>
   <main tabindex="0" aria-label="窗前速写，可拖动或用左右方向键环顾">
+    <p class="location"><small>Xleia Studio</small><span aria-live="polite">沙发</span></p>
     <div class="room">
       <div class="camera">
       <div class="plane wall">
@@ -101,7 +125,7 @@ import { STUDIO_ZONES } from '../../data/studio';
       </div>
       </div>
     </div>
-    <p class="tip" id="room-tip">指向书架、窗户或速写本 · 向上滚动走近</p>
+    <p class="tip" id="room-tip"><span class="wheel-copy">指向书架、窗户或速写本，向上滚动走近</span><span class="touch-copy">轻点窗户走近，或从目录选择去处</span></p>
     <section class="view" aria-label="窗边" hidden>
       <img src="/studio/sketch-assets/window-seat.webp" alt="隔着雨夜的玻璃望向城市灯火" />
       <canvas class="mist" tabindex="0" aria-label="起雾的窗玻璃，拖动或按空格擦开"></canvas>
@@ -111,7 +135,20 @@ import { STUDIO_ZONES } from '../../data/studio';
     <section class="detail" aria-label="室内近景" hidden>
       <img src="/studio/sketch-assets/night.webp" alt="" />
       <button class="return">坐回沙发</button>
-      <a href="/blog/">浏览架上的文章</a>
+      <aside class="catalogue" aria-labelledby="reading-title" hidden>
+        <h2 id="reading-title">架上的笔记</h2>
+        {reading.map(article => <a href={article.data.legacyPath}><small>{article.data.category}</small>{article.data.title}</a>)}
+        <a href="/blog/">全部文章</a>
+      </aside>
+      <button type="button" class="return open-paper" hidden>翻到画纸</button>
+      <div class="paper-desk" hidden>
+        <canvas class="paper" width="1200" height="800" aria-label="空白速写纸，用鼠标或手指作画"></canvas>
+        <div class="paper-tools">
+          <span class="paper-status" aria-live="polite">在纸上画一笔</span>
+          <button type="button" data-undo disabled>撤销</button>
+          <button type="button" data-save disabled>保存图像</button>
+        </div>
+      </div>
     </section>
   </main>
   <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
@@ -125,6 +162,7 @@ import { STUDIO_ZONES } from '../../data/studio';
   <script>
     import '../../scripts/studio-sketch-evening.js';
     import '../../scripts/studio-presence.js';
+    import '../../scripts/studio-paper.js';
   </script>
 </body>
 </html>

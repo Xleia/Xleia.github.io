@@ -110,13 +110,22 @@ function coatGlass() {
 }
 
 const detail = document.querySelector('.detail');
-const shelfLink = detail.querySelector('a');
+const catalogue = detail.querySelector('.catalogue');
+const desk = detail.querySelector('.paper-desk');
+const openPaper = detail.querySelector('.open-paper');
+openPaper.addEventListener('click', () => {
+  desk.hidden = false;
+  openPaper.hidden = true;
+  desk.querySelector('canvas').setAttribute('tabindex','-1');
+  desk.querySelector('canvas').focus({preventScroll:true});
+});
+const locationName = document.querySelector('.location span');
 const labels = {window:'窗边', shelf:'书架', sketch:'速写本'};
 const spots = new Map([...room.querySelectorAll('[data-place]')].map(button => [button.dataset.place, button]));
 let route;
 let progress = 0;
 let destination;
-const initialHint = hint.textContent;
+const initialHint = matchMedia('(pointer:coarse)').matches ? '轻点房间里的物件，或从目录选择去处' : '指向书架、窗户或速写本，向上滚动走近';
 
 function aimAt(place) {
   route = place;
@@ -145,6 +154,7 @@ function arrive(place, button) {
   if (!fromWheel) room.classList.add('travel');
   walk(1);
   destination = place === 'window' ? view : detail;
+  locationName.textContent = labels[place];
   origin = menu.contains(button) ? menu.querySelector('summary') : button;
   menu.open = false;
   menu.hidden = true;
@@ -160,7 +170,9 @@ function arrive(place, button) {
     detail.dataset.scene = place;
     detail.setAttribute('aria-label', labels[place]);
     detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的东京夜景速写';
-    shelfLink.hidden = place !== 'shelf';
+    catalogue.hidden = place !== 'shelf';
+    desk.hidden = true;
+    openPaper.hidden = place !== 'sketch';
     detail.querySelector('button').focus({preventScroll:true});
   }
   if (!motion.matches) fade = destination.animate([{opacity:0},{opacity:1}], {duration:fromWheel ? 320 : 550});
@@ -184,6 +196,7 @@ function sitDown() {
     destination.inert = false;
     destination.hidden = true;
     destination = undefined;
+    locationName.textContent = '沙发';
     leaving = false;
     room.inert = false;
     menu.hidden = false;
@@ -200,7 +213,7 @@ function sitDown() {
 back.addEventListener('click', sitDown);
 detail.querySelector('button').addEventListener('click', sitDown);
 stage.addEventListener('wheel', e => {
-  if (menu.open || e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+  if (menu.open || e.target.closest('.catalogue,.paper-desk') || e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
   const units = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stage.clientHeight : 1;
   const stride = Math.max(-.24, Math.min(.24, -e.deltaY * units / 620));
   if (destination) {
