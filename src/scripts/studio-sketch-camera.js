@@ -1,111 +1,86 @@
-// Reproject the photographed planes from a common reference camera.
-// Distances are in scene units and screen coordinates are fractions of the frame.
-const stage=document.querySelector('main');
-const room=stage.querySelector('.room');
-const poster=room.querySelector('.poster');
-const planes=[...room.querySelectorAll('[data-distance]')];
-const menu=document.querySelector('details');
-const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
-const target={x:0,y:0,zoom:0};
-const current={...target};
-const pointers=new Map();
-let frame=0,previous=0,lastTap=null,ready=false;
-let width,height,viewWidth,viewHeight;
+import {createRenderer} from './studio-sketch-renderer.js';
 
-function renderPlane(el,distance){
-  // Zoom moves the eye forward, so nearby objects expand faster.
-  const scale=(1+.14*Math.max(Math.abs(current.x),Math.abs(current.y)))*distance/(distance-current.zoom*.74);
-  const limitX=Math.max(0,(width*scale-viewWidth)/2);
-  const limitY=Math.max(0,(height*scale-viewHeight)/2);
-  const portraitBias=viewWidth<viewHeight ? -.1*width : 0;
-  const panorama=Math.max(0,(width-viewWidth)/2)*current.x;
-  const x=clamp(portraitBias+panorama+current.x*.19*width/(distance-current.zoom*.74),-limitX,limitX);
-  const y=clamp(current.y*.13*height/(distance-current.zoom*.74)-(scale-1)*height*.32,-limitY,limitY);
-  el.style.transform='translate3d('+x+'px,'+y+'px,0) scale('+scale+')';
-}
-function draw(){
-  if(ready) for(const el of planes) renderPlane(el,Number(el.dataset.distance));
-  else renderPlane(poster,7);
-}
-function resize(){
-  width=room.offsetWidth;height=room.offsetHeight;
-  viewWidth=stage.clientWidth;viewHeight=stage.clientHeight;
-  draw();
-}
-resize();
-new ResizeObserver(resize).observe(stage);
-Promise.all(planes.map(el=>el.querySelector('img').decode())).then(()=>{
-  ready=true;draw();room.classList.add('ready');
-}).catch(()=>{ /* Keep the complete photograph if a cutout fails to load. */ });
-
+const stage=document.querySelector('main'),canvas=stage.querySelector('canvas');
+const menu=document.querySelector('details'),motion=matchMedia('(prefers-reduced-motion: reduce)');
+const clamp=v=>Math.max(-1,Math.min(1,v));
+let render=null,x=0,y=0,aimX=0,aimY=0,pointer=null,lastTap=null;
+let frame=0,timer=0,previous=0,trainStart=0;
 function tick(time){
-  const ease=reduced.matches?1:1-Math.exp(-Math.min(64,time-previous)/75);
-  previous=time;
-  let moving=false;
-  for(const key of ['x','y','zoom']){
-    current[key]+=(target[key]-current[key])*ease;
-    if(Math.abs(target[key]-current[key])<.0003) current[key]=target[key];
-    else moving=true;
+  frame=0;
+  if(!render||document.hidden)return;
+  const k=motion.matches?1:1-Math.exp(-Math.min(64,time-previous)/75);
+  previous=time;x+=(aimX-x)*k;y+=(aimY-y)*k;
+  const moving=Math.abs(x-aimX)+Math.abs(y-aimY)>.0003;
+  if(!moving){x=aimX;y=aimY;}
+  const seconds=(time-trainStart)/1000;
+  const passing=!motion.matches && seconds>=0 && seconds<5;
+  render(x,y,passing?seconds*.30-.46:-2);
+  if(moving||passing)frame=requestAnimationFrame(tick);
+  else if(!timer&&!motion.matches){
+    const delay=seconds<0?-seconds*1000:18000;
+    timer=setTimeout(()=>{timer=0;trainStart=performance.now();schedule();},delay);
   }
-  draw();frame=moving?requestAnimationFrame(tick):0;
 }
 function schedule(){
-  if(!frame){previous=performance.now()-16;frame=requestAnimationFrame(tick);}
+  if(render&&!frame&&!document.hidden){previous=performance.now()-16;frame=requestAnimationFrame(tick);}
 }
-function zoom(delta){target.zoom=clamp(target.zoom+delta,0,1);schedule();}
-function gap(){
-  const [a,b]=pointers.values();
-  return Math.hypot(a.x-b.x,a.y-b.y);
+function restart(){
+  clearTimeout(timer);timer=0;cancelAnimationFrame(frame);frame=0;
+  trainStart=performance.now()+3200;schedule();
 }
+async function init(){
+  try{
+    render=await createRenderer(canvas);
+    if(render && !canvas.getContext('webgl').isContextLost()){
+      render(x,y,-2);canvas.classList.add('ready');restart();
+    }
+  }catch{render=null;canvas.classList.remove('ready');}
+}
+canvas.addEventListener('webglcontextlost',e=>{
+  e.preventDefault();render=null;canvas.classList.remove('ready');restart();
+});
+canvas.addEventListener('webglcontextrestored',init);
+document.addEventListener('visibilitychange',restart);motion.addEventListener('change',restart);
+new ResizeObserver(schedule).observe(stage);init();
+function move(dx,dy){
+  aimX=clamp(aimX+dx);aimY=clamp(aimY+dy);schedule();
+}
+function center(){aimX=0;aimY=0;schedule();}
 stage.addEventListener('pointerdown',e=>{
   if(menu.open){menu.open=false;return;}
-  if(e.button!==0 || pointers.size===2)return;
-  stage.focus({preventScroll:true});
-  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false});
-  if(pointers.size===2) for(const point of pointers.values())point.moved=true;
+  if(!e.isPrimary||e.button!==0)return;
+  stage.focus({preventScroll:true});pointer={id:e.pointerId,x:e.clientX,y:e.clientY,travel:0};
   stage.setPointerCapture(e.pointerId);
 });
 stage.addEventListener('pointermove',e=>{
-  const point=pointers.get(e.pointerId);if(!point)return;
-  const dx=e.clientX-point.x,dy=e.clientY-point.y;
-  const pinch=pointers.size===2,oldGap=pinch?gap():0;
-  point.x=e.clientX;point.y=e.clientY;
-  if(Math.hypot(point.x-point.startX,point.y-point.startY)>5)point.moved=true;
-  if(pinch){zoom((gap()-oldGap)/220);return;}
-  target.x=clamp(target.x+dx/Math.min(width*.33,320),-1,1);
-  target.y=clamp(target.y+dy/Math.min(height*.4,260),-1,1);
-  schedule();
+  if(pointer?.id!==e.pointerId)return;
+  const dx=e.clientX-pointer.x,dy=e.clientY-pointer.y;
+  pointer.x=e.clientX;pointer.y=e.clientY;pointer.travel+=Math.hypot(dx,dy);
+  move(-dx/Math.min(330,stage.clientWidth*.55),-dy/240);
 });
 stage.addEventListener('pointerup',e=>{
-  const p=pointers.get(e.pointerId);pointers.delete(e.pointerId);
-  if(!p||p.moved){lastTap=null;return;}
+  if(pointer?.id!==e.pointerId)return;
   const now=performance.now();
-  if(lastTap && now-lastTap.time<360 && Math.hypot(lastTap.x-p.x,lastTap.y-p.y)<32){
-    target.zoom=target.zoom>.5?0:1;schedule();lastTap=null;
-  }else lastTap={time:now,x:p.x,y:p.y};
+  if(pointer.travel>6)lastTap=null;
+  else if(lastTap && now-lastTap.time<340 && Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<30){center();lastTap=null;}
+  else lastTap={time:now,x:e.clientX,y:e.clientY};
+  pointer=null;
 });
-stage.addEventListener('lostpointercapture',e=>pointers.delete(e.pointerId));
+stage.addEventListener('lostpointercapture',()=>{pointer=null;});
 stage.addEventListener('wheel',e=>{
-  if(menu.open||e.ctrlKey)return;
+  if(menu.open||e.ctrlKey||!render)return;
   e.preventDefault();
-  const units=e.deltaMode===1?16:e.deltaMode===2?viewHeight:1;
-  zoom(-e.deltaY*units*.0015);
+  const units=e.deltaMode===1?16:e.deltaMode===2?stage.clientHeight:1;
+  move((Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)*units/700,0);
 },{passive:false});
 stage.addEventListener('keydown',e=>{
   if(menu.open)return;
-  switch(e.key){
-    case 'Home': Object.assign(target,{x:0,y:0,zoom:0});break;
-    case 'ArrowLeft':target.x=clamp(target.x+.15,-1,1);break;
-    case 'ArrowRight':target.x=clamp(target.x-.15,-1,1);break;
-    case 'ArrowUp':target.y=clamp(target.y+.15,-1,1);break;
-    case 'ArrowDown':target.y=clamp(target.y-.15,-1,1);break;
-    case '+':case '=':zoom(.2);break;
-    case '-':zoom(-.2);break;
-    default:return;
-  }
-  e.preventDefault();schedule();
+  const steps={ArrowLeft:[-.15,0],ArrowRight:[.15,0],ArrowUp:[0,-.15],ArrowDown:[0,.15]};
+  if(e.key==='Home')center();
+  else if(steps[e.key])move(...steps[e.key]);
+  else return;
+  e.preventDefault();
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape' && menu.open){menu.open=false;menu.querySelector('summary').focus();}
+  if(e.key==='Escape'&&menu.open){menu.open=false;menu.querySelector('summary').focus();}
 });

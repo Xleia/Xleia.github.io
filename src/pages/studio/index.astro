@@ -14,19 +14,11 @@ import { STUDIO_ZONES } from '../../data/studio';
     main{position:fixed;inset:0;overflow:hidden;touch-action:none;cursor:grab}
     main:active{cursor:grabbing}main:focus-visible{outline:2px solid #e7b77a;outline-offset:-3px}
     .room{position:absolute;width:max(104vw,181.25vh);width:max(104vw,181.25dvh);aspect-ratio:1672/941;left:50%;top:50%;transform:translate(-50%,-50%);user-select:none;pointer-events:none}
-    .plane,.poster{position:absolute;inset:0;transform-origin:50% 50%}
-    .plane{visibility:hidden}
-    .ready .plane{visibility:visible}
-    .ready .poster{visibility:hidden}
-    .plane img,.poster{width:100%;height:100%;display:block}
-    .plane img.crop{position:absolute;height:auto}
-    .chair{left:26.73445%;top:48.67163%;width:19.01914%!important}
-    .foreground{left:26.19617%;top:54.83528%;width:73.80383%!important}
+    .poster{display:block;width:100%;height:100%}
+    canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
+    canvas.ready{opacity:1}
+    @media(max-aspect-ratio:1/1){.room{left:calc(50% - 10dvh)}}
     .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-    .rail{position:absolute;overflow:hidden;left:67.92%;top:36.97%;width:8.4%;height:.96%;pointer-events:none}
-    .train{display:block;position:absolute;top:18%;height:64%;width:52%;background:repeating-linear-gradient(90deg,#ab783f 0 2%,#eeb877 2% 8%,#403930 8% 13%);border-block:1px solid #514b40;border-radius:20%;filter:blur(.5px);animation:pass 23s linear infinite;transform:translateX(-110%)}
-    @keyframes pass{0%,12%{transform:translateX(-110%)}33%,100%{transform:translateX(205%)}}
-    @media(prefers-reduced-motion:reduce){.train{animation:none} }
     details{position:fixed;top:max(18px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right));z-index:2}
     summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;margin-left:auto;width:max-content;min-height:38px;padding:7px 16px;border:1px solid #ffffff47;border-radius:24px;background:#211d1bbf;color:#f2eae2;font-size:14px;backdrop-filter:blur(10px)}
     summary::-webkit-details-marker{display:none}summary span{font-size:15px}summary:focus-visible,a:focus-visible{outline:2px solid #f2c88e;outline-offset:3px}
@@ -36,16 +28,11 @@ import { STUDIO_ZONES } from '../../data/studio';
 </head>
 <body>
   <main tabindex="0" aria-label="窗前速写" aria-describedby="controls">
-    <span id="controls" class="sr">拖动或按方向键环顾，滚轮、双指或加减键调整距离，双击切换远近，Home 键回到全景。</span>
+    <span id="controls" class="sr">拖动或按方向键侧身环顾，滚轮左右巡视，双击或按 Home 回到正面。</span>
     <div class="room">
       <img class="poster" src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一幅东京夜景速写，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
-      <div class="plane" data-distance="7" aria-hidden="true">
-        <img src="/studio/sketch-assets/far.webp" alt="" />
-        <div class="rail"><i class="train"></i></div>
-      </div>
-      <div class="plane" data-distance="3.8" aria-hidden="true"><img class="crop chair" src="/studio/sketch-assets/seat.webp" alt="" /></div>
-      <div class="plane" data-distance="2.25" aria-hidden="true"><img class="crop foreground" src="/studio/sketch-assets/near.webp" alt="" /></div>
     </div>
+    <canvas aria-hidden="true"></canvas>
   </main>
   <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
     <a href="/">首页</a>
