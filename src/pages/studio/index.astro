@@ -56,10 +56,22 @@ import { STUDIO_ZONES } from '../../data/studio';
     .layered .layer-photo,.layered .chair,.layered .foreground{visibility:visible}
     .layered .poster{visibility:hidden}
     .layered .plane{transform-origin:center;transform:scale(1.16)}
+    .layered.walking .plane{
+      --advance:calc(var(--walk) * (.48 + .65 * var(--depth)));
+      --reach:calc(50% * var(--advance));
+      transform:translate(clamp(calc(-1 * var(--reach)),calc(var(--walk-x) * (1 + var(--depth))),var(--reach)),clamp(calc(-1 * var(--reach)),calc(var(--walk-y) * (1 + var(--depth))),var(--reach))) scale(calc(1.16 + var(--advance)))
+    }
+    .shelf{left:6%;top:13%;width:17%;height:54%}
+    .sketch{left:40%;top:77%;width:27%;height:20%}
+    .detail{position:absolute;inset:0;overflow:hidden;background:#151316;container-type:size}
+    .detail img{position:absolute;left:50%;top:50%;width:max(calc(100cqw / var(--crop)),calc(100cqh * 1.777 / var(--height)));transform:translate(var(--cx),var(--cy))}
+    .detail[data-scene="shelf"]{--crop:.25;--height:.65;--cx:-14%;--cy:-42%}
+    .detail[data-scene="sketch"]{--crop:.47;--height:.26;--cx:-53%;--cy:-86%}
+    .detail a{position:absolute;bottom:24px;right:20px;padding:9px 15px;border-radius:22px;background:#211d1bdb;color:inherit}
+    @media(prefers-reduced-motion:reduce){.layered.walking .plane{transform:none}}
     .wall{--depth:.18}.middle{--depth:.62}.front{--depth:1}
     .layered.travel .plane{transition:transform .85s cubic-bezier(.35,0,.35,1)}
-    .layered.approach .plane{transform:translate(calc(-2vw * var(--depth)),calc(7vh * var(--depth))) scale(calc(1.12 + .30 * var(--depth)))}
-    @media(prefers-reduced-motion:reduce){.layered .plane,.layered.approach .plane{transform:none}.layered.travel .plane{transition:none}}
+    @media(prefers-reduced-motion:reduce){.layered .plane{transform:none}.layered.travel .plane{transition:none}}
     nav button{display:block;width:100%;text-align:left;padding:11px 14px;border:0;border-radius:6px;background:none;font-size:14px}
     nav button:hover,nav button:focus-visible{background:#ffffff13}
     button:focus-visible,canvas:focus-visible{outline:2px solid #f2c88e;outline-offset:-3px}
@@ -77,26 +89,35 @@ import { STUDIO_ZONES } from '../../data/studio';
       <img class="layer-photo" src="/studio/sketch-assets/far.webp" alt="" />
       <img class="lamp-off" src="/studio/sketch-assets/lamp-off.webp" alt="" />
       <button class="spot lamp" data-lamp aria-pressed="true" aria-label="桌灯"><span>桌灯</span></button>
-      <button class="spot window" data-window><span>走到窗边</span></button>
+      <button class="spot window" data-place="window" data-window><span>走到窗边</span></button>
+      <button class="spot shelf" data-place="shelf"><span>走到书架</span></button>
       <canvas class="glass" aria-hidden="true"></canvas>
       <div class="viaduct" aria-hidden="true"><i class="carriages"></i></div>
       </div>
       <div class="plane middle"><img class="chair" src="/studio/sketch-assets/seat.webp" alt="" /></div>
       <div class="plane front"><img class="foreground" src="/studio/sketch-assets/near.webp" alt="" />
+      <button class="spot sketch" data-place="sketch"><span>俯看速写本</span></button>
       <div class="steam" aria-hidden="true"><img src="/studio/sketch-assets/night.webp" alt="" /></div>
       </div>
       </div>
     </div>
-    <p class="tip" id="room-tip">左右拖动环顾 · 点窗户走近</p>
+    <p class="tip" id="room-tip">指向书架、窗户或速写本 · 向上滚动走近</p>
     <section class="view" aria-label="窗边" hidden>
       <img src="/studio/sketch-assets/window-seat.webp" alt="隔着雨夜的玻璃望向城市灯火" />
       <canvas class="mist" tabindex="0" aria-label="起雾的窗玻璃，拖动或按空格擦开"></canvas>
       <p class="tip" id="glass-tip">拖动擦开窗雾 · 也可以按空格</p>
       <button class="return">坐回沙发</button>
     </section>
+    <section class="detail" aria-label="室内近景" hidden>
+      <img src="/studio/sketch-assets/night.webp" alt="" />
+      <button class="return">坐回沙发</button>
+      <a href="/blog/">浏览架上的文章</a>
+    </section>
   </main>
   <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
-    <button data-window>走到窗边</button>
+    <button data-place="window" data-window>走到窗边</button>
+    <button data-place="shelf">走到书架</button>
+    <button data-place="sketch">俯看速写本</button>
     <button data-lamp aria-pressed="true">桌灯</button>
     <a href="/">首页</a>
     {STUDIO_ZONES.map(zone => <a href={zone.href}>{zone.name}</a>)}

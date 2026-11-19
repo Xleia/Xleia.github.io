@@ -42,7 +42,7 @@ function setYaw(angle) {
 new ResizeObserver(fitCamera).observe(stage);
 fitCamera();
 stage.addEventListener('pointerdown', e => {
-  if (room.inert || menu.open || motion.matches || !room.classList.contains('layered')
+  if (room.classList.contains('walking') || room.inert || menu.open || motion.matches || !room.classList.contains('layered')
       || !e.isPrimary || e.button || e.target.closest('button')) return;
   drag = {id:e.pointerId, x:e.clientX};
   stage.setPointerCapture(e.pointerId);
@@ -57,7 +57,7 @@ stage.addEventListener('pointermove', e => {
 });
 stage.addEventListener('lostpointercapture', () => { drag = undefined; });
 stage.addEventListener('keydown', e => {
-  if (room.inert || menu.open || motion.matches || !room.classList.contains('layered')) return;
+  if (room.classList.contains('walking') || room.inert || menu.open || motion.matches || !room.classList.contains('layered')) return;
   if (e.key === 'Home') setYaw(0);
   else if (e.key === 'ArrowLeft') setYaw(yaw - .018);
   else if (e.key === 'ArrowRight') setYaw(yaw + .018);
@@ -109,52 +109,118 @@ function coatGlass() {
   ctx.fillRect(0, 0, glass.width, glass.height);
 }
 
-for (const button of document.querySelectorAll('[data-window]')) {
-  button.addEventListener('click', () => {
-    origin = menu.contains(button) ? menu.querySelector('summary') : button;
-    menu.open = false;
-    menu.hidden = true;
-    room.inert = true;
-    room.dispatchEvent(new Event('viewchange'));
-    room.classList.add('travel','approach');
-    view.hidden = false;
-    if (!motion.matches) {
-      fade = view.animate([{opacity:0, offset:0}, {opacity:0, offset:.4}, {opacity:1}], {duration:900});
-    }
-    hint.hidden = true;
+const detail = document.querySelector('.detail');
+const shelfLink = detail.querySelector('a');
+const labels = {window:'窗边', shelf:'书架', sketch:'速写本'};
+const spots = new Map([...room.querySelectorAll('[data-place]')].map(button => [button.dataset.place, button]));
+let route;
+let progress = 0;
+let destination;
+const initialHint = hint.textContent;
+
+function aimAt(place) {
+  route = place;
+  // Use the hotspot's projected position, including the current yaw and mobile crop.
+  const box = spots.get(place).getBoundingClientRect();
+  const dx = stage.clientWidth / 2 - box.left - box.width / 2;
+  const dy = stage.clientHeight / 2 - box.top - box.height / 2;
+  room.style.setProperty('--aim-x', dx + 'px');
+  room.style.setProperty('--aim-y', dy + 'px');
+}
+function walk(value) {
+  progress = Math.max(0, Math.min(1, value));
+  room.style.setProperty('--walk', String(progress));
+  room.style.setProperty('--walk-x', 'calc(var(--aim-x) * var(--walk) * .85)');
+  room.style.setProperty('--walk-y', 'calc(var(--aim-y) * var(--walk) * .85)');
+  room.classList.toggle('walking', progress > 0);
+  hint.hidden = false;
+  hint.textContent = progress ? labels[route] + ' · 向上走近 / 向下退回' : initialHint;
+  if (!progress) route = undefined;
+}
+
+function arrive(place, button) {
+  if (destination) return;
+  if (route !== place) { walk(0); aimAt(place); }
+  const fromWheel = progress === 1;
+  if (!fromWheel) room.classList.add('travel');
+  walk(1);
+  destination = place === 'window' ? view : detail;
+  origin = menu.contains(button) ? menu.querySelector('summary') : button;
+  menu.open = false;
+  menu.hidden = true;
+  room.inert = true;
+  room.dispatchEvent(new Event('viewchange'));
+  destination.hidden = false;
+  hint.hidden = true;
+  if (destination === view) {
     glassHint.hidden = !ctx || glass.dataset.wiped === 'true';
     coatGlass();
-    (ctx ? glass : back).focus();
-  });
+    (ctx ? glass : back).focus({preventScroll:true});
+  } else {
+    detail.dataset.scene = place;
+    detail.setAttribute('aria-label', labels[place]);
+    detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的东京夜景速写';
+    shelfLink.hidden = place !== 'shelf';
+    detail.querySelector('button').focus({preventScroll:true});
+  }
+  if (!motion.matches) fade = destination.animate([{opacity:0},{opacity:1}], {duration:fromWheel ? 320 : 550});
 }
+for (const button of document.querySelectorAll('[data-place]')) {
+  button.addEventListener('click', () => arrive(button.dataset.place, button));
+}
+
 function sitDown() {
-  if (leaving) return;
+  if (!destination || leaving) return;
   leaving = true;
   previous = undefined;
   pointer = undefined;
-  const opacity = getComputedStyle(view).opacity;
+  const opacity = getComputedStyle(destination).opacity;
   fade?.cancel();
-  room.classList.remove('approach');
-  view.inert = true;
+  destination.inert = true;
+  room.classList.add('travel');
+  walk(0);
+  hint.hidden = true;
   function finish() {
+    destination.inert = false;
+    destination.hidden = true;
+    destination = undefined;
     leaving = false;
-    view.inert = false;
-    view.hidden = true;
-    room.classList.remove('travel');
     room.inert = false;
     menu.hidden = false;
+    room.classList.remove('travel');
     room.dispatchEvent(new Event('viewchange'));
     origin?.focus({preventScroll:true});
   }
   if (motion.matches) finish();
   else {
-    fade = view.animate([{opacity}, {opacity:0, offset:.68}, {opacity:0}], {duration:850});
+    fade = destination.animate([{opacity}, {opacity:0}], {duration:850});
     fade.finished.then(finish, finish);
   }
 }
 back.addEventListener('click', sitDown);
+detail.querySelector('button').addEventListener('click', sitDown);
+stage.addEventListener('wheel', e => {
+  if (menu.open || e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+  const units = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stage.clientHeight : 1;
+  const stride = Math.max(-.24, Math.min(.24, -e.deltaY * units / 620));
+  if (destination) {
+    if (stride < 0) sitDown();
+    e.preventDefault();
+    return;
+  }
+  if (!route) {
+    const spot = e.target.closest('.spot[data-place]');
+    if (!spot || stride <= 0) return;
+    aimAt(spot.dataset.place);
+  }
+  e.preventDefault();
+  walk(progress + stride);
+  if (progress === 1) arrive(route, spots.get(route));
+}, {passive:false});
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !view.hidden) sitDown();
+  if (event.key !== 'Escape') return;
+  if (destination) sitDown();
+  else if (route) walk(0);
 });
 window.addEventListener('resize', coatGlass);
 
