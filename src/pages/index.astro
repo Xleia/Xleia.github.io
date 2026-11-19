@@ -8,9 +8,9 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="坐在 Xleia 的夜间工作室，看窗外的东京夜景和桌上的速写。" />
+  <meta name="description" content="坐在 Xleia 的夜间工作室，看窗外的东京夜景和桌上的漫画。" />
   <link rel="canonical" href="https://xleia.github.io/" />
-  <title>窗前速写 · Xleia Studio</title>
+  <title>窗前工作室 · Xleia Studio</title>
   <style is:inline>
     *{box-sizing:border-box}html,body{margin:0;background:#151316;color:#eee5da;font-family:system-ui,sans-serif}
     main{position:fixed;inset:0;overflow:hidden}
@@ -47,9 +47,7 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
     .view img,.mist{position:absolute;width:100%;height:100%;object-fit:cover}
     .mist{touch-action:none;cursor:crosshair}
     .plane{position:absolute;inset:0;transform-origin:64% 24%}
-    .room{touch-action:none;perspective:var(--focal,1200px);perspective-origin:var(--eye-x,50%) 50%}
-    .camera{position:absolute;inset:0;transform-origin:var(--eye-x,50%) 50% var(--focal,1200px);transform:rotateY(var(--yaw,0deg))}
-    @media(prefers-reduced-motion:reduce){.camera{transform:none}}
+    .camera{position:absolute;inset:0}
     main{touch-action:none}
     .layer-photo,.chair,.foreground{position:absolute;pointer-events:none}
     .layer-photo{inset:0;width:100%;height:100%}
@@ -98,25 +96,29 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
     .catalogue h2{font:normal 24px/1.2 Georgia,serif;margin:0 0 12px}.catalogue a{display:block;padding:9px 0;color:var(--ink);text-decoration:none;border-top:1px solid var(--edge)}
     .catalogue a:hover,.catalogue a:focus-visible{color:var(--gold);text-decoration:underline}.catalogue small{display:block;color:#d5bd99}
     .detail:has(.paper-desk:not([hidden]))>img{filter:brightness(.62)}
-    .open-paper{left:auto;right:20px}
-    .paper-desk{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(680px,88vw,92vh);max-height:none;overflow:visible}
-    .paper{display:block;width:100%;aspect-ratio:3/2;background:#eadabe;border:1px solid #b99d72;border-radius:2px 8px 8px 2px;box-shadow:0 10px 38px #0008;touch-action:none;cursor:crosshair}
-    .paper-tools{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:8px}
-    .paper-tools button{border-radius:20px;padding:5px 14px}.paper-tools :disabled{opacity:.56;cursor:default}
-    .paper-status{color:var(--ink);text-shadow:0 1px 4px black;margin-right:auto;font-size:14px}
+    .paper-desk{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(92vw,95dvh,940px);max-height:none;overflow:visible;outline:none}
+    .book{position:relative;display:flex;aspect-ratio:4/3;perspective:1600px;background:#d8c7a6;border:3px solid #50362a;border-radius:4px 7px 7px 4px;box-shadow:0 3px #ac987a,0 5px #625246,0 14px 32px #0009;touch-action:pan-y}
+    .page,.face{background:#eee2c8;position:relative;display:grid;place-items:center;overflow:hidden;color:#302822;text-align:center}
+    .page{width:50%;height:100%}.book img{position:static;display:block;width:100%;height:100%;object-fit:fill;transform:none;pointer-events:none}
+    .page:after,.face:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#30201633,transparent 11%,transparent 96%,#3020160d)}
+    .left:after,.verso:after{transform:scaleX(-1)}.leaf{position:absolute;inset:0 0 0 50%;transform-origin:left;transform-style:preserve-3d;pointer-events:none}
+    .face{position:absolute;inset:0;backface-visibility:hidden}.verso{transform:rotateY(180deg)}
+    .book strong{font:normal clamp(24px,5vw,60px)/1.3 Georgia,serif;letter-spacing:.12em}.book small{display:block;margin-top:1em;color:#745b43;letter-spacing:.16em}
+    .paper-tools{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}.paper-tools button{border-radius:24px;padding:6px 14px}.paper-tools button:disabled{opacity:.45}
+    .paper-status{background:#211d19ed;color:var(--ink);padding:5px 12px;border-radius:14px;font-size:13px}
     .touch-copy{display:none}
     @media(pointer:coarse){.wheel-copy{display:none}.touch-copy{display:inline}}
-    @media(max-height:480px){.paper-desk{width:min(54vw,82vh)}.catalogue{bottom:14px;max-height:calc(100% - 78px)}}
+    @media(max-height:480px){.paper-desk{width:min(64vw,85dvh)}.catalogue{bottom:14px;max-height:calc(100% - 78px)}}
     [hidden]{display:none!important}
   </style>
 </head>
 <body>
-  <main tabindex="0" aria-label="窗前速写，可拖动或用左右方向键环顾">
+  <main tabindex="0" aria-label="Xleia 工作室">
     <p class="location"><small>Xleia Studio</small><span aria-live="polite">沙发</span></p>
     <div class="room">
       <div class="camera">
       <div class="plane wall">
-      <img class="poster" src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一幅东京夜景速写，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
+      <img class="poster" src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一本漫画，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
       <img class="layer-photo" src="/studio/sketch-assets/far.webp" alt="" />
       <img class="lamp-off" src="/studio/sketch-assets/lamp-off.webp" alt="" />
       <button class="spot lamp" data-lamp aria-pressed="true" aria-label="桌灯"><span>桌灯</span></button>
@@ -130,7 +132,7 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
       </div>
       <div class="plane middle"><img class="chair" src="/studio/sketch-assets/seat.webp" alt="" /></div>
       <div class="plane front"><img class="foreground" src="/studio/sketch-assets/near.webp" alt="" />
-      <button class="spot sketch" data-place="sketch"><span>俯看速写本</span></button>
+      <button class="spot sketch" data-place="sketch"><span>读桌上的漫画</span></button>
       <div class="steam" aria-hidden="true"><img src="/studio/sketch-assets/night.webp" alt="" /></div>
       </div>
       </div>
@@ -151,28 +153,30 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
         {reading.map(article => <a href={article.data.legacyPath}><small>{article.data.category}</small>{article.data.title}</a>)}
         <a href="/blog/">全部文章</a>
       </aside>
-      <button type="button" class="return open-paper" hidden>翻到画纸</button>
-      <div class="paper-desk" hidden>
-        <canvas class="paper" width="1200" height="800" aria-label="空白速写纸，用鼠标或手指作画"></canvas>
-        <div class="paper-tools">
-          <span class="paper-status" aria-live="polite">在纸上画一笔</span>
-          <button type="button" data-undo disabled>撤销</button>
-          <button type="button" data-save disabled>保存图像</button>
+      <section class="paper-desk" tabindex="-1" aria-label="末班车，桌上的短篇漫画" hidden>
+        <div class="book">
+          <div class="page left"></div><div class="page right"></div>
+          <div class="leaf" aria-hidden="true" hidden><div class="face"></div><div class="face verso"></div></div>
         </div>
-      </div>
+        <div class="paper-tools">
+          <button type="button" data-prev>上一页</button>
+          <span class="paper-status" aria-live="polite"></span>
+          <button type="button" data-next>下一页</button>
+        </div>
+      </section>
     </section>
   </main>
   <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
     <button data-place="window" data-window>走到窗边</button>
     <button data-place="shelf">走到书架</button>
-    <button data-place="sketch">俯看速写本</button>
+    <button data-place="sketch">读桌上的漫画</button>
     <button data-lamp aria-pressed="true">桌灯</button>
     {NAV_ITEMS.filter(item => item.href !== '/').map(item => <a href={item.href}>{item.label}</a>)}
   </nav></details>
   <script>
     import '../scripts/studio-sketch-evening.js';
     import '../scripts/studio-presence.js';
-    import '../scripts/studio-paper.js';
+    import '../scripts/studio-comic.js';
   </script>
 </body>
 </html>

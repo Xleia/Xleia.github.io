@@ -86,10 +86,9 @@ export async function createRenderer(canvas, walkMode = false){
 }
 
 export function walkCamera(progress, yaw, pitch, portrait) {
-  const bend = Math.sin(Math.PI * progress);
-  const x = 1.05 * progress * progress - .96 * bend * bend;
+  const x = 1.05 * progress;
   const z = 3.85 * progress;
   return {x, y:-.37 * Math.sin(Math.PI * progress / 2), z,
-    yaw:yaw + Math.atan2(1.45-x,6.35-z)*progress + (portrait ? .13 : 0),
+    yaw:yaw + (portrait ? .13 : 0),
     pitch:pitch + .20*Math.sin(Math.PI*Math.min(1,progress*2)) - .08*progress};
 }

@@ -10,63 +10,12 @@ const back = view.querySelector('.return');
 const ctx = glass.getContext('2d');
 const stage = document.querySelector('main');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
-let yaw = 0;
-let focal = 1200;
-let minYaw = 0;
-let maxYaw = 0;
-let drag;
 let leaving = false;
 let fade;
 Promise.all([...room.querySelectorAll('.layer-photo,.chair,.foreground')].map(img => img.decode()))
   .then(() => room.classList.add('layered'))
   .catch(() => { hint.textContent = '点窗户走近 · 点桌灯开关'; });
 
-// Rotate the whole view around the observer. Limit the turn to rays covered
-// by the room photograph, including the extra crop on portrait screens.
-function fitCamera() {
-  const rect = room.getBoundingClientRect();
-  const half = stage.clientWidth / 2;
-  const eye = half - rect.left;
-  focal = Math.max(stage.clientWidth, stage.clientHeight) * .95;
-  const edgeAngle = Math.atan(half / focal);
-  const margin = rect.width * .08;
-  const cap = Math.PI / 18;
-  minYaw = -Math.min(cap, Math.max(0, Math.atan((eye + margin) / focal) - edgeAngle));
-  maxYaw = Math.min(cap, Math.max(0, Math.atan((rect.width - eye + margin) / focal) - edgeAngle));
-  room.style.setProperty('--eye-x', eye + 'px');
-  room.style.setProperty('--focal', focal + 'px');
-  setYaw(yaw);
-}
-function setYaw(angle) {
-  yaw = Math.max(minYaw, Math.min(maxYaw, angle));
-  room.style.setProperty('--yaw', yaw + 'rad');
-}
-new ResizeObserver(fitCamera).observe(stage);
-fitCamera();
-stage.addEventListener('pointerdown', e => {
-  if (room.classList.contains('walking') || room.inert || menu.open || motion.matches || !room.classList.contains('layered')
-      || !e.isPrimary || e.button || e.target.closest('button,a')) return;
-  drag = {id:e.pointerId, x:e.clientX};
-  stage.setPointerCapture(e.pointerId);
-});
-stage.addEventListener('pointermove', e => {
-  if (drag?.id !== e.pointerId) return;
-  const delta = e.clientX - drag.x;
-  drag.x = e.clientX;
-  if (!delta) return;
-  setYaw(yaw - delta * .65 / focal);
-  hint.hidden = true;
-});
-stage.addEventListener('lostpointercapture', () => { drag = undefined; });
-stage.addEventListener('keydown', e => {
-  if (room.classList.contains('walking') || room.inert || menu.open || motion.matches || !room.classList.contains('layered')) return;
-  if (e.key === 'Home') setYaw(0);
-  else if (e.key === 'ArrowLeft') setYaw(yaw - .018);
-  else if (e.key === 'ArrowRight') setYaw(yaw + .018);
-  else return;
-  hint.hidden = true;
-  e.preventDefault();
-});
 let origin;
 let previous;
 let pointer;
@@ -114,15 +63,8 @@ function coatGlass() {
 const detail = document.querySelector('.detail');
 const catalogue = detail.querySelector('.catalogue');
 const desk = detail.querySelector('.paper-desk');
-const openPaper = detail.querySelector('.open-paper');
-openPaper.addEventListener('click', () => {
-  desk.hidden = false;
-  openPaper.hidden = true;
-  desk.querySelector('canvas').setAttribute('tabindex','-1');
-  desk.querySelector('canvas').focus({preventScroll:true});
-});
 const locationName = document.querySelector('.location span');
-const labels = {window:'窗边', shelf:'书架', sketch:'速写本'};
+const labels = {window:'窗边', shelf:'书架', sketch:'桌边漫画'};
 const spots = new Map([...room.querySelectorAll('[data-place]')].map(button => [button.dataset.place, button]));
 let route;
 let progress = 0;
@@ -131,13 +73,11 @@ const initialHint = matchMedia('(pointer:coarse)').matches ? '轻点房间里的
 
 const passage = stage.querySelector('.passage');
 let renderWalk;
-let lookAngle = 0;
-let lookPitch = 0;
 let pendingFrame = 0;
 function paintPassage() {
   const active = route === 'window' && progress > 0 && renderWalk && !motion.matches;
   passage.hidden = !active;
-  if (active) renderWalk(yaw + lookAngle, lookPitch, -2, progress, room.classList.contains('dark'));
+  if (active) renderWalk(0, 0, -2, progress, room.classList.contains('dark'));
 }
 async function preparePassage() {
   try { renderWalk = await createRenderer(passage,true) || await createCanvasWalk(passage); paintPassage(); }
@@ -151,35 +91,9 @@ window.addEventListener('resize',paintPassage);
 motion.addEventListener('change',paintPassage);
 preparePassage();
 
-function turnInPassage(delta) {
-  lookAngle = Math.max(-.32, Math.min(.32, lookAngle + delta));
-  paintPassage();
-}
-let walkDrag;
-passage.addEventListener('pointerdown', e => {
-  if (!e.isPrimary || e.button) return;
-  cancelAnimationFrame(pendingFrame);
-  walkDrag = {id:e.pointerId,x:e.clientX,y:e.clientY};
-  passage.setPointerCapture(e.pointerId);
-});
-passage.addEventListener('pointermove', e => {
-  if (walkDrag?.id !== e.pointerId) return;
-  lookPitch = Math.max(-.16, Math.min(.35,lookPitch + (walkDrag.y-e.clientY)/focal));
-  walkDrag.y=e.clientY;
-  turnInPassage((walkDrag.x-e.clientX)/focal);
-  walkDrag.x=e.clientX;
-});
-passage.addEventListener('lostpointercapture',()=>{walkDrag=undefined;});
-stage.addEventListener('keydown', e => {
-  if(passage.hidden || destination || menu.open)return;
-  if(e.key==='ArrowLeft')turnInPassage(-.035);
-  else if(e.key==='ArrowRight')turnInPassage(.035);
-  else return;
-  e.preventDefault();
-});
 function aimAt(place) {
   route = place;
-  // Use the hotspot's projected position, including the current yaw and mobile crop.
+  // Use the hotspot's projected position, including the mobile crop.
   const box = spots.get(place).getBoundingClientRect();
   const dx = stage.clientWidth / 2 - box.left - box.width / 2;
   const dy = stage.clientHeight / 2 - box.top - box.height / 2;
@@ -194,10 +108,10 @@ function walk(value) {
   room.classList.toggle('walking', progress > 0);
   hint.hidden = false;
   hint.textContent = progress ? labels[route] + ' · 向上走近 / 向下退回' : initialHint;
-  if (!progress) { route = undefined; lookAngle = 0; lookPitch = 0; }
+  if (!progress) route = undefined;
   paintPassage();
   if (!destination) locationName.textContent = passage.hidden ? '沙发' : progress < .52 ? '茶几旁' : '窗前';
-  if (!passage.hidden && !destination) hint.textContent = '滚轮前进或后退 · 拖动环顾';
+  if (!passage.hidden && !destination) hint.textContent = '滚轮前进或后退';
 }
 
 function arrive(place, button) {
@@ -222,11 +136,10 @@ function arrive(place, button) {
   } else {
     detail.dataset.scene = place;
     detail.setAttribute('aria-label', labels[place]);
-    detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的东京夜景速写';
+    detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的漫画《末班车》';
     catalogue.hidden = place !== 'shelf';
-    desk.hidden = true;
-    openPaper.hidden = place !== 'sketch';
-    detail.querySelector('button').focus({preventScroll:true});
+    desk.hidden = place !== 'sketch';
+    (place === 'sketch' ? desk : detail.querySelector('button')).focus({preventScroll:true});
   }
   if (!motion.matches) fade = destination.animate([{opacity:0},{opacity:1}], {duration:fromWheel ? 320 : 550});
 }
