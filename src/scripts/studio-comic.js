@@ -20,7 +20,7 @@ function page(index) {
   }
   const title = document.createElement('div');
   const name = document.createElement('strong');
-  name.textContent = index === 0 ? '末班车' : '完';
+  name.textContent = index === 0 ? '夜色落在猫爪上' : '完';
   const credit = document.createElement('small');
   credit.textContent = 'XLEIA STUDIO';
   title.append(name, credit);

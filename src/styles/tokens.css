@@ -1,16 +1,16 @@
 /* Shared design tokens: base layout, components and future project pages. */
 :root {
-  color-scheme: light;
-  --color-bg: #f7f9fc;
-  --color-surface: #ffffff;
-  --color-surface-alt: #eef3f9;
-  --color-text: #1a2839;
-  --color-muted: #506175;
-  --color-border: #dbe4ef;
-  --color-accent: #2759bf;
-  --color-accent-hover: #163f9c;
-  --color-focus: #c36115;
-  --color-shadow: rgb(28 50 84 / 8%);
+  color-scheme: dark;
+  --color-bg: #1b191a;
+  --color-surface: #26221f;
+  --color-surface-alt: #322923;
+  --color-text: #f6e9d4;
+  --color-muted: #c9b7a3;
+  --color-border: #58483a;
+  --color-accent: #e3ba80;
+  --color-accent-hover: #ffdaa6;
+  --color-focus: #ffd198;
+  --color-shadow: rgb(9 7 8 / 22%);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -28,33 +28,16 @@
   --shadow-card: 0 12px 32px var(--color-shadow);
 }
 
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --color-bg: #0d1421;
-  --color-surface: #162337;
-  --color-surface-alt: #1d2d44;
-  --color-text: #f4f7fc;
-  --color-muted: #b9c8db;
-  --color-border: #344962;
-  --color-accent: #a8c7ff;
-  --color-accent-hover: #d0e0ff;
-  --color-focus: #ffd079;
-  --color-shadow: rgb(0 0 0 / 22%);
-}
-
-/* CSS-only fallback: respect OS preference if scripts are unavailable. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']):not([data-theme='dark']) {
-    color-scheme: dark;
-    --color-bg: #0d1421;
-    --color-surface: #162337;
-    --color-surface-alt: #1d2d44;
-    --color-text: #f4f7fc;
-    --color-muted: #b9c8db;
-    --color-border: #344962;
-    --color-accent: #a8c7ff;
-    --color-accent-hover: #d0e0ff;
-    --color-focus: #ffd079;
-    --color-shadow: rgb(0 0 0 / 22%);
-  }
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #efe5d5;
+  --color-surface: #faf2e4;
+  --color-surface-alt: #e9ddc9;
+  --color-text: #312820;
+  --color-muted: #675444;
+  --color-border: #c8b69c;
+  --color-accent: #804319;
+  --color-accent-hover: #65320e;
+  --color-focus: #94521e;
+  --color-shadow: rgb(54 31 16 / 10%);
 }

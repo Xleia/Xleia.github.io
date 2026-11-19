@@ -1,13 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionPlaceholder from '../../components/SectionPlaceholder.astro';
 ---
-
-<BaseLayout title="Lab" description="跨领域技术实验室：AI、后端、云、数据、移动和新兴技术。">
-  <SectionPlaceholder
-    eyebrow="Tech Lab"
-    title="跨领域技术实验室"
-    summary="AI、后端、数据库、云原生、移动开发与新兴技术的实验、原型和技术记录。"
-    phase="P4"
-  />
+<BaseLayout title="实验室" description="Xleia 工作台上的交互实验与开发记录。">
+  <section class="page-intro">
+    <p class="eyebrow">工作室 / 电脑桌</p>
+    <h1>实验室</h1>
+    <p class="lead">工作室的灯光、镜头和交互，都在这里试过。</p>
+  </section>
+  <section class="desk-note">
+    <h2>工作室的 3D 原型</h2>
+    <p>在早期的房间里转动视角，切换画质，看看灯光和家具是怎么搭起来的。</p>
+    <a class="text-link" href="/studio/dev/">进入 WebGL 实验 →</a>
+  </section>
 </BaseLayout>

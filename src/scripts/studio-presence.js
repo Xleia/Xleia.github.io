@@ -136,7 +136,7 @@ function arrive(place, button) {
   } else {
     detail.dataset.scene = place;
     detail.setAttribute('aria-label', labels[place]);
-    detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的漫画《末班车》';
+    detail.querySelector('img').alt = place === 'shelf' ? '左侧书架与架上的藏书' : '茶几上摊开的漫画《夜色落在猫爪上》';
     catalogue.hidden = place !== 'shelf';
     desk.hidden = place !== 'sketch';
     (place === 'sketch' ? desk : detail.querySelector('button')).focus({preventScroll:true});

@@ -97,13 +97,13 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
     .catalogue a:hover,.catalogue a:focus-visible{color:var(--gold);text-decoration:underline}.catalogue small{display:block;color:#d5bd99}
     .detail:has(.paper-desk:not([hidden]))>img{filter:brightness(.62)}
     .paper-desk{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(92vw,95dvh,940px);max-height:none;overflow:visible;outline:none}
-    .book{position:relative;display:flex;aspect-ratio:4/3;perspective:1600px;background:#d8c7a6;border:3px solid #50362a;border-radius:4px 7px 7px 4px;box-shadow:0 3px #ac987a,0 5px #625246,0 14px 32px #0009;touch-action:pan-y}
+    .book{container-type:inline-size;position:relative;display:flex;aspect-ratio:4/3;perspective:1600px;background:#d8c7a6;border:3px solid #50362a;border-radius:4px 7px 7px 4px;box-shadow:0 3px #ac987a,0 5px #625246,0 14px 32px #0009;touch-action:pan-y}
     .page,.face{background:#eee2c8;position:relative;display:grid;place-items:center;overflow:hidden;color:#302822;text-align:center}
     .page{width:50%;height:100%}.book img{position:static;display:block;width:100%;height:100%;object-fit:fill;transform:none;pointer-events:none}
     .page:after,.face:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#30201633,transparent 11%,transparent 96%,#3020160d)}
     .left:after,.verso:after{transform:scaleX(-1)}.leaf{position:absolute;inset:0 0 0 50%;transform-origin:left;transform-style:preserve-3d;pointer-events:none}
     .face{position:absolute;inset:0;backface-visibility:hidden}.verso{transform:rotateY(180deg)}
-    .book strong{font:normal clamp(24px,5vw,60px)/1.3 Georgia,serif;letter-spacing:.12em}.book small{display:block;margin-top:1em;color:#745b43;letter-spacing:.16em}
+    .book strong{font:normal clamp(14px,5cqw,46px)/1.3 Georgia,serif;letter-spacing:.12em;writing-mode:vertical-rl}.book small{display:block;margin-top:1em;color:#745b43;letter-spacing:.16em}
     .paper-tools{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px}.paper-tools button{border-radius:24px;padding:6px 14px}.paper-tools button:disabled{opacity:.45}
     .paper-status{background:#211d19ed;color:var(--ink);padding:5px 12px;border-radius:14px;font-size:13px}
     .touch-copy{display:none}
@@ -153,7 +153,7 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
         {reading.map(article => <a href={article.data.legacyPath}><small>{article.data.category}</small>{article.data.title}</a>)}
         <a href="/blog/">全部文章</a>
       </aside>
-      <section class="paper-desk" tabindex="-1" aria-label="末班车，桌上的短篇漫画" hidden>
+      <section class="paper-desk" tabindex="-1" aria-label="夜色落在猫爪上，桌上的短篇漫画" hidden>
         <div class="book">
           <div class="page left"></div><div class="page right"></div>
           <div class="leaf" aria-hidden="true" hidden><div class="face"></div><div class="face verso"></div></div>

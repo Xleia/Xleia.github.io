@@ -32,7 +32,7 @@ const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, SITE.url).toSt
     <link rel="canonical" href={canonicalUrl} />
     <title>{title} · {SITE.name}</title>
 
-    <!-- Apply saved/system theme before the page paints. No React hydration required. -->
+    <!-- Apply studio theme before the page paints. No React hydration required. -->
     <script is:inline>
       (() => {
         let saved;
@@ -41,13 +41,12 @@ const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, SITE.url).toSt
         } catch {
           // Storage can be blocked in private or restricted browser contexts.
         }
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.dataset.theme =
-          saved === 'light' || saved === 'dark' ? saved : prefersDark ? 'dark' : 'light';
+          saved === 'light' ? 'light' : 'dark';
       })();
     </script>
   </head>
-  <body id="page-top">
+  <body id="page-top" data-room={Astro.url.pathname.split('/')[1]}>
     <a href="#main-content" class="skip-link">跳转到正文</a>
     <SiteHeader />
     <main id="main-content" class="site-main container">

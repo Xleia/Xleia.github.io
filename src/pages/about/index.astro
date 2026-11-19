@@ -1,13 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionPlaceholder from '../../components/SectionPlaceholder.astro';
+import { SITE } from '../../data/site';
 ---
-
-<BaseLayout title="关于" description="关于 Xleia 与个人开发者网站。">
-  <SectionPlaceholder
-    eyebrow="About"
-    title="关于本站"
-    summary="关于个人经历、学习方向和公开联系方式，将在正式设计阶段补充。"
-    phase="P2"
-  />
+<BaseLayout title="关于" description="关于 Xleia 的个人工作室、技术笔记与项目。">
+  <section class="page-intro">
+    <p class="eyebrow">工作室 / 留言板</p>
+    <h1>关于 Xleia</h1>
+    <p class="lead">这里是我的个人博客。书架上收着学习笔记，电脑里放着我做的项目。</p>
+  </section>
+  <section class="desk-note">
+    <h2>在别处找到我</h2>
+    <p>我把公开的代码和开发记录放在 GitHub。</p>
+    <a class="text-link" href={SITE.github}>github.com/Xleia ↗</a>
+  </section>
 </BaseLayout>
