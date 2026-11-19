@@ -42,6 +42,7 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
     .tip,.return{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));background:#211d1bdb;padding:9px 15px;border-radius:22px;font-size:14px}
     .tip{left:50%;transform:translateX(-50%);margin:0;white-space:nowrap;pointer-events:none}
     .return{left:20px;border:1px solid #ffffff55}
+    .passage{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
     .view{position:absolute;inset:0;background:#191c23;overflow:hidden}
     .view img,.mist{position:absolute;width:100%;height:100%;object-fit:cover}
     .mist{touch-action:none;cursor:crosshair}
@@ -125,6 +126,7 @@ const reading = (await getCollection('blog')).sort((a,b) => b.data.pubDate.getTi
       </div>
       </div>
     </div>
+    <canvas class="passage" aria-hidden="true" hidden></canvas>
     <p class="tip" id="room-tip"><span class="wheel-copy">指向书架、窗户或速写本，向上滚动走近</span><span class="touch-copy">轻点窗户走近，或从目录选择去处</span></p>
     <section class="view" aria-label="窗边" hidden>
       <img src="/studio/sketch-assets/window-seat.webp" alt="隔着雨夜的玻璃望向城市灯火" />

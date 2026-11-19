@@ -1,3 +1,5 @@
+import {createCanvasWalk} from './studio-walk-canvas.js';
+import {createRenderer} from './studio-sketch-renderer.js';
 const room = document.querySelector('.room');
 const view = document.querySelector('.view');
 const menu = document.querySelector('details');
@@ -127,6 +129,54 @@ let progress = 0;
 let destination;
 const initialHint = matchMedia('(pointer:coarse)').matches ? '轻点房间里的物件，或从目录选择去处' : '指向书架、窗户或速写本，向上滚动走近';
 
+const passage = stage.querySelector('.passage');
+let renderWalk;
+let lookAngle = 0;
+let lookPitch = 0;
+let pendingFrame = 0;
+function paintPassage() {
+  const active = route === 'window' && progress > 0 && renderWalk && !motion.matches;
+  passage.hidden = !active;
+  if (active) renderWalk(yaw + lookAngle, lookPitch, -2, progress, room.classList.contains('dark'));
+}
+async function preparePassage() {
+  try { renderWalk = await createRenderer(passage,true) || await createCanvasWalk(passage); paintPassage(); }
+  catch { renderWalk = undefined; passage.hidden = true; }
+}
+passage.addEventListener('webglcontextlost', event => {
+  event.preventDefault(); renderWalk = undefined; passage.hidden = true;
+});
+passage.addEventListener('webglcontextrestored',preparePassage);
+window.addEventListener('resize',paintPassage);
+motion.addEventListener('change',paintPassage);
+preparePassage();
+
+function turnInPassage(delta) {
+  lookAngle = Math.max(-.32, Math.min(.32, lookAngle + delta));
+  paintPassage();
+}
+let walkDrag;
+passage.addEventListener('pointerdown', e => {
+  if (!e.isPrimary || e.button) return;
+  cancelAnimationFrame(pendingFrame);
+  walkDrag = {id:e.pointerId,x:e.clientX,y:e.clientY};
+  passage.setPointerCapture(e.pointerId);
+});
+passage.addEventListener('pointermove', e => {
+  if (walkDrag?.id !== e.pointerId) return;
+  lookPitch = Math.max(-.16, Math.min(.35,lookPitch + (walkDrag.y-e.clientY)/focal));
+  walkDrag.y=e.clientY;
+  turnInPassage((walkDrag.x-e.clientX)/focal);
+  walkDrag.x=e.clientX;
+});
+passage.addEventListener('lostpointercapture',()=>{walkDrag=undefined;});
+stage.addEventListener('keydown', e => {
+  if(passage.hidden || destination || menu.open)return;
+  if(e.key==='ArrowLeft')turnInPassage(-.035);
+  else if(e.key==='ArrowRight')turnInPassage(.035);
+  else return;
+  e.preventDefault();
+});
 function aimAt(place) {
   route = place;
   // Use the hotspot's projected position, including the current yaw and mobile crop.
@@ -144,7 +194,10 @@ function walk(value) {
   room.classList.toggle('walking', progress > 0);
   hint.hidden = false;
   hint.textContent = progress ? labels[route] + ' · 向上走近 / 向下退回' : initialHint;
-  if (!progress) route = undefined;
+  if (!progress) { route = undefined; lookAngle = 0; lookPitch = 0; }
+  paintPassage();
+  if (!destination) locationName.textContent = passage.hidden ? '沙发' : progress < .52 ? '茶几旁' : '窗前';
+  if (!passage.hidden && !destination) hint.textContent = '滚轮前进或后退 · 拖动环顾';
 }
 
 function arrive(place, button) {
@@ -178,7 +231,22 @@ function arrive(place, button) {
   if (!motion.matches) fade = destination.animate([{opacity:0},{opacity:1}], {duration:fromWheel ? 320 : 550});
 }
 for (const button of document.querySelectorAll('[data-place]')) {
-  button.addEventListener('click', () => arrive(button.dataset.place, button));
+  button.addEventListener('click', () => {
+    cancelAnimationFrame(pendingFrame);
+    if (button.dataset.place !== 'window' || !renderWalk || motion.matches) {
+      arrive(button.dataset.place,button); return;
+    }
+    menu.open=false;
+    if (route !== 'window') { walk(0); aimAt('window'); }
+    const start=performance.now(), initial=progress;
+    function advance(now) {
+      const t=Math.min(1,(now-start)/1850);
+      walk(initial+(1-initial)*t*t*(3-2*t));
+      if(t<1) pendingFrame=requestAnimationFrame(advance);
+      else arrive('window',button);
+    }
+    pendingFrame=requestAnimationFrame(advance);
+  });
 }
 
 function sitDown() {
@@ -214,6 +282,7 @@ back.addEventListener('click', sitDown);
 detail.querySelector('button').addEventListener('click', sitDown);
 stage.addEventListener('wheel', e => {
   if (menu.open || e.target.closest('.catalogue,.paper-desk') || e.ctrlKey || !e.deltaY || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+  cancelAnimationFrame(pendingFrame);
   const units = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stage.clientHeight : 1;
   const stride = Math.max(-.24, Math.min(.24, -e.deltaY * units / 620));
   if (destination) {
@@ -227,11 +296,12 @@ stage.addEventListener('wheel', e => {
     aimAt(spot.dataset.place);
   }
   e.preventDefault();
-  walk(progress + stride);
+  walk(progress + (route === 'window' && renderWalk ? stride*.48 : stride));
   if (progress === 1) arrive(route, spots.get(route));
 }, {passive:false});
 document.addEventListener('keydown', event => {
   if (event.key !== 'Escape') return;
+  cancelAnimationFrame(pendingFrame);
   if (destination) sitDown();
   else if (route) walk(0);
 });

@@ -49,11 +49,59 @@ function mug(){
   }
   return s;
 }
-export function buildRoom(){
+function cupHandle() {
+  const handle = surface('handle',[1236,686,1278,761]);
+  // Bend a ceramic tube out of the cup wall; each cross-section has depth.
+  function ring(t, a) {
+    const phase=Math.PI*t;
+    const x=1234+37*Math.sin(phase), y=723-29*Math.cos(phase);
+    const nx=29*Math.sin(phase), ny=-37*Math.cos(phase), len=Math.hypot(nx,ny);
+    return [x+5*nx/len*Math.cos(a), y+5*ny/len*Math.cos(a), 2.22+.014*Math.sin(a)];
+  }
+  for(let i=0;i<24;i++)for(let j=0;j<8;j++){
+    const a=j*Math.PI/4,b=(j+1)*Math.PI/4;
+    handle.quad(ring(i/24,a),ring((i+1)/24,a),ring((i+1)/24,b),ring(i/24,b));
+  }
+  return handle;
+}
+function architecturalDetails() {
+  const timber=surface('far',[0,0,WIDTH,HEIGHT]);
+  // Front, sides and top of each extrusion share registered photographic UVs.
+  function solid(l,t,r,b,back,front) {
+    const a=[l,t,front],c=[r,t,front],d=[r,b,front],e=[l,b,front];
+    timber.quad(a,c,d,e);
+    for(const [one,two] of [[a,c],[c,d],[d,e],[e,a]]){
+      const rear = p => [WIDTH/2+(p[0]-WIDTH/2)*front/back,
+        HEIGHT/2+(p[1]-HEIGHT/2)*front/back,back];
+      timber.quad(one,two,rear(two),rear(one));
+    }
+  }
+  solid(1104,47,1124,372,6.37,6.16);
+  solid(559,479,613,494,6.36,5.99);
+  const rim=surface('table',[438,516,1672,941]);
+  // Follow the exposed curved lip from the rear left corner to the front edge.
+  const edge=[[760,695],[677,715],[605,746],[547,787],[501,840],[474,897],[466,941]];
+  for(let i=1;i<edge.length;i++){
+    const top=([x,y])=>[x,y,table(x,y)];
+    const a=top(edge[i-1]),b=top(edge[i]);
+    // Sample opaque wood just inside the silhouette for the vertical band.
+    const face=[a,b,[b[0],b[1]+12,b[2]],[a[0],a[1]+12,a[2]]];
+    const start=rim.vertices.length;
+    rim.quad(...face);
+    for(let k=start;k<rim.vertices.length;k+=5){
+      rim.vertices[k+3]=(rim.vertices[k+3]*1234+42)/1234;
+    }
+  }
+  const lamp=grid('lamp-off',[351,280,670,552],(x,y)=>room(x,y)-.012,20);
+  rim.layer='edge';
+  return [timber,rim,lamp];
+}
+export function buildRoom(walkMode=false, coarse=false){
   return [
-    grid('far',[0,0,WIDTH,HEIGHT],room,32),
-    grid('seat',[447,458,765,804],(x,y)=>3.45+.22*clamp((y-600)/180,0,1)+.10*clamp((x-560)/150,0,1),16),
-    grid('table',[438,516,1672,941],table,12),
-    grid('handle',[1236,686,1278,761],()=>2.23,12),mug()
+    grid('far',[0,0,WIDTH,HEIGHT],room,coarse?112:32),
+    grid('seat',[447,458,765,804],(x,y)=>3.45+.22*clamp((y-600)/180,0,1)+.10*clamp((x-560)/150,0,1),coarse?55:16),
+    grid('table',[438,516,1672,941],table,coarse?58:12),
+    walkMode ? cupHandle() : grid('handle',[1236,686,1278,761],()=>2.23,12),mug(),
+    ...(walkMode ? architecturalDetails() : [])
   ];
 }
