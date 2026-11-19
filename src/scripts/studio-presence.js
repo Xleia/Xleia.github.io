@@ -8,8 +8,10 @@ const back = view.querySelector('.return');
 const ctx = glass.getContext('2d');
 const stage = document.querySelector('main');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
-let lean = 0;
-let rise = 0;
+let yaw = 0;
+let focal = 1200;
+let minYaw = 0;
+let maxYaw = 0;
 let drag;
 let leaving = false;
 let fade;
@@ -17,28 +19,51 @@ Promise.all([...room.querySelectorAll('.layer-photo,.chair,.foreground')].map(im
   .then(() => room.classList.add('layered'))
   .catch(() => { hint.textContent = '点窗户走近 · 点桌灯开关'; });
 
-function look(x, y) {
-  if (motion.matches || !room.classList.contains('layered')) return;
-  const limit = Math.min(44, stage.clientWidth * .027);
-  lean = Math.max(-limit, Math.min(limit, x));
-  rise = Math.max(-12, Math.min(12, y));
-  room.style.setProperty('--lean', lean + 'px');
-  room.style.setProperty('--rise', rise + 'px');
-  hint.hidden = true;
+// Rotate the whole view around the observer. Limit the turn to rays covered
+// by the room photograph, including the extra crop on portrait screens.
+function fitCamera() {
+  const rect = room.getBoundingClientRect();
+  const half = stage.clientWidth / 2;
+  const eye = half - rect.left;
+  focal = Math.max(stage.clientWidth, stage.clientHeight) * .95;
+  const edgeAngle = Math.atan(half / focal);
+  const margin = rect.width * .08;
+  const cap = Math.PI / 18;
+  minYaw = -Math.min(cap, Math.max(0, Math.atan((eye + margin) / focal) - edgeAngle));
+  maxYaw = Math.min(cap, Math.max(0, Math.atan((rect.width - eye + margin) / focal) - edgeAngle));
+  room.style.setProperty('--eye-x', eye + 'px');
+  room.style.setProperty('--focal', focal + 'px');
+  setYaw(yaw);
 }
+function setYaw(angle) {
+  yaw = Math.max(minYaw, Math.min(maxYaw, angle));
+  room.style.setProperty('--yaw', yaw + 'rad');
+}
+new ResizeObserver(fitCamera).observe(stage);
+fitCamera();
 stage.addEventListener('pointerdown', e => {
-  if (room.inert || menu.open || !e.isPrimary || e.button || e.target.closest('button')) return;
-  drag = {id:e.pointerId, x:e.clientX, y:e.clientY, lean, rise};
+  if (room.inert || menu.open || motion.matches || !room.classList.contains('layered')
+      || !e.isPrimary || e.button || e.target.closest('button')) return;
+  drag = {id:e.pointerId, x:e.clientX};
   stage.setPointerCapture(e.pointerId);
 });
 stage.addEventListener('pointermove', e => {
-  if (drag?.id === e.pointerId) look(drag.lean + (e.clientX-drag.x)*.42, drag.rise + (e.clientY-drag.y)*.16);
+  if (drag?.id !== e.pointerId) return;
+  const delta = e.clientX - drag.x;
+  drag.x = e.clientX;
+  if (!delta) return;
+  setYaw(yaw - delta * .65 / focal);
+  hint.hidden = true;
 });
 stage.addEventListener('lostpointercapture', () => { drag = undefined; });
 stage.addEventListener('keydown', e => {
-  if (room.inert || menu.open) return;
-  const step = {ArrowLeft:[12,0], ArrowRight:[-12,0], ArrowUp:[0,6], ArrowDown:[0,-6], Home:[-lean,-rise]}[e.key];
-  if (step) { e.preventDefault(); look(lean + step[0], rise + step[1]); }
+  if (room.inert || menu.open || motion.matches || !room.classList.contains('layered')) return;
+  if (e.key === 'Home') setYaw(0);
+  else if (e.key === 'ArrowLeft') setYaw(yaw - .018);
+  else if (e.key === 'ArrowRight') setYaw(yaw + .018);
+  else return;
+  hint.hidden = true;
+  e.preventDefault();
 });
 let origin;
 let previous;
