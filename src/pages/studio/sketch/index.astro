@@ -1,66 +1,8 @@
----
-import { STUDIO_ZONES } from '../../../data/studio';
----
 <!doctype html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="坐在 Xleia 的夜间工作室，看窗外的东京夜景和桌上的速写。" />
-  <link rel="canonical" href="https://xleia.github.io/studio/sketch/" />
-  <title>窗前速写 · Xleia Studio</title>
-  <style is:inline>
-    *{box-sizing:border-box}html,body{margin:0;background:#151316;color:#eee5da;font-family:system-ui,sans-serif}
-    main{position:fixed;inset:0;overflow:hidden;touch-action:pan-y}
-    .room{position:absolute;width:max(104vw,181.25vh);width:max(104vw,181.25dvh);aspect-ratio:1672/941;left:50%;top:50%;transform:translate(calc(-50% + var(--pan,0px)),-50%);user-select:none;pointer-events:none}
-    .room img{display:block;width:100%;height:100%}
-    main{cursor:grab}main:active{cursor:grabbing}
-    .rail{position:absolute;overflow:hidden;left:67.92%;top:36.97%;width:8.4%;height:.96%;pointer-events:none}
-    .train{display:block;position:absolute;top:18%;height:64%;width:52%;background:repeating-linear-gradient(90deg,#ab783f 0 2%,#eeb877 2% 8%,#403930 8% 13%);border-block:1px solid #514b40;border-radius:20%;filter:blur(.5px);animation:pass 23s linear infinite;transform:translateX(-110%)}
-    @keyframes pass{0%,12%{transform:translateX(-110%)}33%,100%{transform:translateX(205%)}}
-    @media(prefers-reduced-motion:reduce){.train{animation:none} }
-    details{position:fixed;top:max(18px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right));z-index:2}
-    summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;margin-left:auto;width:max-content;min-height:38px;padding:7px 16px;border:1px solid #ffffff47;border-radius:24px;background:#211d1bbf;color:#f2eae2;font-size:14px;backdrop-filter:blur(10px)}
-    summary::-webkit-details-marker{display:none}summary span{font-size:15px}summary:focus-visible,a:focus-visible{outline:2px solid #f2c88e;outline-offset:3px}
-    nav{min-width:210px;max-height:calc(100dvh - 85px);overflow:auto;margin-top:8px;padding:8px;border:1px solid #ffffff30;background:#211d1bf2;border-radius:12px;box-shadow:0 10px 35px #0005}
-    nav a{display:block;color:#eee5da;padding:11px 14px;border-radius:6px;text-decoration:none;font-size:14px}nav a:hover,nav a:focus-visible{background:#ffffff13}
-  </style>
-</head>
-<body>
-  <main aria-label="窗前速写">
-    <div class="room">
-      <img src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一幅东京夜景速写，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
-      <div class="rail" aria-hidden="true"><i class="train"></i></div>
-    </div>
-  </main>
-  <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
-    <a href="/">首页</a>
-    {STUDIO_ZONES.map(zone => <a href={zone.href}>{zone.name}</a>)}
-  </nav></details>
-  <script is:inline>
-    const stage=document.querySelector('main'), room=document.querySelector('.room');
-    const menu=document.querySelector('details'), toggle=menu.querySelector('summary');
-    let pan=0, drag=null;
-    function position(next){
-      const limit=Math.max(0,(room.offsetWidth-stage.clientWidth)/2);
-      pan=Math.min(limit,Math.max(-limit,next));
-      room.style.setProperty('--pan',pan+'px');
-    }
-    // On a portrait display frame both the real tower and its painted counterpart.
-    position(innerWidth<innerHeight ? -room.offsetWidth*.10 : 0);
-    new ResizeObserver(()=>position(pan)).observe(stage);
-    stage.addEventListener('pointerdown',e=>{
-      if(!e.isPrimary || e.button!==0)return;
-      if(menu.open){menu.open=false;return;}
-      drag={id:e.pointerId,x:e.clientX,start:pan};stage.setPointerCapture(e.pointerId);
-    });
-    stage.addEventListener('pointermove',e=>{
-      if(drag?.id===e.pointerId)position(drag.start+e.clientX-drag.x);
-    });
-    stage.addEventListener('lostpointercapture',()=>{drag=null});
-    document.addEventListener('keydown',e=>{
-      if(e.key==='Escape' && menu.open){menu.open=false;toggle.focus();}
-    });
-  </script>
-</body>
-</html>
+  <meta name="description" content="夜间工作室已移至 Studio 主入口。" />
+  <meta http-equiv="refresh" content="0;url=/studio/" />
+  <link rel="canonical" href="https://xleia.github.io/studio/" />
+  <title>进入夜间工作室</title>
+</head><body><a href="/studio/">进入夜间工作室</a></body></html>
