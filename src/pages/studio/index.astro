@@ -11,14 +11,20 @@ import { STUDIO_ZONES } from '../../data/studio';
   <title>窗前速写 · Xleia Studio</title>
   <style is:inline>
     *{box-sizing:border-box}html,body{margin:0;background:#151316;color:#eee5da;font-family:system-ui,sans-serif}
-    main{position:fixed;inset:0;overflow:hidden;touch-action:none;cursor:grab}
-    main:active{cursor:grabbing}main:focus-visible{outline:2px solid #e7b77a;outline-offset:-3px}
-    .room{position:absolute;width:max(104vw,181.25vh);width:max(104vw,181.25dvh);aspect-ratio:1672/941;left:50%;top:50%;transform:translate(-50%,-50%);user-select:none;pointer-events:none}
+    main{position:fixed;inset:0;overflow:hidden}
+    .room{position:absolute;width:max(100vw,177.69vh);width:max(100vw,177.69dvh);aspect-ratio:1672/941;left:50%;top:50%;transform:translate(-50%,-50%);user-select:none;pointer-events:none}
     .poster{display:block;width:100%;height:100%}
-    canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
-    canvas.ready{opacity:1}
-    @media(max-aspect-ratio:1/1){.room{left:calc(50% - 10dvh)}}
-    .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    @media(max-aspect-ratio:1/1){.room{left:calc(50% - 17dvh)}}
+    .glass,.viaduct,.steam{position:absolute;overflow:hidden;pointer-events:none}
+    .glass{left:58%;top:10%;width:18.3%;height:27%}
+    .viaduct{left:67.96%;top:36.92%;width:8.31%;height:1.05%}
+    .carriages{position:absolute;top:18%;width:70%;height:70%;border-radius:20% 30% 6% 8%;background:repeating-linear-gradient(90deg,#28313c 0 2%,#c38d5a 2% 4%,#e3b987 4% 6%,#4e4543 6% 9%);border-block:1px solid #31363b;filter:blur(.45px);animation:train 31s linear infinite}
+    @keyframes train{0%,9%{transform:translateX(-105%)}31%,100%{transform:translateX(148%)}}
+    .steam{left:69.4%;top:60.5%;width:7%;height:10.4%;mask-image:radial-gradient(ellipse at 48% 60%,black 22%,transparent 69%);}
+    .steam img{position:absolute;width:1428.5714%;max-width:none;left:-991.4286%;top:-581.7308%;animation:drift 7.8s ease-in-out infinite alternate}
+    @keyframes drift{from{transform:translate(0,0)}to{transform:translate(.29%,-.26%)}}
+    .resting *{animation-play-state:paused!important}
+    @media(prefers-reduced-motion:reduce){.glass,.viaduct,.steam{display:none}.room *{animation:none!important}}
     details{position:fixed;top:max(18px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right));z-index:2}
     summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;margin-left:auto;width:max-content;min-height:38px;padding:7px 16px;border:1px solid #ffffff47;border-radius:24px;background:#211d1bbf;color:#f2eae2;font-size:14px;backdrop-filter:blur(10px)}
     summary::-webkit-details-marker{display:none}summary span{font-size:15px}summary:focus-visible,a:focus-visible{outline:2px solid #f2c88e;outline-offset:3px}
@@ -27,19 +33,20 @@ import { STUDIO_ZONES } from '../../data/studio';
   </style>
 </head>
 <body>
-  <main tabindex="0" aria-label="窗前速写" aria-describedby="controls">
-    <span id="controls" class="sr">拖动或按方向键侧身环顾，滚轮左右巡视，双击或按 Home 回到正面。</span>
+  <main aria-label="窗前速写">
     <div class="room">
       <img class="poster" src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一幅东京夜景速写，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
+      <canvas class="glass" aria-hidden="true"></canvas>
+      <div class="viaduct" aria-hidden="true"><i class="carriages"></i></div>
+      <div class="steam" aria-hidden="true"><img src="/studio/sketch-assets/night.webp" alt="" /></div>
     </div>
-    <canvas aria-hidden="true"></canvas>
   </main>
   <details><summary><span aria-hidden="true">☰</span>目录</summary><nav aria-label="工作室目录">
     <a href="/">首页</a>
     {STUDIO_ZONES.map(zone => <a href={zone.href}>{zone.name}</a>)}
   </nav></details>
   <script>
-    import '../../scripts/studio-sketch-camera.js';
+    import '../../scripts/studio-sketch-evening.js';
   </script>
 </body>
 </html>
