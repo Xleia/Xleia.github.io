@@ -43,8 +43,21 @@ import { STUDIO_ZONES } from '../../data/studio';
     .view{position:absolute;inset:0;background:#191c23;overflow:hidden}
     .view img,.mist{position:absolute;width:100%;height:100%;object-fit:cover}
     .mist{touch-action:none;cursor:crosshair}
-    .view:not([hidden]){animation:arrive .48s ease-out}
-    @keyframes arrive{from{opacity:0}to{opacity:1}}
+    .plane{position:absolute;inset:0;transform-origin:64% 24%}
+    .room{--lean:0px;--rise:0px;touch-action:none}
+    main{touch-action:none}
+    .layer-photo,.chair,.foreground{position:absolute;pointer-events:none}
+    .layer-photo{inset:0;width:100%;height:100%}
+    .chair{left:26.734%;top:48.672%;width:19.019%}
+    .foreground{left:26.196%;top:54.835%;width:73.804%}
+    .plane .layer-photo,.chair,.foreground{visibility:hidden}
+    .layered .layer-photo,.layered .chair,.layered .foreground{visibility:visible}
+    .layered .poster{visibility:hidden}
+    .layered .plane{transform:translate(calc(var(--lean) * var(--depth)),calc(var(--rise) * var(--depth))) scale(1.08)}
+    .wall{--depth:.18}.middle{--depth:.62}.front{--depth:1}
+    .layered.travel .plane{transition:transform .85s cubic-bezier(.35,0,.35,1)}
+    .layered.approach .plane{transform:translate(calc(-2vw * var(--depth)),calc(7vh * var(--depth))) scale(calc(1.12 + .30 * var(--depth)))}
+    @media(prefers-reduced-motion:reduce){.layered .plane,.layered.approach .plane{transform:none}.layered.travel .plane{transition:none}}
     nav button{display:block;width:100%;text-align:left;padding:11px 14px;border:0;border-radius:6px;background:none;font-size:14px}
     nav button:hover,nav button:focus-visible{background:#ffffff13}
     button:focus-visible,canvas:focus-visible{outline:2px solid #f2c88e;outline-offset:-3px}
@@ -54,17 +67,23 @@ import { STUDIO_ZONES } from '../../data/studio';
   </style>
 </head>
 <body>
-  <main aria-label="窗前速写">
+  <main tabindex="0" aria-label="窗前速写，可拖动或用方向键移动视角">
     <div class="room">
+      <div class="plane wall">
       <img class="poster" src="/studio/sketch-assets/night.webp" width="1672" height="941" fetchpriority="high" draggable="false" alt="茶几上摊着一幅东京夜景速写，抬头可以看到画中的塔。暖灯照着书架，窗外落着细雨。" />
+      <img class="layer-photo" src="/studio/sketch-assets/far.webp" alt="" />
       <img class="lamp-off" src="/studio/sketch-assets/lamp-off.webp" alt="" />
       <button class="spot lamp" data-lamp aria-pressed="true" aria-label="桌灯"><span>桌灯</span></button>
       <button class="spot window" data-window><span>走到窗边</span></button>
       <canvas class="glass" aria-hidden="true"></canvas>
       <div class="viaduct" aria-hidden="true"><i class="carriages"></i></div>
+      </div>
+      <div class="plane middle"><img class="chair" src="/studio/sketch-assets/seat.webp" alt="" /></div>
+      <div class="plane front"><img class="foreground" src="/studio/sketch-assets/near.webp" alt="" />
       <div class="steam" aria-hidden="true"><img src="/studio/sketch-assets/night.webp" alt="" /></div>
+      </div>
     </div>
-    <p class="tip" id="room-tip">点窗户走近，或在目录里切换桌灯</p>
+    <p class="tip" id="room-tip">拖动画面侧身看 · 点窗户走近</p>
     <section class="view" aria-label="窗边" hidden>
       <img src="/studio/sketch-assets/window-seat.webp" alt="隔着雨夜的玻璃望向城市灯火" />
       <canvas class="mist" tabindex="0" aria-label="起雾的窗玻璃，拖动或按空格擦开"></canvas>
