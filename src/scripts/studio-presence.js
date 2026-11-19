@@ -45,7 +45,7 @@ new ResizeObserver(fitCamera).observe(stage);
 fitCamera();
 stage.addEventListener('pointerdown', e => {
   if (room.classList.contains('walking') || room.inert || menu.open || motion.matches || !room.classList.contains('layered')
-      || !e.isPrimary || e.button || e.target.closest('button')) return;
+      || !e.isPrimary || e.button || e.target.closest('button,a')) return;
   drag = {id:e.pointerId, x:e.clientX};
   stage.setPointerCapture(e.pointerId);
 });
@@ -127,7 +127,7 @@ const spots = new Map([...room.querySelectorAll('[data-place]')].map(button => [
 let route;
 let progress = 0;
 let destination;
-const initialHint = matchMedia('(pointer:coarse)').matches ? '轻点房间里的物件，或从目录选择去处' : '指向书架、窗户或速写本，向上滚动走近';
+const initialHint = matchMedia('(pointer:coarse)').matches ? '轻点房间里的物件，或从目录选择去处' : '点书架读文章，点显示器看项目；向窗户滚动可走近';
 
 const passage = stage.querySelector('.passage');
 let renderWalk;

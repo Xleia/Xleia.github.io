@@ -313,7 +313,7 @@ for (const filename of htmlFiles) {
   if (!html.includes('<meta name="description"')) failures.push(`Missing description: ${route}`);
 
   const canonicalMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/);
-  const canonicalAliases = { '/studio/': '/', '/studio/visual/': '/studio/room/', '/studio/sketch/': '/studio/room/' };
+  const canonicalAliases = { '/studio/': '/', '/studio/room/': '/', '/studio/visual/': '/', '/studio/sketch/': '/' };
   const expectedCanonical = new URL(canonicalAliases[route] ?? route, siteOrigin).href;
   if (!canonicalMatch || canonicalMatch[1] !== expectedCanonical) {
     failures.push(`Unexpected canonical in ${route}: ${canonicalMatch?.[1] ?? 'missing'}`);

@@ -6,7 +6,7 @@ export const SITE = {
 } as const;
 
 export const NAV_ITEMS = [
-  { label: '首页', href: '/' },
+  { label: '回到工作室', href: '/' },
   { label: '文章归档', href: '/blog/' },
   { label: '项目', href: '/projects/' },
   { label: 'Lab', href: '/lab/' },
