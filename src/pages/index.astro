@@ -1,15 +1,22 @@
 ---
 import { getCollection } from 'astro:content';
+import { SITE, NAV_ITEMS, MORE_ITEMS } from '../data/site';
 import { PROJECTS, projectPath } from '../data/projects';
-import { SITE, NAV_ITEMS } from '../data/site';
 import '../styles/landing.css';
 
 const articles = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 4);
-const [featured, ...latest] = articles;
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const recent = articles.slice(0, 10);
 const date = (value: Date) => value.toISOString().slice(0, 10);
-const links = NAV_ITEMS;
+const excerpt = (body: string) => body
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+  .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/[#*_`~>|{}\\]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, 160);
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -17,97 +24,111 @@ const links = NAV_ITEMS;
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="description" content={SITE.description} />
-  <meta name="theme-color" content="#473938" />
+  <meta name="theme-color" content="#2f4154" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={SITE.name} />
   <meta property="og:title" content={SITE.name} />
   <meta property="og:description" content={SITE.description} />
   <meta property="og:url" content="https://xleia.github.io/" />
   <link rel="canonical" href="https://xleia.github.io/" />
-  <link rel="preload" as="image" href="/studio/hero-coast.avif" type="image/avif" />
-  <meta property="og:image" content="https://xleia.github.io/studio/hero-coast.avif" />
+  <link rel="icon" href="/img/favicon.png" />
+  <link rel="preload" as="image" href="/img/default.png" />
   <title>{SITE.name}</title>
+  <script is:inline>
+    try { document.documentElement.dataset.theme = localStorage.getItem('xleia-theme') === 'dark' ? 'dark' : 'light'; }
+    catch { document.documentElement.dataset.theme = 'light'; }
+  </script>
 </head>
 <body id="page-top">
-  <a class="skip-to-content" href="#main-content">跳转到正文</a>
-  <section class="coast-hero" aria-labelledby="site-name">
-    <img class="coast-photo" src="/studio/hero-coast.avif"
-      alt="夕阳下的海滨小镇、灯光温暖的街角、海面与休息的猫咪" width="1024" height="576" fetchpriority="high" decoding="async" />
-    <div class="coast-shade" aria-hidden="true"></div>
-    <header class="coast-header">
-      <a class="coast-brand" href="/" aria-label="H的学习小破站，返回首页">
-        <strong>H的学习小破站</strong><span class="flower" aria-hidden="true">❧</span>
-      </a>
-      <nav class="coast-navigation" aria-label="网站导航">
-        {links.map((item) => <a href={item.href} aria-current={item.href === '/' ? 'page' : undefined}>{item.label}</a>)}
+  <a href="#main-content" class="skip-to-content">跳转到正文</a>
+  <header class="classic-header">
+    <div class="classic-nav-wrap">
+      <a class="classic-brand" href="/">H的学习小破站</a>
+      <nav class="classic-nav" aria-label="主导航">
+        {NAV_ITEMS.map(item => <a href={item.href} aria-current={item.href === '/' ? 'page' : undefined}>{item.label}</a>)}
+        <details class="classic-more"><summary>更多 <span aria-hidden="true">⌄</span></summary>
+          <div class="classic-more-panel">{MORE_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}</div>
+        </details>
+        <a href="/blog/#blog-search" aria-label="搜索文章" class="classic-search" title="搜索文章">⌕</a>
       </nav>
-      <details class="coast-mobile-nav">
-        <summary aria-label="打开或关闭导航">☰ 菜单</summary>
-        <nav aria-label="手机导航">
-          {links.map((item) => <a href={item.href} aria-current={item.href === '/' ? 'page' : undefined}>{item.label}</a>)}
-          <a href="/studio/legacy/">旧工作室</a>
+      <details class="classic-mobile">
+        <summary aria-label="打开导航菜单">☰</summary>
+        <nav aria-label="移动端导航">
+          {NAV_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}
+          {MORE_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}
+          <a href="/blog/#blog-search">搜索</a>
         </nav>
       </details>
-    </header>
-    <div class="coast-main-title">
-      <p class="coast-kicker">Today’s Task : stay up all night</p>
-      <h1 id="site-name">H的学习小破站</h1>
-      <p class="coast-intro">今日任务：熬夜</p>
     </div>
-    <a class="coast-scroll" href="#main-content" aria-label="向下滚动，查看最新文章"><b aria-hidden="true">⌄</b>向下探索</a>
+  </header>
+  <section class="classic-hero" aria-labelledby="site-title">
+    <div class="classic-hero-overlay" aria-hidden="true"></div>
+    <div class="classic-hero-copy">
+      <p class="hero-overline">WELCOME TO MY BLOG</p>
+      <h1 id="site-title">H的学习小破站</h1>
+      <p class="hero-slogan">Today’s Task : stay up all night</p>
+      <p class="hero-subtitle">今日任务：熬夜</p>
+    </div>
+    <a class="classic-scroll" href="#main-content" aria-label="向下滚动查看文章"><span aria-hidden="true">⌄</span></a>
   </section>
-  <main class="coast-content" id="main-content">
-    <div class="coast-wrap">
-      <section class="coast-section" aria-labelledby="latest-heading">
-        <div class="coast-section-heading">
-          <div><p class="coast-eyebrow">WORDS & NOTES</p><h2 id="latest-heading">最新文章</h2></div>
-          <a class="coast-more" href="/blog/">全部文章 ↗</a>
-        </div>
-        {featured && (
-          <article class="coast-feature">
-            <div class="coast-feature-art" aria-hidden="true"></div>
-            <div class="coast-feature-copy">
-              <div class="coast-meta"><span>{featured.data.category}</span><time datetime={date(featured.data.pubDate)}>{date(featured.data.pubDate)}</time></div>
-              <h3><a href={featured.data.legacyPath}>{featured.data.title}</a></h3>
-              
-              <a class="coast-read" href={featured.data.legacyPath}>继续阅读 →</a>
-            </div>
-          </article>
-        )}
-        <div class="coast-rows">
-          {latest.map((article) => (
-            <article class="coast-row">
-              <div class="coast-meta"><span>{article.data.category}</span><time datetime={date(article.data.pubDate)}>{date(article.data.pubDate)}</time></div>
+  <main id="main-content" class="classic-board">
+    <div class="classic-board-head">
+      <div><p class="classic-eyebrow">RECENT POSTS</p><h2>最新文章</h2></div>
+      <a href="/archives/" class="classic-more-link">查看全部 {articles.length} 篇 →</a>
+    </div>
+    <div class="classic-board-grid">
+      <section class="classic-posts" aria-label="最新文章列表">
+        {recent.map(article => (
+          <article class="classic-post">
+            <header>
               <h3><a href={article.data.legacyPath}>{article.data.title}</a></h3>
-              <a class="coast-row-arrow" href={article.data.legacyPath} aria-label={`阅读：${article.data.title}`}>↗</a>
-            </article>
-          ))}
-        </div>
+              <div class="classic-post-meta">
+                <time datetime={date(article.data.pubDate)}>{date(article.data.pubDate)}</time>
+                <span aria-hidden="true">·</span><span>{article.data.category}</span>
+              </div>
+            </header>
+            <p class="classic-excerpt">{excerpt(article.body)}</p>
+            <a class="classic-read" href={article.data.legacyPath}>阅读全文 <span aria-hidden="true">→</span></a>
+          </article>
+        ))}
+        <a class="classic-all-posts" href="/archives/">查看全部历史文章 <span aria-hidden="true">→</span></a>
       </section>
-      <section class="coast-section" aria-labelledby="projects-heading">
-        <div class="coast-section-heading">
-          <div><p class="coast-eyebrow">MADE WITH CURIOSITY</p><h2 id="projects-heading">项目</h2></div>
-          <a class="coast-more" href="/projects/">全部项目 ↗</a>
-        </div>
-        <div class="coast-projects">
-          {PROJECTS.map((project) => (
-            <a class="coast-project" href={projectPath(project)}>
-              <span class="coast-project-symbol" aria-hidden="true">{project.symbol}</span>
-              <h3>{project.name}</h3><p>{project.summary}</p>
-              <span class="coast-project-arrow" aria-hidden="true">↗</span>
-            </a>
-          ))}
-        </div>
-      </section>
-      <aside class="coast-ending" aria-label="更多页面">
-        <a href="/about/">关于 →</a><a href="/studio/legacy/">原版工作室 →</a>
+      <aside class="classic-side" aria-label="侧边导航">
+        <section class="classic-side-block">
+          <h3>关于本站</h3>
+          <p>H的学习小破站</p>
+          <a href="/about/">关于作者 →</a>
+        </section>
+        <section class="classic-side-block">
+          <h3>文章导航</h3>
+          <a href="/archives/">归档</a>
+          <a href="/categories/">分类</a>
+          <a href="/tags/">标签</a>
+          <a href="/blog/">搜索文章</a>
+        </section>
+        <section class="classic-side-block">
+          <h3>项目与实验</h3>
+          {PROJECTS.map(project => <a href={projectPath(project)}>{project.name}</a>)}
+          <a href="/projects/">全部项目</a>
+          <a href="/lab/">实验室</a>
+        </section>
       </aside>
     </div>
+    <section class="classic-project-section" aria-labelledby="projects-title">
+      <div class="classic-board-head"><div><p class="classic-eyebrow">PERSONAL PROJECTS</p><h2 id="projects-title">项目</h2></div><a class="classic-more-link" href="/projects/">查看全部 →</a></div>
+      <div class="classic-project-grid">
+        {PROJECTS.map(project => <a class="classic-project-item" href={projectPath(project)}>
+          <span class="classic-project-icon" aria-hidden="true">{project.symbol}</span>
+          <span><strong>{project.name}</strong><small>{project.summary}</small></span>
+          <span class="project-arrow" aria-hidden="true">↗</span>
+        </a>)}
+      </div>
+    </section>
   </main>
-  <footer class="coast-footer">
-    <strong>H的学习小破站</strong>
-    <small>© {new Date().getFullYear()} Xleia</small>
-    <a href="https://github.com/Xleia" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+  <footer class="classic-footer">
+    <small>© {new Date().getFullYear()} Xleia · {SITE.name}</small>
+    <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="#page-top">返回顶部 ↑</a>
   </footer>
 </body>
 </html>
