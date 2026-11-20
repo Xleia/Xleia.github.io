@@ -352,115 +352,69 @@ h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); }
   }
 }
 
-/* Frame each destination with the part of the room that opens it. */
+/* Visual refresh: retain the original Fluid hierarchy and palette. */
 body {
-  background-image: radial-gradient(ellipse at 85% 0%, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 38rem);
+  background:var(--color-bg);
+  background-image:radial-gradient(ellipse at 85% 0%,#dae2ec4d,transparent 38rem);
+  color:var(--color-text);
 }
-h1, h2, .site-brand {
-  font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', 'SimSun', serif;
-  font-weight: 500;
-  letter-spacing: .025em;
+h1,h2,h3{font-weight:550;letter-spacing:.015em}
+.site-header {
+  background:#2f4154;
+  color:#fff;
+  border-bottom:1px solid #ffffff1d;
+  box-shadow:0 3px 18px #192c3e24;
 }
-.site-main { padding-block: clamp(1.8rem, 5vw, 4.5rem); }
-.brand-mark { color: var(--color-accent); background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 50%; }
-:root[data-theme='dark'] .brand-mark { color: var(--color-accent); }
-.button-link, .button-link:hover { background: var(--color-accent); color: var(--color-bg); }
+@supports(backdrop-filter:blur(12px)){
+  .site-header {background:rgba(39,58,78,.96);backdrop-filter:blur(12px)}
+}
+.site-brand{color:#fff;font-weight:600;letter-spacing:.035em}
+.site-brand:hover{color:#fff}
+.brand-mark{display:none}
+.nav-list a {color:#e4ecf5;background:transparent;border-radius:4px;font-weight:500}
+.nav-list a:hover,.nav-list a[aria-current='page'] {color:#ffdfb7;background:#ffffff17}
+.theme-toggle,.mobile-menu-trigger{background:#ffffff16;border:1px solid #ffffff4d;color:#fff}
+.theme-toggle:hover,.mobile-menu-trigger:hover{background:#ffffff25}
 .page-intro {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  padding: clamp(1.5rem, 4.5vw, 3.75rem);
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  border: 1px solid #69533f;
-  border-radius: .65rem;
-  background: #211d1b;
-  color: #f6e9d4;
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  min-height:clamp(15rem,25vw,22rem);
+  margin:0 0 clamp(2rem,4vw,3.5rem);
+  padding:clamp(2rem,5vw,4.8rem);
+  border:0;border-radius:var(--radius-lg);color:#fff;
+  background:linear-gradient(90deg,rgba(31,51,69,.84),rgba(33,52,71,.52) 65%,rgba(33,52,71,.37)),
+    url('/img/default.png') center 44%/cover no-repeat;
+  box-shadow:var(--shadow-card);
 }
-.page-intro::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: 0 0 0 35%;
-  background: linear-gradient(90deg,#211d1b,transparent 75%), url('/studio/sketch-assets/night.webp') var(--scene-position, 65% 38%) / var(--scene-scale, 230%) auto no-repeat;
-}
-[data-room='blog'] { --scene-position: 3% 36%; }
-[data-room='projects'] { --scene-position: 51% 45%; }
-[data-room='lab'] { --scene-position: 88% 52%; }
-[data-room='about'] { --scene-position: 100% 28%; }
-.page-intro .eyebrow { color: #e3ba80; }
-.page-intro .lead, .page-intro .muted-note { max-width: 54%; color: #eadcc8; }
-.desk-note, .post, .project-detail {
-  padding: clamp(1rem, 4vw, 3.25rem);
-  border: 1px solid var(--color-border);
-  border-radius: .65rem;
-  background: var(--color-surface);
-}
-.desk-note h2 { margin-top: 0; }
-@media (max-width: 650px) {
-  .page-intro { padding-top: 9rem; }
-  .page-intro::before { inset: 0 0 auto; height: 9rem; background-image: linear-gradient(0deg,#211d1b,transparent 70%), url('/studio/sketch-assets/night.webp'); }
-  .page-intro .lead, .page-intro .muted-note { max-width: none; }
-}
-
-/* Coastal visual system: all secondary pages use the homepage's palette. */
-body{background:var(--color-bg);background-image:none;color:var(--color-text);
-  font-family:system-ui,-apple-system,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif}
-h1,h2,h3,.site-brand,.article-info a,.project-title-link{
-  font-family:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif}
-.site-header{background:color-mix(in srgb,var(--color-surface) 92%,transparent);
-  border-bottom:1px solid var(--color-border);box-shadow:0 1px 16px var(--color-shadow)}
-.site-brand{color:var(--color-text);font-weight:600;letter-spacing:.035em}
-.brand-mark{color:var(--color-accent);background:var(--color-surface-alt);
-  border:1px solid var(--color-border);border-radius:50%}
-:root[data-theme='dark'] .brand-mark{color:var(--color-accent)}
-.nav-list a{color:var(--color-muted);background:transparent;border-radius:0;position:relative}
-.nav-list a::after{content:"";position:absolute;height:2px;left:.75rem;right:.75rem;bottom:.1rem;
-  background:var(--color-accent);transform:scaleX(0);transition:transform .2s ease}
-.nav-list a[aria-current='page'],.nav-list a:hover{color:var(--color-accent);background:transparent}
-.nav-list a[aria-current='page']::after,.nav-list a:hover::after{transform:scaleX(1)}
-.theme-toggle,.mobile-menu-trigger{border-radius:50%;background:var(--color-surface-alt)}
-.site-main{padding-block:clamp(2.5rem,5vw,5.5rem)}
-.page-intro{min-height:clamp(15rem,24vw,20rem);display:flex;flex-direction:column;justify-content:center;
-  overflow:hidden;isolation:isolate;padding:clamp(2rem,5vw,4.5rem);
-  margin-bottom:clamp(2rem,4vw,3.5rem);color:var(--color-text);
-  background:linear-gradient(90deg,var(--color-surface),
-    color-mix(in srgb,var(--color-surface) 95%,transparent) 47%,
-    color-mix(in srgb,var(--color-surface) 62%,transparent)),
-    url('/studio/hero-coast.avif') center 53%/cover no-repeat;
-  border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card)}
 .page-intro::before{display:none}
-.page-intro .eyebrow{color:var(--color-accent)}
-.page-intro h1{margin-bottom:clamp(.8rem,1.5vw,1.5rem)}
-.page-intro .lead,.page-intro .muted-note{color:var(--color-muted);max-width:min(42rem,76%);margin-top:.2rem}
-.page-intro .muted-note{margin-top:1rem}
-.page-intro .button-link{width:max-content}
-.desk-note,.post,.project-detail{color:var(--color-text);background:var(--color-surface);
-  border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card)}
-.post,.project-detail{max-width:56rem;padding:clamp(1.4rem,4vw,3.5rem)}
-.post-header h1{letter-spacing:.01em;line-height:1.38}
-.post-content{line-height:1.95;font-size:1.02rem;letter-spacing:.008em}
-.post-content p{margin-block:1.2rem}
-.post-notice,.project-availability{border-left:3px solid var(--color-accent);background:var(--color-surface-alt)}
-.article-list-item{padding:1.35rem .45rem;transition:background .2s ease}
-.article-list-item:hover{background:color-mix(in srgb,var(--color-surface) 72%,transparent)}
-.article-info a{color:var(--color-text);font-size:1.075rem;line-height:1.55}
-.archive-controls input,.archive-controls select{background:var(--color-surface);border-color:var(--color-border);
-  color:var(--color-text);min-height:2.8rem}
-.project-card,.explore-card{background:var(--color-surface);border-color:var(--color-border);
-  border-radius:var(--radius-lg);box-shadow:var(--shadow-card)}
-.project-symbol{border-radius:50%;font-family:Georgia,serif}
-.tech-tag,.project-availability{background:var(--color-surface-alt)}
-.button-link,.button-link:hover{background:var(--color-accent);color:#fff9f3}
-.site-footer{background:var(--color-surface-alt);border-top:1px solid var(--color-border)}
-.site-footer a{color:var(--color-accent)}
-@media(max-width:740px){
-  .page-intro{min-height:16rem;padding:clamp(1.6rem,5vw,2.2rem);
-    background:linear-gradient(90deg,var(--color-surface),
-      color-mix(in srgb,var(--color-surface) 93%,transparent) 72%,
-      color-mix(in srgb,var(--color-surface) 78%,transparent)),
-      url('/studio/hero-coast.avif') center/cover no-repeat}
-  .page-intro .lead,.page-intro .muted-note{max-width:100%}
-  .site-brand{font-size:1rem}
-  .post,.project-detail{padding:clamp(1.2rem,5vw,2rem)}
+.page-intro .eyebrow {color:#f3d7b2}
+.page-intro .lead,.page-intro .muted-note{color:#eff2f7;max-width:min(48rem,85%)}
+.page-intro .muted-note{margin-top:1.2rem}
+.page-intro a {color:#fff}
+.site-main{padding-block:clamp(2rem,5vw,4rem)}
+.desk-note,.post,.project-detail,.project-card,.explore-card,.archive-board{
+  background:var(--color-surface);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
 }
-@media(prefers-reduced-motion:reduce){.nav-list a::after,.article-list-item{transition:none}}
+.desk-note {padding:clamp(1.5rem,4vw,3rem)}
+.post,.project-detail{max-width:56rem;padding:clamp(1.3rem,4vw,3.4rem)}
+.post-content{line-height:1.9;font-size:1.02rem}
+.post-content p{margin-block:1.18rem}
+.post-content pre{background:var(--color-surface-alt)}
+.post-notice,.project-availability{border-left:3px solid var(--color-accent)}
+.article-list-item{padding:1.25rem .4rem}
+.article-list-item .article-info a{color:var(--color-text);font-weight:550}
+.article-list-item .article-info a:hover{color:var(--color-accent)}
+.project-card .project-symbol{background:var(--color-surface-alt);color:var(--color-accent)}
+.button-link,.button-link:hover{background:var(--color-accent);color:white}
+.site-footer{background:var(--color-surface);border-top:1px solid var(--color-border)}
+@media(max-width:740px){
+  .page-intro{min-height:15rem;padding:clamp(1.5rem,5vw,2.3rem)}
+  .page-intro .lead,.page-intro .muted-note{max-width:100%}
+  .mobile-nav {background:var(--color-surface)}
+  .mobile-nav a{color:var(--color-text)}
+  .site-brand{font-size:1rem}
+  .post,.project-detail{padding:clamp(1.1rem,4vw,2rem)}
+}
