@@ -34,7 +34,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ea
 .classic-scroll:hover{transform:translate(-50%,6px)}
 .classic-board{position:relative;z-index:2;width:min(1160px,calc(100% - 2rem));margin:-65px auto 0;padding:clamp(1.5rem,3.5vw,3.3rem);background:#fff;border-radius:12px;box-shadow:0 16px 54px rgba(27,45,66,.19)}
 .classic-board-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.7rem}
-.classic-eyebrow{color:#7891a7;font-weight:700;font-size:.69rem;letter-spacing:.22em;margin:0 0:.3rem}
+.classic-eyebrow{color:#7891a7;font-weight:700;font-size:.69rem;letter-spacing:.22em;margin:0 0 .3rem}
 .classic-board h2{font-size:clamp(1.35rem,2vw,1.8rem);font-weight:550;letter-spacing:.04em;margin:0;color:#34485d}
 .classic-more-link{font-size:.85rem;color:#527c98;white-space:nowrap;padding-bottom:.25rem}
 .classic-more-link:hover{color:#be8e6a}
@@ -42,7 +42,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ea
 .classic-posts{min-width:0}
 .classic-post{padding:1.55rem 0 1.8rem;border-bottom:1px solid #e7ebef}
 .classic-post:first-child{padding-top:0}
-.classic-post h3{margin:0 0:.6rem;font-size:clamp(1.1rem,1.7vw,1.36rem);font-weight:560;line-height:1.55;letter-spacing:.008em}
+.classic-post h3{margin:0 0 .6rem;font-size:clamp(1.1rem,1.7vw,1.36rem);font-weight:560;line-height:1.55;letter-spacing:.008em}
 .classic-post h3 a:hover{color:#527c98}
 .classic-post-meta{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:.78rem;color:#8b99a7}
 .classic-excerpt{margin:.65rem 0 .75rem;color:#637284;font-size:.915rem;line-height:1.95;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
@@ -52,7 +52,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ea
 .classic-all-posts:hover{background:#eff4f7}
 .classic-side{border-left:1px solid #e8edf0;padding-left:clamp(1rem,2.8vw,2rem);align-self:start}
 .classic-side-block{margin:0 0 2.5rem}
-.classic-side-block h3{color:#425770;font-size:.97rem;margin:0 0:.85rem;padding:0 0:.75rem;border-bottom:1px solid #dfe7ed;font-weight:600}
+.classic-side-block h3{color:#425770;font-size:.97rem;margin:0 0 .85rem;padding:0 0:.75rem;border-bottom:1px solid #dfe7ed;font-weight:600}
 .classic-side-block p{margin:.5rem 0;color:#718296;font-size:.87rem}
 .classic-side-block>a{display:block;color:#647c92;padding:.35rem 0;font-size:.88rem}
 .classic-side-block>a:hover{color:#bd8863}
