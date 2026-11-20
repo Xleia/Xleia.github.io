@@ -1,3 +1,4 @@
+import {wetGlass} from './studio-wet-glass.js';
 // Window masks are traced in the photographs' coordinates. Keeping the weather
 // in that space also keeps it behind the sill when object-fit crops the view.
 const frameWidth = 836;
@@ -29,14 +30,15 @@ const layers = [...document.querySelectorAll('[data-rain]')].map(canvas => {
   const close = name === 'window';
   const bounds = close ? [0,0,frameWidth,frameHeight] : [328,32,314,166];
   const [x,y,width,height] = bounds;
-  const count = close ? 220 : 100;
+  const count = close ? 82 : 42;
   const drops = Array.from({length:count}, () => {
     const depth = Math.random();
     return {x: Math.random() * width, y: Math.random() * height,
-      speed:(close ? 64 : 33) * (.7 + depth), length:(close ? 10 : 5) * (.45 + depth),
+      speed:(close ? 64 : 33) * (.7 + depth), length:(close ? 5 : 3) * (.45 + depth),
       depth, warm: Math.random() < .12};
   });
-  return {canvas, ctx:canvas.getContext('2d'), path, x,y,width,height,drops,close};
+  const water = wetGlass({x,y,width,height,close},close ? view.querySelector('img') : room.querySelector('.poster'));
+  return {water,canvas, ctx:canvas.getContext('2d'), path, x,y,width,height,drops,close};
 });
 let timer;
 let last = 0;
@@ -59,13 +61,15 @@ function paint(layer) {
     const px = x + (drop.x + travel*.22 + 2*Math.sin(time*.5+drop.y)) % width;
     const py = y + (drop.y + travel) % height;
     ctx.strokeStyle = drop.warm ? '#efd2a6' : '#c8e2f7';
-    ctx.globalAlpha = .14 + drop.depth*.25;
+    ctx.globalAlpha = .055 + drop.depth*.10;
     ctx.lineWidth = (close ? .65 : .48) + drop.depth*.35;
     ctx.beginPath();
     ctx.moveTo(px-drop.length*.22,py-drop.length);
     ctx.lineTo(px,py);
     ctx.stroke();
   }
+  ctx.globalAlpha = 1;
+  layer.water.draw(ctx);
   ctx.restore();
 }
 function syncRain() {
@@ -77,7 +81,9 @@ function syncRain() {
   last = performance.now();
   timer = setInterval(() => {
     const now = performance.now();
-    time += Math.min(.1,(now-last)/1000);
+    const dt = Math.min(.1,(now-last)/1000);
+    layer.water.advance(dt);
+    time += dt;
     last = now;
     paint(layer);
   }, 1000/30);
