@@ -87,7 +87,7 @@ const excerpt = (body: string) => body
                 <span aria-hidden="true">·</span><span>{article.data.category}</span>
               </div>
             </header>
-            <p class="classic-excerpt">{excerpt(article.body)}</p>
+            <p class="classic-excerpt">{excerpt(article.body ?? '')}</p>
             <a class="classic-read" href={article.data.legacyPath}>阅读全文 <span aria-hidden="true">→</span></a>
           </article>
         ))}
