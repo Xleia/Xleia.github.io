@@ -1,11 +1,13 @@
 export const SITE = {
   name: 'xleiaの个人博客',
+  brand: 'H的学习小破站',
+  tagline: 'Today’s Task : stay up all night',
+  taglineZh: '今日任务：熬夜',
   description: 'Xleia 的个人博客，记录开发笔记、学习过程和个人项目。',
   url: 'https://xleia.github.io',
   github: 'https://github.com/Xleia',
 } as const;
 
-// Restore the original Hexo / Fluid navigation labels and order.
 export const NAV_ITEMS = [
   { label: '首页', href: '/' },
   { label: '归档', href: '/archives/' },

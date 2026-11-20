@@ -1,19 +1,18 @@
-/* Refined Hexo / Fluid-inspired tokens; both light and dark modes remain available. */
-:root{
+:root {
  color-scheme:light;
- --color-bg:#edf1f5;--color-surface:#fff;--color-surface-alt:#f5f8fb;
- --color-text:#34465a;--color-muted:#718296;--color-border:#e3e9ee;
- --color-accent:#4f7796;--color-accent-hover:#335b79;--color-focus:#b8845b;
- --color-shadow:rgb(36 59 84 / 12%);
+ --color-bg:#f5f7fb;--color-surface:#fff;--color-surface-alt:#f1f5fa;
+ --color-text:#27364b;--color-muted:#718298;--color-border:#e4eaf0;
+ --color-accent:#48729a;--color-accent-hover:#2a547e;--color-focus:#dbab82;
+ --color-shadow:rgb(29 57 89 / 10%);
  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-6:1.5rem;
  --space-8:2rem;--space-12:3rem;--space-16:4rem;
- --radius-sm:.5rem;--radius-md:.75rem;--radius-lg:.8rem;
- --container:73.75rem;--shadow-card:0 10px 28px var(--color-shadow);
+ --radius-sm:.45rem;--radius-md:.8rem;--radius-lg:1.1rem;
+ --container:75rem;--shadow-card:0 14px 42px var(--color-shadow);
 }
 :root[data-theme='light']{color-scheme:light}
 :root[data-theme='dark']{
- color-scheme:dark;--color-bg:#202935;--color-surface:#293544;--color-surface-alt:#344253;
- --color-text:#e5edf4;--color-muted:#b4c2d0;--color-border:#435366;
- --color-accent:#b2d0e6;--color-accent-hover:#d1e3f3;--color-focus:#dbb289;
- --color-shadow:rgb(0 0 0 / 20%);
+ color-scheme:dark;--color-bg:#171d28;--color-surface:#232d3d;--color-surface-alt:#2d394c;
+ --color-text:#edf2fa;--color-muted:#b4c2d3;--color-border:#3b4a5f;
+ --color-accent:#a3c7ed;--color-accent-hover:#d1e5ff;--color-focus:#deb896;
+ --color-shadow:rgb(0 0 0 / 24%);
 }
