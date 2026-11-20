@@ -1,0 +1,20 @@
+---
+import {getCollection} from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const articles=(await getCollection('blog')).sort((a,b)=>b.data.pubDate.getTime()-a.data.pubDate.getTime());
+const years=[...new Set(articles.map(a=>a.data.pubDate.getFullYear()))];
+const date=(value:Date)=>value.toISOString().slice(0,10);
+---
+<BaseLayout title="归档" description="xleiaの个人博客 - 文章归档">
+ <section class="page-intro"><p class="eyebrow">ARCHIVES</p><h1>归档</h1><p class="lead">共计 {articles.length} 篇文章</p></section>
+ <section class="archive-board" aria-label="文章归档">
+ {years.map(year=><div class="archive-year">
+  <h2>{year}</h2><ol class="article-list">
+  {articles.filter(a=>a.data.pubDate.getFullYear()===year).map(a=><li class="article-list-item">
+   <time class="article-date" datetime={date(a.data.pubDate)}>{date(a.data.pubDate)}</time>
+   <div class="article-info"><a href={a.data.legacyPath}>{a.data.title}</a></div>
+  </li>)}
+  </ol>
+ </div>)}
+ </section>
+</BaseLayout>

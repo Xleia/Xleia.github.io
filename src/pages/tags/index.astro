@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {LEGACY_TAGS} from '../../data/legacyTaxonomy';
+---
+<BaseLayout title="标签" description="xleiaの个人博客 - 文章标签">
+ <section class="page-intro"><p class="eyebrow">TAGS</p><h1>标签</h1><p class="lead">原博客的文章标签。</p></section>
+ <section class="archive-board"><div class="legacy-tag-cloud">
+ {LEGACY_TAGS.map(t=><a href={`/tags/${t.slug}/`}>{t.slug}<small>{t.paths.length}</small></a>)}
+ </div></section>
+</BaseLayout>

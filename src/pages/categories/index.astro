@@ -1,0 +1,23 @@
+---
+import {getCollection} from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {LEGACY_CATEGORIES} from '../../data/legacyTaxonomy';
+const articles=await getCollection('blog');
+const byPath=new Map(articles.map(a=>[a.data.legacyPath,a]));
+const date=(v:Date)=>v.toISOString().slice(0,10);
+---
+<BaseLayout title="分类" description="xleiaの个人博客 - 文章分类">
+ <section class="page-intro"><p class="eyebrow">CATEGORIES</p><h1>分类</h1><p class="lead">按照原博客的分类查看文章。</p></section>
+ <section class="archive-board">
+  {LEGACY_CATEGORIES.map(group=><div class="archive-year">
+   <h2><a href={`/categories/${group.slug}/`}>{group.slug}</a> <small class="archive-count">{group.paths.length} 篇</small></h2>
+   <ol class="article-list">
+   {group.paths.map(path=>byPath.get(path)).filter(a=>a!==undefined).slice(0,6).map(a=><li class="article-list-item">
+    <time class="article-date" datetime={date(a.data.pubDate)}>{date(a.data.pubDate)}</time>
+    <div class="article-info"><a href={a.data.legacyPath}>{a.data.title}</a></div>
+   </li>)}
+   </ol>
+   <p><a class="text-link" href={`/categories/${group.slug}/`}>查看全部 →</a></p>
+  </div>)}
+ </section>
+</BaseLayout>

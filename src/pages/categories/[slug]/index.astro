@@ -1,0 +1,15 @@
+---
+import {getCollection} from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import {LEGACY_CATEGORIES, type LegacyGroup} from '../../../data/legacyTaxonomy';
+export function getStaticPaths(){return LEGACY_CATEGORIES.map(group=>({params:{slug:group.slug},props:{group}}));}
+const {group}=Astro.props as {group:LegacyGroup};
+const articles=(await getCollection('blog')).filter(a=>group.paths.includes(a.data.legacyPath)).sort((a,b)=>b.data.pubDate.getTime()-a.data.pubDate.getTime());
+const date=(v:Date)=>v.toISOString().slice(0,10);
+---
+<BaseLayout title={group.slug} description={`分类：${group.slug}`}>
+ <section class="page-intro"><p class="eyebrow"><a href="/categories/">分类</a> / {group.slug}</p><h1>{group.slug}</h1><p class="lead">共 {articles.length} 篇文章</p></section>
+ <section class="archive-board"><ol class="article-list">
+  {articles.map(a=><li class="article-list-item"><time class="article-date" datetime={date(a.data.pubDate)}>{date(a.data.pubDate)}</time><div class="article-info"><a href={a.data.legacyPath}>{a.data.title}</a></div></li>)}
+ </ol></section>
+</BaseLayout>
