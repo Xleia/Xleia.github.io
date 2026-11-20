@@ -1,0 +1,102 @@
+/* 一隅 — full-screen image landing. Scoped to the new homepage only. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing:border-box }
+html { scroll-behavior:smooth; scroll-padding-top:1rem }
+body { margin:0; font-family:system-ui,-apple-system,"Noto Sans SC",sans-serif; background:#faf4ef; color:#4b3432; line-height:1.7 }
+a { color:inherit; text-decoration:none }
+a:focus-visible,summary:focus-visible { outline:3px solid #ffcdac; outline-offset:4px }
+.skip-to-content { position:fixed;top:0;left:1rem;z-index:30;transform:translateY(-120%);padding:.65rem 1rem;background:white;color:#4b3432 }
+.skip-to-content:focus { transform:none }
+.coast-hero { position:relative;isolation:isolate;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(135deg,#3e5667,#c6766c 62%,#efba8c);color:#fff8ee }
+.coast-photo { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;z-index:-2 }
+.coast-shade { position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(18,20,34,.50),transparent 35%,rgba(18,15,29,.10) 65%,rgba(21,17,24,.35)),radial-gradient(ellipse at 50% 39%,rgba(28,24,37,.26),transparent 60%) }
+.coast-header { width:min(1440px,calc(100% - 7vw));margin-inline:auto;padding-top:clamp(1.2rem,2.5vw,2.2rem);display:flex;align-items:center;justify-content:space-between;gap:2rem;position:relative;z-index:4 }
+.coast-brand { display:flex;align-items:center;gap:.6rem;color:#fff8ee;text-shadow:0 2px 14px #1118;white-space:nowrap }
+.coast-brand strong { font:500 clamp(1.25rem,2.1vw,1.75rem)/1.3 "Noto Serif SC","Songti SC","SimSun",serif;letter-spacing:.12em }
+.coast-brand em { font:italic clamp(.85rem,1.4vw,1.15rem)/1.3 Georgia,serif;letter-spacing:.03em }
+.coast-brand .flower { font:1.4rem/1 Georgia,serif;color:#f4c2a1 }
+.coast-navigation { display:flex;gap:clamp(1.5rem,3.5vw,3.5rem);align-items:center }
+.coast-navigation a { font:500 1.02rem/1.5 "Noto Serif SC","Songti SC",serif;letter-spacing:.13em;position:relative;padding:.25rem .15rem .7rem;text-shadow:0 2px 10px #18131a9c }
+.coast-navigation a::after { content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:#f5bb97;transform:scaleX(0);transition:transform .25s ease }
+.coast-navigation a:hover::after,.coast-navigation a[aria-current="page"]::after { transform:scaleX(1) }
+.coast-mobile-nav { display:none }
+.coast-main-title { flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.3rem;padding:5rem 1.2rem 6rem;text-shadow:0 3px 28px #171422bd;transform:translateY(-1vh) }
+.coast-kicker { margin:0;font:.72rem/1.5 system-ui,sans-serif;letter-spacing:.45em;color:#f9e0d3 }
+.coast-main-title h1 { margin:0;line-height:1.25;font-weight:400;letter-spacing:.04em;font-size:clamp(3rem,6.5vw,6.5rem);font-family:"Noto Serif SC","Songti SC","SimSun",serif }
+.coast-main-title h1 em { font:italic 400 clamp(2.1rem,4.8vw,5rem)/1.25 Georgia,serif;letter-spacing:0 }
+.coast-main-title .dot { font-size:.65em;vertical-align:middle;opacity:.8 }
+.coast-intro { margin:.5rem 0 0;font:400 clamp(.9rem,1.35vw,1.12rem)/2.05 "Noto Serif SC","Songti SC","SimSun",serif;letter-spacing:.13em;max-width:44rem }
+.coast-scroll { position:absolute;bottom:max(1.6rem,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;align-items:center;flex-direction:column;gap:.25rem;white-space:nowrap;text-shadow:0 2px 8px #211c29;letter-spacing:.22em;font-size:.72rem }
+.coast-scroll b { font:normal 3rem/1 Georgia,serif;animation:drift 3s ease-in-out infinite }
+@keyframes drift { 50%{transform:translateY(8px)} }
+.coast-content { background:#faf4ef }
+.coast-wrap { width:min(1180px,calc(100% - clamp(2rem,8vw,10rem)));margin:auto;padding:clamp(4rem,7vw,7rem) 0 5rem }
+.coast-section { margin:0 0 clamp(4.5rem,8vw,7rem) }
+.coast-section-heading { display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:2rem }
+.coast-eyebrow { margin:0 0 .35rem;font-size:.7rem;font-weight:650;letter-spacing:.2em;color:#b7785e }
+.coast-section h2 { font:500 clamp(1.7rem,3.2vw,2.45rem)/1.3 "Noto Serif SC","Songti SC",serif;margin:0 }
+.coast-caption { margin:.55rem 0 0;color:#87766c;font-size:.94rem }
+.coast-more { padding-bottom:.25rem;border-bottom:1px solid #b7785e;color:#a76a54;font-size:.85rem;white-space:nowrap }
+.coast-more:hover,.coast-row h3 a:hover,.coast-feature-copy a:hover { color:#784330 }
+.coast-feature { display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(1.4rem,3.5vw,3rem);align-items:center;padding:clamp(1.1rem,2.7vw,1.8rem);background:#fffaf6;border:1px solid #ecdcd0;border-radius:1rem;box-shadow:0 16px 38px #7d54450e }
+.coast-feature-art { display:flex;align-items:flex-end;min-height:240px;aspect-ratio:3/2;border-radius:.7rem;overflow:hidden;position:relative;background:linear-gradient(180deg,#a6a2b4 0%,#f4b199 48%,#f6d8aa 69%,#797989 70%,#565d71 100%) }
+.coast-feature-art::before { content:"";position:absolute;right:21%;top:35%;width:14%;aspect-ratio:1;border-radius:50%;background:#ffe4af;box-shadow:0 0 60px #fce2ae }
+.coast-feature-art::after { content:"";position:absolute;left:-20%;bottom:-28%;width:150%;height:56%;background:#6d7180;border-radius:45% 55% 0 0;transform:rotate(-5deg) }
+.coast-feature-art span { position:relative;z-index:2;font:.7rem Georgia,serif;letter-spacing:.16em;color:#fff8ec;margin:1.2rem }
+.coast-meta { display:flex;flex-wrap:wrap;gap:1rem;align-items:center;font-size:.8rem;color:#a66d56 }
+.coast-meta time { color:#948077 }
+.coast-feature-copy h3 { font:500 clamp(1.4rem,2.3vw,2rem)/1.5 "Noto Serif SC","Songti SC",serif;margin:.8rem 0 }
+.coast-feature-copy p { color:#836f65;margin:0 0 1.4rem;line-height:1.9 }
+.coast-read { color:#a76a54;font-weight:600 }
+.coast-rows { margin-top:1.2rem }
+.coast-row { display:grid;grid-template-columns:11rem minmax(0,1fr) 2rem;gap:2rem;align-items:center;padding:1.45rem .15rem;border-bottom:1px solid #e5d5c9 }
+.coast-row .coast-meta { flex-direction:column;align-items:flex-start;gap:.2rem }
+.coast-row h3 { font:500 clamp(1rem,1.7vw,1.2rem)/1.5 "Noto Serif SC","Songti SC",serif;margin:0 }
+.coast-row-arrow { font-size:1.5rem;color:#a76a54;text-align:right }
+.coast-projects { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.35rem }
+.coast-project { position:relative;display:block;min-height:215px;padding:2rem;border:1px solid #ecdcd0;background:#fffaf6;border-radius:1rem;transition:transform .2s ease,border-color .2s ease }
+.coast-project:hover { transform:translateY(-4px);border-color:#cfae9a }
+.coast-project-symbol { display:grid;place-items:center;background:#f1dfd2;color:#a76a54;width:2.8rem;height:2.8rem;border-radius:50%;font:1.3rem Georgia,serif }
+.coast-project h3 { font:500 1.4rem "Noto Serif SC","Songti SC",serif;margin:1rem 0 .35rem }
+.coast-project p { margin:0 2rem 0 0;color:#89766b;font-size:.94rem }
+.coast-project-arrow { position:absolute;right:1.5rem;bottom:1.5rem;color:#b7785e;font-size:1.5rem }
+.coast-ending { text-align:center;padding:2.8rem 1rem 0;border-top:1px solid #e8d8ce }
+.coast-ending p { font:400 clamp(1.05rem,2vw,1.45rem)/1.9 "Noto Serif SC","Songti SC",serif;margin:0 0 1.3rem }
+.coast-ending a { color:#a76a54;margin-inline:1rem;font-size:.87rem }
+.coast-footer { display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#f4e7de;border-top:1px solid #e5d1c5;padding:1.5rem max(2rem,calc((100% - 1180px)/2));font-size:.8rem;color:#79665d }
+.coast-footer strong { font-family:Georgia,serif;font-weight:400 }
+@media(max-width:820px) {
+ .coast-brand .flower { display:none }
+ .coast-main-title h1 em { display:block;margin-top:.15rem }
+ .coast-main-title .dot { display:none }
+ .coast-hero .coast-photo { object-position:46% center }
+ .coast-row { grid-template-columns:8rem minmax(0,1fr) 2rem;gap:1rem }
+}
+@media(max-width:650px) {
+ .coast-header { width:calc(100% - 2rem);padding-top:max(1rem,env(safe-area-inset-top)) }
+ .coast-brand em { font-size:.82rem }
+ .coast-navigation { display:none }
+ .coast-mobile-nav { display:block;position:relative }
+ .coast-mobile-nav summary { display:flex;align-items:center;gap:.4rem;border-radius:.45rem;padding:.45rem .75rem;background:#27202ab8;border:1px solid #ffffff6d;backdrop-filter:blur(8px);font-size:.84rem;list-style:none;cursor:pointer }
+ .coast-mobile-nav summary::-webkit-details-marker { display:none }
+ .coast-mobile-nav nav { position:absolute;right:0;top:calc(100% + .5rem);display:flex;flex-direction:column;min-width:175px;padding:.4rem;background:#322831ee;border:1px solid #ffffff55;border-radius:.5rem;box-shadow:0 15px 40px #19151b88 }
+ .coast-mobile-nav nav a { padding:.65rem .85rem;border-radius:.3rem }
+ .coast-mobile-nav nav a:hover { background:#ffffff1c }
+ .coast-main-title h1 { font-size:clamp(2.5rem,12vw,4rem) }
+ .coast-main-title h1 em { font-size:clamp(2.05rem,8vw,2.8rem) }
+ .coast-main-title { padding:4rem 1.2rem 6rem }
+ .coast-intro { letter-spacing:.06em;font-size:.87rem;max-width:28rem }
+ .coast-feature { grid-template-columns:1fr;gap:1rem }
+ .coast-feature-art { min-height:190px }
+ .coast-content .coast-wrap { width:calc(100% - 2rem);padding-top:3.5rem }
+ .coast-row { grid-template-columns:minmax(0,1fr) 2rem;gap:.3rem }
+ .coast-row .coast-meta { grid-column:1;grid-row:1;flex-direction:row;gap:.7rem }
+ .coast-row h3 { grid-column:1;grid-row:2 }
+ .coast-row-arrow { grid-column:2;grid-row:1/3 }
+ .coast-projects { grid-template-columns:1fr }
+ .coast-section-heading { align-items:flex-start }
+ .coast-more { font-size:.78rem;margin-top:1.7rem }
+ .coast-footer { justify-content:center;text-align:center }
+}
+@media(max-width:370px) { .coast-brand em { display:none } .coast-intro br { display:none } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } .coast-scroll b { animation:none } .coast-project,.coast-navigation a::after { transition:none } }
