@@ -52,7 +52,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #ea
 .classic-all-posts:hover{background:#eff4f7}
 .classic-side{border-left:1px solid #e8edf0;padding-left:clamp(1rem,2.8vw,2rem);align-self:start}
 .classic-side-block{margin:0 0 2.5rem}
-.classic-side-block h3{color:#425770;font-size:.97rem;margin:0 0 .85rem;padding:0 0:.75rem;border-bottom:1px solid #dfe7ed;font-weight:600}
+.classic-side-block h3{color:#425770;font-size:.97rem;margin:0 0 .85rem;padding:0 0 .75rem;border-bottom:1px solid #dfe7ed;font-weight:600}
 .classic-side-block p{margin:.5rem 0;color:#718296;font-size:.87rem}
 .classic-side-block>a{display:block;color:#647c92;padding:.35rem 0;font-size:.88rem}
 .classic-side-block>a:hover{color:#bd8863}
