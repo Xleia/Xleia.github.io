@@ -10,7 +10,7 @@ import '../styles/landing.css';
 
 const articles = (await getCollection('blog')).sort((a,b)=>b.data.pubDate.getTime()-a.data.pubDate.getTime());
 const featured = articles[0];
-const recent = articles.slice(1,10);
+const recent = articles.slice(1,7);
 const formatDate = (d:Date) => d.toISOString().slice(0,10);
 const excerpt = (raw:string) => raw.replace(/<[^>]*>/g,' ').replace(/!\[[^\]]*\]\([^)]*\)/g,' ')
   .replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[#*_~>|{}]/g,' ')
@@ -47,9 +47,13 @@ const excerpt = (raw:string) => raw.replace(/<[^>]*>/g,' ').replace(/!\[[^\]]*\]
       <h1 id="landing-title">{SITE.brand}</h1>
       <p class="landing-hero-tagline">{SITE.tagline}</p>
       <p class="landing-hero-subtagline">{SITE.taglineZh}</p>
+      <div class="landing-hero-actions">
+        <a href="#main-content" class="landing-hero-primary">阅读文章 <span aria-hidden="true">→</span></a>
+        <a href="/projects/" class="landing-hero-secondary">查看项目 <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
     <a class="landing-scroll" href="#main-content" aria-label="向下滚动查看文章">
-      <span>阅读文章</span><span class="landing-scroll-arrow" aria-hidden="true">↓</span>
+      <span class="landing-scroll-arrow" aria-hidden="true">↓</span>
     </a>
   </section>
   <main class="landing-main" id="main-content">
@@ -58,7 +62,6 @@ const excerpt = (raw:string) => raw.replace(/<[^>]*>/g,' ').replace(/!\[[^\]]*\]
         <div>
           <p class="section-overline">BLOG / RECENT</p>
           <h2>最新文章 <span class="headline-count">{articles.length} 篇</span></h2>
-          <p>{SITE.description}</p>
         </div>
         <a href="/archives/" class="landing-heading-link">浏览归档 ↗</a>
       </div>
@@ -70,7 +73,7 @@ const excerpt = (raw:string) => raw.replace(/<[^>]*>/g,' ').replace(/!\[[^\]]*\]
         <section class="landing-feed" aria-label="文章列表">
           {featured && <article class="landing-featured">
             <a class="landing-featured-visual" href={featured.data.legacyPath} aria-label={'阅读文章：'+featured.data.title}>
-              <span>RECENT NOTES</span>
+              <span>DEVELOPMENT NOTES</span>
             </a>
             <div class="landing-featured-body">
               <div class="landing-post-meta"><span class="post-category">{featured.data.category}</span><time datetime={formatDate(featured.data.pubDate)}>{formatDate(featured.data.pubDate)}</time></div>
