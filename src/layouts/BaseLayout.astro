@@ -42,7 +42,7 @@ const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, SITE.url).toSt
           // Storage can be blocked in private or restricted browser contexts.
         }
         document.documentElement.dataset.theme =
-          saved === 'light' ? 'light' : 'dark';
+          saved === 'dark' ? 'dark' : 'light';
       })();
     </script>
   </head>

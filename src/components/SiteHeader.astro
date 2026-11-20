@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
-import { NAV_ITEMS, SITE } from '../data/site';
+import { NAV_ITEMS } from '../data/site';
 
 const currentPath = Astro.url.pathname;
 const isCurrent = (href: string) =>
@@ -9,9 +9,9 @@ const isCurrent = (href: string) =>
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="site-brand" href="/" aria-label="Xleia 首页">
+    <a class="site-brand" href="/" aria-label="H的学习小破站，返回首页">
       <span class="brand-mark" aria-hidden="true">X</span>
-      <span>{SITE.name}</span>
+      <span>H的学习小破站</span>
     </a>
 
     <nav class="desktop-nav" aria-label="主导航">

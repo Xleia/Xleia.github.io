@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { PROJECTS, projectPath } from '../data/projects';
+import { SITE, NAV_ITEMS } from '../data/site';
 import '../styles/landing.css';
 
 const articles = (await getCollection('blog'))
@@ -8,29 +9,24 @@ const articles = (await getCollection('blog'))
   .slice(0, 4);
 const [featured, ...latest] = articles;
 const date = (value: Date) => value.toISOString().slice(0, 10);
-const links = [
-  { label: '首页', href: '/' },
-  { label: '文章', href: '/blog/' },
-  { label: '项目', href: '/projects/' },
-  { label: '关于', href: '/about/' },
-];
+const links = NAV_ITEMS;
 ---
 <!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="一隅 · The Quiet Corner，记录代码、阅读、思考与生活的个人博客。" />
+  <meta name="description" content={SITE.description} />
   <meta name="theme-color" content="#473938" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="一隅 · The Quiet Corner" />
-  <meta property="og:title" content="一隅 · The Quiet Corner" />
-  <meta property="og:description" content="在喧嚣的世界里，留一隅安静的角落。" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={SITE.name} />
+  <meta property="og:description" content={SITE.description} />
   <meta property="og:url" content="https://xleia.github.io/" />
   <link rel="canonical" href="https://xleia.github.io/" />
   <link rel="preload" as="image" href="/studio/hero-coast.avif" type="image/avif" />
   <meta property="og:image" content="https://xleia.github.io/studio/hero-coast.avif" />
-  <title>一隅 · The Quiet Corner</title>
+  <title>{SITE.name}</title>
 </head>
 <body id="page-top">
   <a class="skip-to-content" href="#main-content">跳转到正文</a>
@@ -39,8 +35,8 @@ const links = [
       alt="夕阳下的海滨小镇、灯光温暖的街角、海面与休息的猫咪" width="1024" height="576" fetchpriority="high" decoding="async" />
     <div class="coast-shade" aria-hidden="true"></div>
     <header class="coast-header">
-      <a class="coast-brand" href="/" aria-label="一隅，返回首页">
-        <strong>一隅</strong><span aria-hidden="true">·</span><em>The Quiet Corner</em><span class="flower" aria-hidden="true">❧</span>
+      <a class="coast-brand" href="/" aria-label="H的学习小破站，返回首页">
+        <strong>H的学习小破站</strong><span class="flower" aria-hidden="true">❧</span>
       </a>
       <nav class="coast-navigation" aria-label="网站导航">
         {links.map((item) => <a href={item.href} aria-current={item.href === '/' ? 'page' : undefined}>{item.label}</a>)}
@@ -54,9 +50,9 @@ const links = [
       </details>
     </header>
     <div class="coast-main-title">
-      <p class="coast-kicker">A PLACE TO SLOW DOWN</p>
-      <h1 id="site-name">一隅 <span class="dot" aria-hidden="true">·</span> <em>The Quiet Corner</em></h1>
-      <p class="coast-intro">在喧嚣的世界里，留一隅安静的角落。<br/>记录生活、阅读、思考，以及那些慢慢沉淀的想法。</p>
+      <p class="coast-kicker">Today’s Task : stay up all night</p>
+      <h1 id="site-name">H的学习小破站</h1>
+      <p class="coast-intro">今日任务：熬夜</p>
     </div>
     <a class="coast-scroll" href="#main-content" aria-label="向下滚动，查看最新文章"><b aria-hidden="true">⌄</b>向下探索</a>
   </section>
@@ -64,16 +60,16 @@ const links = [
     <div class="coast-wrap">
       <section class="coast-section" aria-labelledby="latest-heading">
         <div class="coast-section-heading">
-          <div><p class="coast-eyebrow">WORDS & NOTES</p><h2 id="latest-heading">最新文章</h2><p class="coast-caption">那些写下的文字，也是一段段走过的路。</p></div>
+          <div><p class="coast-eyebrow">WORDS & NOTES</p><h2 id="latest-heading">最新文章</h2></div>
           <a class="coast-more" href="/blog/">全部文章 ↗</a>
         </div>
         {featured && (
           <article class="coast-feature">
-            <div class="coast-feature-art" aria-hidden="true"><span>A QUIET MOMENT</span></div>
+            <div class="coast-feature-art" aria-hidden="true"></div>
             <div class="coast-feature-copy">
               <div class="coast-meta"><span>{featured.data.category}</span><time datetime={date(featured.data.pubDate)}>{date(featured.data.pubDate)}</time></div>
               <h3><a href={featured.data.legacyPath}>{featured.data.title}</a></h3>
-              <p>从一篇笔记开始，慢慢整理学习中遇到的问题与实践。</p>
+              
               <a class="coast-read" href={featured.data.legacyPath}>继续阅读 →</a>
             </div>
           </article>
@@ -90,7 +86,7 @@ const links = [
       </section>
       <section class="coast-section" aria-labelledby="projects-heading">
         <div class="coast-section-heading">
-          <div><p class="coast-eyebrow">MADE WITH CURIOSITY</p><h2 id="projects-heading">正在创造</h2><p class="coast-caption">把喜欢的想法，一点点变成真实的作品。</p></div>
+          <div><p class="coast-eyebrow">MADE WITH CURIOSITY</p><h2 id="projects-heading">项目</h2></div>
           <a class="coast-more" href="/projects/">全部项目 ↗</a>
         </div>
         <div class="coast-projects">
@@ -103,15 +99,14 @@ const links = [
           ))}
         </div>
       </section>
-      <aside class="coast-ending" aria-label="关于一隅">
-        <p>给生活留一点空白，给喜欢的事留一点时间。</p>
-        <a href="/about/">关于我 →</a><a href="/studio/legacy/">探索旧工作室 →</a>
+      <aside class="coast-ending" aria-label="更多页面">
+        <a href="/about/">关于 →</a><a href="/studio/legacy/">原版工作室 →</a>
       </aside>
     </div>
   </main>
   <footer class="coast-footer">
-    <strong>一隅 · <i>The Quiet Corner</i></strong>
-    <small>© {new Date().getFullYear()} Xleia · 慢慢写，慢慢生活。</small>
+    <strong>H的学习小破站</strong>
+    <small>© {new Date().getFullYear()} Xleia</small>
     <a href="https://github.com/Xleia" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
   </footer>
 </body>

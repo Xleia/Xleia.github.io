@@ -1,4 +1,4 @@
-/* 一隅 — full-screen image landing. Scoped to the new homepage only. */
+/* Full-screen coastal landing. Scoped to the homepage. */
 :root { color-scheme: light; }
 *, *::before, *::after { box-sizing:border-box }
 html { scroll-behavior:smooth; scroll-padding-top:1rem }
@@ -100,3 +100,18 @@ a:focus-visible,summary:focus-visible { outline:3px solid #ffcdac; outline-offse
 }
 @media(max-width:370px) { .coast-brand em { display:none } .coast-intro br { display:none } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } .coast-scroll b { animation:none } .coast-project,.coast-navigation a::after { transition:none } }
+
+/* Original blog identity; coastal photo and warm cream editorial palette. */
+.coast-brand strong{font-size:clamp(1rem,1.7vw,1.5rem);letter-spacing:.06em}
+.coast-main-title h1{font-size:clamp(2rem,6.3vw,5.9rem);letter-spacing:.055em;max-width:100%;text-wrap:balance}
+.coast-main-title .coast-kicker{font:italic 400 clamp(.95rem,1.6vw,1.3rem)/1.5 Georgia,serif;letter-spacing:.08em;color:#ffe6d7}
+.coast-main-title .coast-intro{margin-top:0;font-size:clamp(.96rem,1.45vw,1.15rem);letter-spacing:.16em}
+.coast-navigation{gap:clamp(1rem,2.2vw,2.5rem)}
+.coast-feature-art{background:linear-gradient(180deg,#372d3218,#3924242e),url('/studio/hero-coast.avif') center/cover no-repeat}
+.coast-feature-art::before,.coast-feature-art::after{display:none}
+.coast-feature-copy h3{margin-bottom:1.8rem}
+@media(max-width:650px){
+  .coast-main-title h1{font-size:clamp(1.85rem,8vw,3.5rem);letter-spacing:.015em}
+  .coast-main-title .coast-kicker{font-size:.9rem}
+  .coast-brand strong{font-size:1rem}
+}
