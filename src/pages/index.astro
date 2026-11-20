@@ -1,134 +1,135 @@
 ---
 import { getCollection } from 'astro:content';
-import { SITE, NAV_ITEMS, MORE_ITEMS } from '../data/site';
+import { SITE } from '../data/site';
 import { PROJECTS, projectPath } from '../data/projects';
+import { LEGACY_CATEGORIES, LEGACY_TAGS } from '../data/legacyTaxonomy';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/global.css';
 import '../styles/landing.css';
 
-const articles = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-const recent = articles.slice(0, 10);
-const date = (value: Date) => value.toISOString().slice(0, 10);
-const excerpt = (body: string) => body
-  .replace(/```[\s\S]*?```/g, ' ')
-  .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-  .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-  .replace(/<[^>]+>/g, ' ')
-  .replace(/[#*_`~>|{}\\]/g, ' ')
-  .replace(/\s+/g, ' ')
-  .trim()
-  .slice(0, 160);
+const articles = (await getCollection('blog')).sort((a,b)=>b.data.pubDate.getTime()-a.data.pubDate.getTime());
+const featured = articles[0];
+const recent = articles.slice(1,10);
+const formatDate = (d:Date) => d.toISOString().slice(0,10);
+const excerpt = (raw:string) => raw.replace(/<[^>]*>/g,' ').replace(/!\[[^\]]*\]\([^)]*\)/g,' ')
+  .replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[#*_~>|{}]/g,' ')
+  .replace(/\s+/g,' ').trim().slice(0,170);
 ---
 <!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="description" content={SITE.description} />
-  <meta name="theme-color" content="#2f4154" />
+  <meta name="theme-color" content="#344a62" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={SITE.name} />
   <meta property="og:title" content={SITE.name} />
   <meta property="og:description" content={SITE.description} />
-  <meta property="og:url" content="https://xleia.github.io/" />
-  <link rel="canonical" href="https://xleia.github.io/" />
+  <meta property="og:url" content={SITE.url + '/'} />
+  <link rel="canonical" href={SITE.url + '/'} />
   <link rel="icon" href="/img/favicon.png" />
-  <link rel="preload" as="image" href="/img/default.png" />
+  <link rel="preload" href="/img/default.png" as="image" />
   <title>{SITE.name}</title>
   <script is:inline>
     try { document.documentElement.dataset.theme = localStorage.getItem('xleia-theme') === 'dark' ? 'dark' : 'light'; }
     catch { document.documentElement.dataset.theme = 'light'; }
   </script>
 </head>
-<body id="page-top">
-  <a href="#main-content" class="skip-to-content">跳转到正文</a>
-  <header class="classic-header">
-    <div class="classic-nav-wrap">
-      <a class="classic-brand" href="/">H的学习小破站</a>
-      <nav class="classic-nav" aria-label="主导航">
-        {NAV_ITEMS.map(item => <a href={item.href} aria-current={item.href === '/' ? 'page' : undefined}>{item.label}</a>)}
-        <details class="classic-more"><summary>更多 <span aria-hidden="true">⌄</span></summary>
-          <div class="classic-more-panel">{MORE_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}</div>
-        </details>
-        <a href="/blog/#blog-search" aria-label="搜索文章" class="classic-search" title="搜索文章">⌕</a>
-      </nav>
-      <details class="classic-mobile">
-        <summary aria-label="打开导航菜单">☰</summary>
-        <nav aria-label="移动端导航">
-          {NAV_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}
-          {MORE_ITEMS.map(item => <a href={item.href}>{item.label}</a>)}
-          <a href="/blog/#blog-search">搜索</a>
-        </nav>
-      </details>
+<body id="page-top" data-room="home" class="home-body">
+  <a href="#main-content" class="skip-link">跳转到正文</a>
+  <SiteHeader overlay />
+  <section class="landing-hero" aria-labelledby="landing-title">
+    <div class="landing-hero-shade" aria-hidden="true"></div>
+    <div class="landing-hero-content">
+      <p class="landing-hero-eyebrow">{SITE.name}</p>
+      <h1 id="landing-title">{SITE.brand}</h1>
+      <p class="landing-hero-tagline">{SITE.tagline}</p>
+      <p class="landing-hero-subtagline">{SITE.taglineZh}</p>
     </div>
-  </header>
-  <section class="classic-hero" aria-labelledby="site-title">
-    <div class="classic-hero-overlay" aria-hidden="true"></div>
-    <div class="classic-hero-copy">
-      <p class="hero-overline">WELCOME TO MY BLOG</p>
-      <h1 id="site-title">H的学习小破站</h1>
-      <p class="hero-slogan">Today’s Task : stay up all night</p>
-      <p class="hero-subtitle">今日任务：熬夜</p>
-    </div>
-    <a class="classic-scroll" href="#main-content" aria-label="向下滚动查看文章"><span aria-hidden="true">⌄</span></a>
+    <a class="landing-scroll" href="#main-content" aria-label="向下滚动查看文章">
+      <span>阅读文章</span><span class="landing-scroll-arrow" aria-hidden="true">↓</span>
+    </a>
   </section>
-  <main id="main-content" class="classic-board">
-    <div class="classic-board-head">
-      <div><p class="classic-eyebrow">RECENT POSTS</p><h2>最新文章</h2></div>
-      <a href="/archives/" class="classic-more-link">查看全部 {articles.length} 篇 →</a>
-    </div>
-    <div class="classic-board-grid">
-      <section class="classic-posts" aria-label="最新文章列表">
-        {recent.map(article => (
-          <article class="classic-post">
-            <header>
-              <h3><a href={article.data.legacyPath}>{article.data.title}</a></h3>
-              <div class="classic-post-meta">
-                <time datetime={date(article.data.pubDate)}>{date(article.data.pubDate)}</time>
-                <span aria-hidden="true">·</span><span>{article.data.category}</span>
-              </div>
-            </header>
-            <p class="classic-excerpt">{excerpt(article.body ?? '')}</p>
-            <a class="classic-read" href={article.data.legacyPath}>阅读全文 <span aria-hidden="true">→</span></a>
-          </article>
-        ))}
-        <a class="classic-all-posts" href="/archives/">查看全部历史文章 <span aria-hidden="true">→</span></a>
-      </section>
-      <aside class="classic-side" aria-label="侧边导航">
-        <section class="classic-side-block">
-          <h3>关于本站</h3>
-          <p>H的学习小破站</p>
-          <a href="/about/">关于作者 →</a>
-        </section>
-        <section class="classic-side-block">
-          <h3>文章导航</h3>
-          <a href="/archives/">归档</a>
-          <a href="/categories/">分类</a>
-          <a href="/tags/">标签</a>
-          <a href="/blog/">搜索文章</a>
-        </section>
-        <section class="classic-side-block">
-          <h3>项目与实验</h3>
-          {PROJECTS.map(project => <a href={projectPath(project)}>{project.name}</a>)}
-          <a href="/projects/">全部项目</a>
-          <a href="/lab/">实验室</a>
-        </section>
-      </aside>
-    </div>
-    <section class="classic-project-section" aria-labelledby="projects-title">
-      <div class="classic-board-head"><div><p class="classic-eyebrow">PERSONAL PROJECTS</p><h2 id="projects-title">项目</h2></div><a class="classic-more-link" href="/projects/">查看全部 →</a></div>
-      <div class="classic-project-grid">
-        {PROJECTS.map(project => <a class="classic-project-item" href={projectPath(project)}>
-          <span class="classic-project-icon" aria-hidden="true">{project.symbol}</span>
-          <span><strong>{project.name}</strong><small>{project.summary}</small></span>
-          <span class="project-arrow" aria-hidden="true">↗</span>
-        </a>)}
+  <main class="landing-main" id="main-content">
+    <div class="landing-shell">
+      <div class="landing-content-head">
+        <div>
+          <p class="section-overline">BLOG / RECENT</p>
+          <h2>最新文章 <span class="headline-count">{articles.length} 篇</span></h2>
+          <p>{SITE.description}</p>
+        </div>
+        <a href="/archives/" class="landing-heading-link">浏览归档 ↗</a>
       </div>
-    </section>
+      <nav class="landing-category-tabs" aria-label="原博客文章分类">
+        <a href="/blog/" class="is-active">全部文章</a>
+        {LEGACY_CATEGORIES.map(group=><a href={'/categories/'+encodeURIComponent(group.slug)+'/'}>{group.slug}</a>)}
+      </nav>
+      <div class="landing-columns">
+        <section class="landing-feed" aria-label="文章列表">
+          {featured && <article class="landing-featured">
+            <a class="landing-featured-visual" href={featured.data.legacyPath} aria-label={'阅读文章：'+featured.data.title}>
+              <span>RECENT NOTES</span>
+            </a>
+            <div class="landing-featured-body">
+              <div class="landing-post-meta"><span class="post-category">{featured.data.category}</span><time datetime={formatDate(featured.data.pubDate)}>{formatDate(featured.data.pubDate)}</time></div>
+              <h3><a href={featured.data.legacyPath}>{featured.data.title}</a></h3>
+              <p>{excerpt(featured.body ?? '')}</p>
+              <a class="landing-read-more" href={featured.data.legacyPath}>阅读全文 →</a>
+            </div>
+          </article>}
+          <div class="landing-feed-list">
+            {recent.map(article=><article class="landing-post-item">
+              <div class="landing-post-meta"><span class="post-category">{article.data.category}</span><time datetime={formatDate(article.data.pubDate)}>{formatDate(article.data.pubDate)}</time></div>
+              <h3><a href={article.data.legacyPath}>{article.data.title}</a></h3>
+              <p>{excerpt(article.body ?? '')}</p>
+              <a href={article.data.legacyPath} class="landing-inline-link">阅读文章 ↗</a>
+            </article>)}
+          </div>
+          <a class="landing-all-posts" href="/archives/">查看全部 {articles.length} 篇历史文章 →</a>
+        </section>
+        <aside class="landing-sidebar" aria-label="作者与博客导航">
+          <section class="sidebar-panel sidebar-author">
+            <div class="sidebar-author-backdrop" aria-hidden="true"></div>
+            <img src="/img/avatar.png" alt="站点头像" class="sidebar-avatar" width="80" height="80" loading="lazy" />
+            <h3>{SITE.brand}</h3>
+            <p>{SITE.description}</p>
+            <div class="sidebar-statistics">
+              <a href="/archives/"><strong>{articles.length}</strong><span>文章</span></a>
+              <a href="/categories/"><strong>{LEGACY_CATEGORIES.length}</strong><span>分类</span></a>
+              <a href="/tags/"><strong>{LEGACY_TAGS.length}</strong><span>标签</span></a>
+            </div>
+            <div class="sidebar-author-links"><a href="/about/">关于作者 →</a><a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
+          </section>
+          <section class="sidebar-panel sidebar-taxonomy">
+            <h3>文章分类 <a href="/categories/" aria-label="查看全部分类">↗</a></h3>
+            <ul>{LEGACY_CATEGORIES.map(group=><li><a href={'/categories/'+encodeURIComponent(group.slug)+'/'}>{group.slug}<span>{group.paths.length}</span></a></li>)}</ul>
+          </section>
+          <section class="sidebar-panel sidebar-tag-panel">
+            <h3>文章标签 <a href="/tags/" aria-label="查看全部标签">↗</a></h3>
+            <div class="sidebar-tags">{LEGACY_TAGS.map(tag=><a href={'/tags/'+encodeURIComponent(tag.slug)+'/'}>#{tag.slug}</a>)}</div>
+          </section>
+          <section class="sidebar-panel sidebar-quick-links">
+            <h3>更多内容</h3>
+            <a href="/projects/">项目 ↗</a>
+            <a href="/lab/">实验室 ↗</a>
+            <a href="/studio/legacy/">原版工作室 ↗</a>
+          </section>
+        </aside>
+      </div>
+      <section class="landing-projects" aria-labelledby="landing-projects-heading">
+        <div class="landing-project-heading"><div><p class="section-overline">PROJECTS</p><h2 id="landing-projects-heading">项目</h2></div><a href="/projects/">查看全部 →</a></div>
+        <div class="landing-project-list">
+          {PROJECTS.map(project=><a href={projectPath(project)} class="landing-project">
+            <span class="landing-project-symbol" aria-hidden="true">{project.symbol}</span>
+            <span class="landing-project-content"><strong>{project.name}</strong><small>{project.summary}</small></span>
+            <span class="landing-project-arrow" aria-hidden="true">↗</span>
+          </a>)}
+        </div>
+      </section>
+    </div>
   </main>
-  <footer class="classic-footer">
-    <small>© {new Date().getFullYear()} Xleia · {SITE.name}</small>
-    <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href="#page-top">返回顶部 ↑</a>
-  </footer>
+  <SiteFooter />
 </body>
 </html>
